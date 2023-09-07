@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React, { useState } from "react";
+import "./styles.css";
+import SignInForm from "./SignIn";
+import SignUpForm from "./SignUp";
+import logo from "./svg/photologo.svg";
+export default function App() {
+  const [type, setType] = useState("signIn");
+  const handleOnClick = text => {
+    if (text !== type) {
+      setType(text);
+      return;
+    }
+  };
+  const containerClass =
+    "container " + (type === "signUp" ? "right-panel-active" : "");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+       <header className="header">
+        <img src={logo} alt="Logo" className="logo" />
+        <h1 style={{ color: 'white'}}>Photomanagement System</h1>
       </header>
+      <div className={containerClass} id="container">
+        <SignUpForm />
+        <SignInForm />
+        <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1>Bentornato!</h1>
+              <p>
+                Inserisci le tue credenziali per poter accedere a PhotoMan!
+              </p>
+              <button
+                className="ghost"
+                id="signIn"
+                onClick={() => handleOnClick("signIn")}
+              >
+                Accedi
+              </button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1>Ciao, sei nuovo?</h1>
+              <p>Entra a far parte della community di PhotoMan</p>
+              <button
+                className="ghost "
+                id="signUp"
+                onClick={() => handleOnClick("signUp")}
+              >
+                Registrati
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
-
-export default App;
