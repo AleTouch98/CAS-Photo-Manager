@@ -9,4 +9,5 @@ router.get('/',(req,res)=>{
 
 router.get('/allutenti',controller.getUtenti);
 
+
 module.exports = router;

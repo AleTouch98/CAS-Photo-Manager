@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./styles.css";
-import SignInForm from "./SignIn";
-import SignUpForm from "./SignUp";
+import SignInForm from "./pages/SignIn";
+import SignUpForm from "./pages/SignUp";
 import logo from "./svg/photologo.svg";
+
 export default function App() {
   const [type, setType] = useState("signIn");
   const handleOnClick = text => {
