@@ -18,7 +18,7 @@ export default function App() {
     <div className="App">
        <header className="header">
         <img src={logo} alt="Logo" className="logo" />
-        <h1 style={{ color: 'white'}}>Photomanagement System</h1>
+        <h1 style={{ color: 'white'}}>MBESEPP</h1>
       </header>
       <div className={containerClass} id="container">
         <SignUpForm />
