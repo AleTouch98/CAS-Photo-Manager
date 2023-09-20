@@ -33,5 +33,50 @@ module.exports = {
             }
         });
 
+
+        app.post('/register', async (req, res) => {
+          try {
+            // Estrai i dati dalla richiesta POST
+            const { Nome, Email, Password } = req.body;
+
+            const result = await databasepg.inserisciUtente(Nome, Email, Password);
+  
+            // Simuliamo una risposta di successo
+            const response = {
+              message: 'Utente registrato con successo',
+              nome: Nome,
+              email: Email,
+            };
+        
+            res.header('Access-Control-Allow-Origin', '*');
+            res.status(200).json(response);
+          } catch (error) {
+            console.error(error);
+            res.status(500).send('Errore del Server Interno');
+          }
+        });
+
+
+        app.post('/login', async (req, res) => {
+          try {
+            // Estrai i dati dalla richiesta POST
+            const { Email, Password } = req.body;
+            const result = await databasepg.loggaUtente(Email, Password);
+  
+            // Simuliamo una risposta di successo
+            const response = {
+              message: 'Utente loggato con successo',
+              email: Email,
+            };
+        
+            res.header('Access-Control-Allow-Origin', '*');
+            res.status(200).json(response);
+          } catch (error) {
+            console.error(error);
+            res.status(500).send('Errore del Server Interno');
+          }
+        });
+        
+
     }
 }

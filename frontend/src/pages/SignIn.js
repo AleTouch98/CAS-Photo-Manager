@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+
 
 function Copyright(props) {
   return (
@@ -40,6 +42,25 @@ export default function SignIn() {
     });
   };
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const logUser = () => {
+    axios
+      .post('http://localhost:8000/login', {
+        Email: email,
+        Password: password,
+      })
+      .then((response) => {
+        console.log('Utente loggato', response.data);
+        // Eseguire altre azioni se necessario dopo la registrazione
+      })
+      .catch((error) => {
+        console.error('Errore durante il login', error);
+        // Gestire l'errore in modo appropriato (ad esempio, mostrando un messaggio all'utente)
+      });
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -64,9 +85,10 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email"
               name="email"
               autoComplete="email"
+              onChange={(event) => setEmail(event.target.value)}
               autoFocus
             />
             <TextField
@@ -77,6 +99,7 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -86,20 +109,16 @@ export default function SignIn() {
             <Button
               type="submit"
               fullWidth
+              onClick={logUser}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"Ancora non sei registrato? Registrati!"}
                 </Link>
               </Grid>
             </Grid>

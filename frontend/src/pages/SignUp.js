@@ -44,15 +44,23 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nome, setNome] = useState('');
-  
+
   const createUser = () => {
-    axios.post('http://localhost:8000/register', {
-      Nome: nome,
-      Email: email,
-      Password: password
-    }).then(() => {console.log('Utente registrato')
-  })
-  }
+    axios
+      .post('http://localhost:8000/register', {
+        Nome: nome,
+        Email: email,
+        Password: password,
+      })
+      .then((response) => {
+        console.log('Utente registrato', response.data);
+        // Eseguire altre azioni se necessario dopo la registrazione
+      })
+      .catch((error) => {
+        console.error('Errore durante la registrazione', error);
+        // Gestire l'errore in modo appropriato (ad esempio, mostrando un messaggio all'utente)
+      });
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -73,26 +81,16 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label="Nome"
+                  onChange={(event) => setNome(event.target.value)}
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(e) => setNome(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -100,7 +98,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   autoComplete="email"
                   onChange={(event) => setEmail(event.target.value)}

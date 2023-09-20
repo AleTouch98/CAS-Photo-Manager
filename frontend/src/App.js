@@ -5,6 +5,7 @@ import SignUpForm from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import logo from "./svg/photologo.svg";
 
+
 import { 
   createBrowserRouter,
    RouterProvider
