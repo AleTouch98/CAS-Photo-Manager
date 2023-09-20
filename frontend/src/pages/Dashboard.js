@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './dashboard.css'; // Assicurati di avere un file CSS separato per la dashboard
 
 function Dashboard() {
   const [image, setImage] = useState(null);

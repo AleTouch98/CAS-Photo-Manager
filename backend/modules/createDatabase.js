@@ -26,6 +26,7 @@ module.exports = {
             await create_collection_table(tableClient);
             await create_photo_table(tableClient);
             await create_collab_racc_table(tableClient);
+            console.log('Tabelle e relazioni create');
             console.log("Database Creato");
             return true;
         }
@@ -227,4 +228,3 @@ const create_collab_racc_table = async (client) => {
     }
 }
 
-console.log('Tabelle e relazioni create');
