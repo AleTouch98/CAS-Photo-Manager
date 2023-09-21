@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Avatar from '@mui/material/Avatar';
+//import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+//import FormControlLabel from '@mui/material/FormControlLabel';
+//import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+//import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from '../svg/photologo.svg';
+import Alert from "@mui/material/Alert";
+import { Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
 function Copyright(props) {
@@ -31,36 +34,69 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+  
+ 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nome, setNome] = useState("");
+  const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false); // Stato per mostrare/nascondere l'alert
+  const [showSuccess, setShowSuccess] = useState(false); // Stato per mostrare/nascondere l'alert
+
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowAlert(false);
+  };
+
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSuccess(false);
+    navigate('/');  //Reindirizzamento a login
+  };
+
+
+  const handleSubmit = async (event) => {
+    
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: data.get("email"),
+      password: data.get("password"),
     });
-  };
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [nome, setNome] = useState('');
-
-  const createUser = () => {
-    axios
-      .post('http://localhost:8000/register', {
+    try {
+      const response = await axios.post("http://localhost:8000/register", {
         Nome: nome,
         Email: email,
         Password: password,
-      })
-      .then((response) => {
-        console.log('Utente registrato', response.data);
-        // Eseguire altre azioni se necessario dopo la registrazione
-      })
-      .catch((error) => {
-        console.error('Errore durante la registrazione', error);
-        // Gestire l'errore in modo appropriato (ad esempio, mostrando un messaggio all'utente)
       });
+      console.log("Response: ");
+      console.log(response.status);
+      if (response.status === 200) {
+        console.log("Utente inserito con successo");
+        setShowSuccess(true);
+      } else if (response.status === 201) {
+        console.log("Utente già registrato!");
+        setShowAlert(true);
+      }
+    } catch (error) {
+      console.error(
+        "Si è verificato un errore durante l'inserimento dell'utente",
+        error
+      );
+      // Gestisci l'errore in base alle tue esigenze
+    }
   };
+
+  
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -100,6 +136,41 @@ export default function SignUp() {
           >
             REGISTRATI
           </Typography>
+          {showAlert ? 
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseError} anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'}}>
+              <Alert
+                onClose={handleCloseError}
+                severity="error"
+                sx={{ width: "350px", height: "50px", display: 'flex', fontSize:"16px", justifyContent:"center"}}
+              >
+                Account già esistente! Riprovare!
+              </Alert>
+            </Snackbar>
+          </Box>
+           : "" }
+          {showSuccess ? 
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+
+            <Snackbar open={true} 
+                    onClose={handleCloseSuccess} 
+                    anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}>
+              <Alert
+                onClose={handleCloseSuccess}
+                severity="success"
+                sx={{ width: "350px", height: "50px", display: 'flex', fontSize:"16px", justifyContent:"center"}}
+              >
+                Account creato con successo!
+              </Alert>
+            </Snackbar>
+            </Box>
+
+           : ""}
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -155,7 +226,6 @@ export default function SignUp() {
                   backgroundColor: '#FF3C26',
                 },
               }}
-              onClick={createUser}
             >
               Registrati
             </Button>

@@ -33,6 +33,7 @@ module.exports = {
 
 
 inserisciUtente: async (Nome, Email, Password) => {
+    
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
     try {
