@@ -13,14 +13,15 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import Logo from '../svg/photologo.svg';
 
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Progetto Context aware
+      <Link color="inherit" href="#">
+        Progetto Context-Aware Systems
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -66,18 +67,38 @@ export default function SignIn() {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+         sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.7)',
+          backgroundBlendMode: 'lighten',
+          border: '2px solid #ccc',
+          borderRadius: '10px',
+          padding: '20px', // Aggiungi spazio intorno al contenuto
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Aggiungi una leggera ombra
+        }}
+         >
+      <img
+          src={Logo}
+          alt="Il tuo Logo"
+          style={{
+          width: '100px', // Imposta la larghezza desiderata del logo
+          height: '100px', // Imposta l'altezza desiderata del logo
+        }}
+          />
+          <Typography
+            component="h1"
+            variant="h4"
+            fontWeight="Italic"
+            fontFamily="Times New Roman, serif"
+            style={{
+              textShadow: '2px 2px 4px #E74D2C',
+              padding: '10px',
+            }}
+          >
+            ACCEDI
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -102,18 +123,25 @@ export default function SignIn() {
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               onClick={logUser}
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: '#E74D2C',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: '#FF6240',
+                },
+                '&:active': {
+                  backgroundColor: '#FF3C26',
+                },
+              }}
             >
-              Sign In
+              Accedi
             </Button>
             <Grid container>
               <Grid item>
