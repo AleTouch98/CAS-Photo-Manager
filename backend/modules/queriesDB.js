@@ -33,37 +33,27 @@ module.exports = {
 
 
 inserisciUtente: async (Nome, Email, Password) => {
-    
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
     try {
-        // Verifica se l'utente esiste già nel database in base all'indirizzo email
-        const checkQuery = `
-            SELECT COUNT(*) FROM Utenti WHERE Email = $1
-        `;
-        const checkValues = [Email];
-        const { rows } = await client.query(checkQuery, checkValues);
-
-        const userExists = rows[0].count > 0;
-
-        if (!userExists) {
-            // L'utente non esiste ancora nel database, esegui l'inserimento
-            const insertQuery = `
-                INSERT INTO Utenti (Nome_Utente, Email, Password_Utente)
-                VALUES ($1, $2, $3)
-            `;
-            const insertValues = [Nome, Email, Password];
-            await client.query(insertQuery, insertValues);
-            console.log("L'utente è stato inserito nel database.");
-        } else {
-            // L'utente esiste già, puoi gestire questa situazione come desideri
-            console.log("L'utente esiste già nel database.");
-        }
-    } catch (e) {
-        console.error(e);
-        return e;
+    const checkQuery = `SELECT COUNT(*) FROM Utenti WHERE Email = $1`;
+    const checkUserValues = [Email];
+    const userExists = await client.query(checkQuery, checkUserValues);
+    if (userExists.rows[0].count > 0) {
+        return false;
+    } else {
+        // Inserisci l'utente nel database
+        const insertQuery = `INSERT INTO Utenti (Nome_Utente, Email, Password_Utente) VALUES ($1, $2, $3)`;
+        const insertValues = [Nome, Email, Password];
+        const result = await client.query(insertQuery, insertValues);
+        return true;
+    }
+    } catch (error) {
+        console.error(error);
+        return null;
+        //res.status(500).json({error: "Si è verificato un errore durante l inserimento dell utente.", });
     } finally {
-        await client.end();
+    await client.end();
     }
 },
 
@@ -73,12 +63,12 @@ loggaUtente: async (Email, Password) => {
     await client.connect();
     try {
         const query = `
-            SELECT * FROM Utenti WHERE Email = $1 AND Password_Utente = $2;
-        `;
-        const values = [Email, Password];
+            SELECT * FROM Utenti WHERE email = $1 ;
+            `;
+        const values = [Email];
         const result = await client.query(query, values);
         if (result.rows.length === 1) {
-            // L'utente è stato trovato, quindi il login è riuscito
+            // L'utente è stato trovato
             console.log("Utente Loggato.");
             return result.rows[0];
         } else {
