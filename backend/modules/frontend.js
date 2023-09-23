@@ -36,69 +36,36 @@ module.exports = {
     });
 
     app.post("/register", async (req, res) => {
-
-      const client = new Client(QUERY_CONFIGURATION);
-      await client.connect();
       try {
-        // Estrae i dati dalla richiesta POST
-        const { Nome, Email, Password } = req.body;
-
-        //const result = await databasepg.inserisciUtente(nomeUtente, emailUtente, passwordUtente);
-
-        const checkQuery = `SELECT COUNT(*) FROM Utenti WHERE Email = $1`;
-        const checkUserValues = [Email];
-
-        const userExists = await client.query(checkQuery, checkUserValues);
-
-        if (userExists.rows[0].count > 0) {
-          res.status(201).json({ message: "Questo utente è già registrato." });
-          return;
+        const {Nome, Email, Password } = req.body; // Estrai i dati dalla richiesta POST
+        const result = await databasepg.inserisciUtente(Nome, Email, Password); // Passa i parametri Email e Password
+        if (result != null) {
+          const user = result;
+          // Caso in cui l'utente esiste ma la password è errata
+          if (result == true) {
+            res.status(200).json({ message: "Registrazione avvenuta con successo." });
+            return;
+          } else {
+            res.status(201).json({ message: "Utente già registrato con ${Email}" });
+            return;
+          }
         } else {
-          // Inserisci l'utente nel database
-          const insertQuery = `INSERT INTO Utenti (Nome_Utente, Email, Password_Utente) VALUES ($1, $2, $3)`;
-          const insertValues = [Nome, Email, Password];
-          const result = await client.query(insertQuery, insertValues);
-          const newUser = result.rows[0];
-
-          res.json(newUser);
+          res.status(500).json({ message: "Errore durante la registrazione." });
           return;
         }
-        // Simula una risposta di successo
-        /*const response = {
-              message: 'Utente registrato con successo',
-              nome: nomeUtente,
-              email: emailUtente,
-            };
-
-            res.header('Access-Control-Allow-Origin', '*');
-            res.status(200).json(response);
-            */
       } catch (error) {
         console.error(error);
-        res.status(500).json({error: "Si è verificato un errore durante l inserimento dell utente.", });
-      }
-      finally {
-        await client.end();
+        res.status(500).send("Errore del Server Interno");
       }
     });
 
     app.post("/", async (req, res) => {
-      const client = new Client(QUERY_CONFIGURATION);
-      await client.connect();
       try {
-        // Estrai i dati dalla richiesta POST
-        const { Email, Password } = req.body;
-        //const result = await databasepg.loggaUtente(Email, Password);
-        const query = `SELECT * FROM Utenti WHERE Email = $1`;
-
-        const values = [Email];
-        const result = await client.query(query, values);
-        
-        if (result.rows.length > 0) {
-          
-          const user = result.rows[0];
-          
-          //Caso in cui l'utente esiste ma la password è errata
+        const { Email, Password } = req.body; // Estrai i dati dalla richiesta POST
+        const result = await databasepg.loggaUtente(Email, Password); // Passa i parametri Email e Password
+        if (result != null) {
+          const user = result;
+          // Caso in cui l'utente esiste ma la password è errata
           if (user.password_utente === Password) {
             res.status(200).json({ message: "Login avvenuto con successo." });
             return;
@@ -107,19 +74,14 @@ module.exports = {
             return;
           }
         } else {
-          res.status(203).json({ message: "L\'utente non esiste!"})
+          res.status(203).json({ message: "L'utente non esiste!" });
           return;
         }
-        
-        res.header("Access-Control-Allow-Origin", "*");
-        //res.status(200).json(response);
       } catch (error) {
         console.error(error);
         res.status(500).send("Errore del Server Interno");
       }
-      finally {
-        await client.end();
-      }
     });
+
   },
 };
