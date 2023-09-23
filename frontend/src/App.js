@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.css";
 import SignInForm from "./pages/SignIn";
 import SignUpForm from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
@@ -8,7 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App(){
   return (
-
+    
     <Router>
 
       <Routes>
@@ -22,7 +21,6 @@ function App(){
       </Routes>
 
     </Router>
-
   );
 
 }
