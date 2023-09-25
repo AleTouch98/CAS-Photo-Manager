@@ -1,0 +1,29 @@
+//CODICE DEI FILTRI
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly', width: '1000px', position: 'absolute', top: '70px', left: '350px', right: '0' }}>
+      <div style={{ border: '2px solid black', marginRight: '10px', padding: '10px' }}>
+        <button onClick={handleGeojsonPopupOpen}>Seleziona Geojson</button>
+        {isGeojsonPopupOpen && (
+          <div style={{ position: 'absolute', backgroundColor: 'white', zIndex: 999 }}>
+            <h3>Scegli un GeoJSON:</h3>
+            <ul>
+              {geojsonList.map((geojson, index) => (
+                <li key={index}>
+                  <button onClick={() => handleSelectGeoJSON(geojson)}>{geojson.name}</button>
+                </li>
+              ))}
+            </ul>
+            <button onClick={handleGeojsonPopupClose}>Chiudi</button>
+          </div>
+        )}
+      </div>
+
+        <div style={{ border: '2px solid black', marginRight: '10px', padding: '10px' }}>
+          Filtri 2
+          {/* Qui puoi aggiungere ulteriori informazioni o componenti per il filtro 2 */}
+        </div>
+        <div style={{ border: '2px solid black', padding: '10px' }}>
+          Filtri 3
+          {/* Qui puoi aggiungere ulteriori informazioni o componenti per il filtro 3 */}
+        </div>
+      </div>

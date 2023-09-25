@@ -9,6 +9,7 @@ import Logo from '../svg/photologo.svg';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import MapComponent from '../component/MapComponent'; 
+import Gallery from '../component/GalleryComponent';
 
 const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState('option1'); // Stato per tenere traccia dell'opzione selezionata
@@ -72,10 +73,11 @@ const Dashboard = () => {
       </Drawer>
 
       {/* Main Content */}
-      <div style={{ marginLeft: '195px', marginTop:'182px', marginRight:'-5px' }}>
-        {/* Aggiungi qui la tua mappa e i filtri */}
+      <div style={{ marginLeft: '195px', marginTop:'-23px'}}>
+        {/* style={{ marginLeft: '195px', marginTop:'182px', marginRight:'-5px' }} */}
         <MapComponent selectedOption={selectedOption} /> {/* Ad esempio: <MapComponent /> */}
       </div>
+      
     </div>
   );
 };
