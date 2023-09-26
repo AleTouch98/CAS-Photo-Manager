@@ -22,10 +22,14 @@ module.exports = {
            // await initialize_zone_table(total_parking_zone1, tableClient);
            // await initialize_charge_stations_table(tableClient);
             await create_user_table(tableClient);
-            await create_area_geo_table(tableClient);
-            await create_collection_table(tableClient);
-            await create_photo_table(tableClient);
-            await create_collab_racc_table(tableClient);
+            console.log('creata tabella utenti');
+            await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
+            console.log('creata tabella geojson');
+            //await create_area_geo_table(tableClient);
+            //await create_collection_table(tableClient);
+            //await create_photo_table(tableClient);
+            //await create_collab_racc_table(tableClient);
+            //await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
             console.log('Tabelle e relazioni create');
             console.log("Database Creato");
             return true;
@@ -48,9 +52,7 @@ module.exports = {
 
 
 
-/**
- questa funzione crea la tabella degli utenti
-*/
+// CREA TABELLA PER UTENTI 
 const create_user_table = async (client) => {
     try {
         await client.query(`CREATE TABLE IF NOT EXISTS Utenti (
@@ -82,9 +84,32 @@ const create_user_table = async (client) => {
             CREATE TYPE RuoloCollaboratore AS ENUM ('Visualizzatore', 'Caricatore', 'Commentatore');
         `);
              console.log('Tipo RuoloCollaboratore creato');
-
-        
     }
+    
+
+
+    // CREA TABELLA PER OSPITARE I GEOJSON
+    const create_geojson_table = async (client) => {
+        console.log('creo tabella geojson');
+        try {
+            await client.query(`
+            CREATE TABLE geojsonTable (
+                ID serial PRIMARY KEY,
+                ID_Utente INT REFERENCES Utenti(ID), 
+                GeoJSON_Path TEXT,
+                NomeGeoJSON TEXT  
+            )
+          `);
+            console.log("Tabella geojson creata");
+        }
+        catch (e) {
+            console.error(e);
+            return e;
+        }
+    }
+
+
+
 
     
 
@@ -227,4 +252,10 @@ const create_collab_racc_table = async (client) => {
         return e;
     }
 }
+
+
+
+
+
+
 

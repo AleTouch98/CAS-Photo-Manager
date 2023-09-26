@@ -36,8 +36,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignIn() {
@@ -48,6 +46,10 @@ export default function SignIn() {
   //const [showAlertLoginSuccess, setShowAlertLoginSuccess] = useState(false); // Stato per mostrare/nascondere l'alert
   const [showAlertErrorLogin, setShowAlertErrorLogin] = useState(false); // Stato per mostrare/nascondere l'alert
 
+
+
+
+  
   const handleCloseErrorPassword = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -55,31 +57,25 @@ export default function SignIn() {
     setShowAlertErrorPassword(false);
   };
 
+
+
+
+
+
   const handleCloseErrorLogin = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setShowAlertErrorLogin(false);
   };
+  
 
-  /*
-  const handleCloseLoginSuccess = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setShowAlertLoginSuccess(false);
-    navigate("/dashboard");
-  };
-  */
+
+
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-
     try {
       const response = await axios.post("http://localhost:8000/", {
         Email: email,
@@ -88,44 +84,28 @@ export default function SignIn() {
 
       console.log(response);
       if (response.status === 200) {
-        console.log("Login effettuato");
-        //setShowAlertLoginSuccess(true);
-        navigate("/dashboard");
-
+        console.log("Login effettuato", response.data.utente, response.data.id);
+        //setShowAlertLoginSuccess(true);  //messaggio verde di login 
+        navigate(`/dashboard/${response.data.id}`); // chiama l'url con l'id dell'utente loggato
       } else if (response.status === 202) {
         console.log("Password errata!");
         setShowAlertErrorPassword(true);
       } else if (response.status === 203) {
         console.log("Utente non registrato");
         setShowAlertErrorLogin(true);
-
       }
     } catch (error) {
       console.error(
         "Si è verificato un errore durante l'inserimento dell'utente",
         error
       );
-      // Gestisci l'errore in base alle tue esigenze
     }
   };
 
-  /*
-  const logUser = () => {
-    axios
-      .post('http://localhost:8000/', {
-        Email: email,
-        Password: password,
-      })
-      .then((response) => {
-        console.log('Utente loggato', response.data);
-        // Eseguire altre azioni se necessario dopo la registrazione
-      })
-      .catch((error) => {
-        console.error('Errore durante il login', error);
-        // Gestire l'errore in modo appropriato (ad esempio, mostrando un messaggio all'utente)
-      });
-  };
-  */
+
+
+
+ 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

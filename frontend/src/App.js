@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App(){
   return (
-    
+
     <Router>
 
       <Routes>
@@ -16,11 +16,12 @@ function App(){
 
         <Route path="/register" element={<SignUpForm />} />
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/:userId" element={<Dashboard />} />
 
       </Routes>
 
     </Router>
+
   );
 
 }

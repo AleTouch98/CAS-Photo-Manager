@@ -12,25 +12,6 @@ SELECT setval(pg_get_serial_sequence('user_events', 'id_user'), 1);
 
 
 module.exports = { 
-    
-    /**
-     * This function return all the users in the database
-     * @returns all the users in the database
-    */
-   getAllUtenti: async () => {
-    const client = new Client(QUERY_CONFIGURATION);
-    await client.connect();
-    try {
-        const result = await client.query(`SELECT * FROM Utenti ORDER BY id ASC`);
-        return result;
-    } catch (e) {
-        console.error(e);
-    }
-    finally {
-        await client.end();
-    }
-},  
-
 
 inserisciUtente: async (Nome, Email, Password) => {
     const client = new Client(QUERY_CONFIGURATION);
@@ -42,23 +23,21 @@ inserisciUtente: async (Nome, Email, Password) => {
     if (userExists.rows[0].count > 0) {
         return false;
     } else {
-        // Inserisci l'utente nel database
         const insertQuery = `INSERT INTO Utenti (Nome_Utente, Email, Password_Utente) VALUES ($1, $2, $3)`;
         const insertValues = [Nome, Email, Password];
         const result = await client.query(insertQuery, insertValues);
         return true;
     }
-    } catch (error) {
-        console.error(error);
-        return null;
-        //res.status(500).json({error: "Si è verificato un errore durante l inserimento dell utente.", });
+    } catch (e) {
+        console.error(e);
+        return e;
     } finally {
     await client.end();
     }
 },
 
 
-loggaUtente: async (Email, Password) => {
+loggaUtente: async (Email) => {
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
     try {
@@ -69,16 +48,39 @@ loggaUtente: async (Email, Password) => {
         const result = await client.query(query, values);
         if (result.rows.length === 1) {
             // L'utente è stato trovato
-            console.log("Utente Loggato.");
             return result.rows[0];
-        } else {
-            // Nessun utente trovato, il login non ha avuto successo
-            console.log("L'utente non esiste o la password è sbagliata.");
-            return null;
-        }
+        } 
+        return null;
     } catch (e) {
         console.error(e);
-        return null; // Gestione dell'errore: restituisci null in caso di errore
+        return e; 
+    } finally {
+        await client.end();
+    }
+},
+
+
+// -------------------------- FINE DELLE QUERY PER IL LOGIN ---------------------------
+
+//con questa query una volta aperta la dashboard (da cui si preleva l'id) viene recuperato il nome dell'utente per stamparlo a video
+//si potrebbe pensare anche di recuperare direttamente l'utente.
+getNomeUtenteById: async (id) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+            SELECT nome_utente FROM utenti WHERE id = $1;
+            `;
+        const values = [id];
+        const result = await client.query(query, values);
+        if (result.rows.length === 1) {
+            // Restituisci il nome dell'utente se trovato
+            return result.rows[0].nome_utente;
+        } 
+        return null;
+    } catch (e) {
+        console.error(e);
+        return e; // Gestione dell'errore: restituisci null in caso di errore
     } finally {
         await client.end();
     }
@@ -88,11 +90,85 @@ loggaUtente: async (Email, Password) => {
 
 
 
+inserisciFoto: async (id, foto, geoTag) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const long = geoTag;
+        const lat = geoTag;
+        const query = `
+        INSERT INTO Foto (Immagine, GeoTag, ID_Utente_Caricatore)
+        VALUES ($1, 'POINT(45.6789 -123.4567)', $2);
+        `;
+        await client.query(query, [foto, id]);
+        return; // Nessun errore
+      } catch (e) {
+        console.error('Errore nell\'inserimento della foto:', e);
+        return e; // Restituisci l'errore in caso di fallimento
+      } finally {
+        await client.end();
+      }
+},
 
+
+getFotoUtente: async (id) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = 'SELECT ID, encode(Immagine, \'base64\') AS ImmagineBase64 FROM Foto WHERE ID_Utente_Caricatore = $1';
+        const result = await client.query(query, [id]);
+        return result; // Nessun errore e ritorna il risultato della query
+      } catch (e) {
+        console.error('Errore nel download delle foto:', e);
+        return e; // Restituisci l'errore in caso di fallimento
+      } finally {
+        await client.end();
+      }
+},
+
+
+
+inserisciGeoJSON: async (id, geojson, nome) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+        INSERT INTO geojsonTable (ID_Utente, GeoJSON_Path, NomeGeoJSON)
+        VALUES ($1, $2, $3);
+        `;
+        await client.query(query, [id, geojson, nome]);
+        return null; // Nessun errore
+      } catch (e) {
+        console.error('Errore nell\'inserimento del GeoJSON:', e);
+        return e; // Restituisci l'errore in caso di fallimento
+      } finally {
+        await client.end();
+      }
+},
+
+getListaGeoJSON: async () => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+        SELECT NomeGeoJSON, GeoJSON_Path
+        FROM geojsonTable;
+        `;
+        const result = await client.query(query);
+        const geoJSONList = result.rows.map(row => ({
+            nomeGeoJSON: row.nomegeojson,
+            geoJSONPath: row.geojson_path // Assicurati che il nome della colonna sia corretto
+        }));
+        return geoJSONList;
+    } catch (e) {
+        console.error('Errore nella query per ottenere la lista dei NomeGeoJSON:', e);
+        throw e; // Rilancia l'errore in caso di fallimento
+    } finally {
+        await client.end();
+    }
+},
 
 
 }
 
 /* -------------------------------------------------------UTILS-----------------------------------------------------------------------------*/
-
-

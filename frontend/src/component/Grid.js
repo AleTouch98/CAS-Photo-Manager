@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -13,13 +13,22 @@ const Item = styled(Paper)(({ theme }) => ({
   color: '#FFFFFF',
 }));
 
-export default function ResponsiveGrid() {
+export default function ResponsiveGrid({geoJSONSelected}) {
+  
+  const [geojson, setgeojson] = useState('');
+
+
+  function handleGeoJSONChange(geoJSONSelezionato) {
+    geoJSONSelected(geoJSONSelezionato);
+  }
+
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
         <Grid item xs={1} sm={4} md={4}>
         <Item>
-            <ChooseGeoButton />
+            <ChooseGeoButton onGeoJSONChange={handleGeoJSONChange}/>
         </Item>
         </Grid>
         <Grid item xs={1} sm={4} md={4}>
