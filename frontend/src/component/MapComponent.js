@@ -49,8 +49,13 @@ const MapComponent = ({ selectedOption }) => {
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
     setGeojson(''); // Reset del geojson quando si apre il menu a tendina
     const path = geoJSONSelezionato.geoJSONPath //DA SOSTITUIRE CON IL RECUPERO DEL PERCORSO DEL GEOJSON IN BASE A QUALCE NOME SELEZIONA (FARE ALTRA QUERY/RICHIESTA)
-    const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, {path});
-    setGeojson(result.data);
+    try{
+      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, {path});
+      setGeojson(result.data);
+    } catch (error) {
+      console.error("Si è verificato un errore:", error);
+    }
+    
   }
 
 

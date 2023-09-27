@@ -157,12 +157,10 @@ module.exports = {
       if (!req.file) {
         return res.status(400).send("Nessun file caricato.");
       }
-    
       const userId = req.params.userId;
       const percorsoFile = req.file.path; // Il percorso del file caricato
       const fileName = req.body.fileName; // Il nome del file
       const result = await databasepg.inserisciGeoJSON(userId, percorsoFile, fileName); 
-
       res.status(200).send("File caricato con successo.");
     });
     
@@ -179,7 +177,7 @@ module.exports = {
           console.error('Errore nella lettura del file:', err);
           return res.status(500).send('Errore nella lettura del file');
         }
-        res.send(data);
+        res.status(200).send(data);
       });
     });
 
@@ -190,9 +188,9 @@ module.exports = {
         const userId = req.params.userId;
         const result = await databasepg.getListaGeoJSON();  
         if(result.length > 0){
-          res.status(200).json({ message: "Download foto completato con successo.", lista_geojson: result });
+          res.status(200).json({ message: "Lista GeoJSON caricata con successo.", lista_geojson: result });
         } else {
-          res.status(210).json({ message: "Nessuna immagine caricata da questo utente." });
+          res.status(210).json({ message: "Nessun GeoJSON caricato da questo utente." });
         }
       } catch (error) {
         console.error(error);

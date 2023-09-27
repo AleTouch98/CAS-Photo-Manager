@@ -32,12 +32,24 @@ const AddGeojsonButton = () => {
     const formDataWithFileName = new FormData();
     formDataWithFileName.append('file', selectedFile);
     formDataWithFileName.append('fileName', fileName);
-    await axios.post(
-      `http://localhost:8000/dashboard/${userId}/loadGeoJSON`,
-      formDataWithFileName,
-      axiosConfig
-    );
-    setOpen(false);
+    try{
+      const result =  await axios.post(
+        `http://localhost:8000/dashboard/${userId}/loadGeoJSON`,
+        formDataWithFileName,
+        axiosConfig
+      );
+      if(result.status == 200) {
+        setOpen(false);
+        alert('geo caricato con successo');
+      } else {
+        alert('nessun geo selezionato');
+      } 
+    } catch (error) {
+      console.error("Si è verificato un errore:", error);
+    }
+    
+
+    
   };
 
   const handleClose = () => {

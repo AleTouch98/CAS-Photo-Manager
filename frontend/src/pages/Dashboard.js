@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Drawer, List, ListItem, ListItemText } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Drawer, List, ListItem } from '@mui/material';
 import AddPhotoButton from '../button/AddPhotoButton';
 import AddGeojsonButton from '../button/AddGeojsonButton';
 import AddCollectionButton from '../button/AddCollection';
@@ -9,10 +9,26 @@ import Logo from '../svg/photologo.svg';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import MapComponent from '../component/MapComponent'; 
-import Gallery from '../component/GalleryComponent';
+import { useParams } from 'react-router-dom';
+import axios from "axios";
 
 const Dashboard = () => {
+
   const [selectedOption, setSelectedOption] = useState('option1'); // Stato per tenere traccia dell'opzione selezionata
+  const { userId } = useParams();
+  const [userName, setUserName] = useState(''); 
+
+  useEffect(() => {
+    const caricaDati = async () => {
+      try {
+        const result = await axios.get(`http://localhost:8000/dashboard/${userId}/loaded`);
+        setUserName(result.data.nome_utente);
+      } catch (error) {
+        console.error("Si è verificato un errore:", error);
+      }
+    };
+    caricaDati();
+  }, [userId]);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -50,7 +66,7 @@ const Dashboard = () => {
           </Grid>
           {/* Inserisci il testo "Benvenuto" */}
           <Grid item>
-            <Typography variant="subtitle1" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Benvenuto UTENTE</Typography>
+            <Typography variant="subtitle1" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Benvenuto {userName}</Typography>
           </Grid>
         </Grid>
         <List>
