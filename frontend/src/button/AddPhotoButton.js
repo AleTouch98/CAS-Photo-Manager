@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import AddPhotoIcon from '@mui/icons-material/AddAPhoto';
 import IconButton from '@mui/material/IconButton';
 import PhotoUploader from '../component/PhotoUploader'; // Importa il componente PhotoUploader
+import UploadGeoTag from '../component/UploadGeoTag'; 
 
 const AddPhotoButton = () => {
   const [open, setOpen] = useState(false);

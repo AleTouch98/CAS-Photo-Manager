@@ -1,3 +1,8 @@
+//CHIAVE API PER GOOGLE
+AIzaSyBkxbpPgM2nZmcStlyWZ8r4U1SoGOMOLjk
+AIzaSyDZFUwx5LUuoZp1vHzjOGZ7DHAfHHuYTOw
+AIzaSyB7M--kaj9HFR8oK1ScipF01-xpPXG2Sw8AIzaSyB7M--kaj9HFR8oK1ScipF01-xpPXG2Sw8
+
 //CODICE DEI FILTRI
 
 <div style={{ display: 'flex', justifyContent: 'space-evenly', width: '1000px', position: 'absolute', top: '70px', left: '350px', right: '0' }}>
@@ -27,3 +32,22 @@
           {/* Qui puoi aggiungere ulteriori informazioni o componenti per il filtro 3 */}
         </div>
       </div>
+
+
+
+      CODICE MAP COMPONENT
+  /*
+  useEffect(() => {  // utilizzato per caricare la mappa 
+    if (!mapRef.current) {
+      mapRef.current = L.map('map').setView([41.9028, 12.4964], 5);
+    }
+    mapRef.current.eachLayer((layer) => { // Rimuovi tutti i layer esistenti prima di aggiungere il nuovo layer
+      mapRef.current.removeLayer(layer);
+    });
+    if (selectedOption === 'option1') {     // Aggiungi il layer di mappa in base all'opzione selezionata
+      OpenStreetMap_Mapnik.addTo(mapRef.current);
+    } else if (selectedOption === 'option2') {
+      Stadia_StamenTerrain.addTo(mapRef.current);
+    }
+  }, [selectedOption]);
+*/

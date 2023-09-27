@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import UploadGeoTag from '../component/UploadGeoTag';
 
 const PhotoUploader = () => {
   const [files, setFiles] = useState([]);
@@ -64,12 +65,7 @@ const PhotoUploader = () => {
           {files.map((file, index) => (
             <div key={file.name}>
               <Typography variant="inherit">Geotag per {file.name}:</Typography>
-              <input
-                type="text"
-                value={geoTags[index]}
-                onChange={(event) => handleGeoTagChange(event, index)}
-                placeholder="Inserisci il geotag"
-              />
+              **inserire qui**
               <Button
                 variant="outlined"
                 color="secondary"

@@ -5,38 +5,98 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+import { Typography } from '@mui/material';
+import FilterCollectionIcon from '@mui/icons-material/Filter';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 export default function TitlebarImageList() {
+  const [filteredData, setFilteredData] = React.useState(itemData);
+
+  const handleShowAll = () => {
+    setFilteredData(itemData);
+  };
+
+  const handleFilter = () => {
+    // Implementa il filtro qui, ad esempio, mostriamo solo le immagini con "featured: true"
+    const filteredItems = itemData.filter(item => item.featured);
+    setFilteredData(filteredItems);
+  };
+
+  
+
   return (
-    <ImageList sx={{ width:'100%', height: '100%' }}>
-      <ImageListItem key="Subheader" cols={2}>
-        <ListSubheader component="div">December</ListSubheader>
-      </ImageListItem>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.img}?w=248&fit=crop&auto=format`}
-            alt={item.title}
-            loading="lazy"
-          />
-          <ImageListItemBar
-            title={item.title}
-            subtitle={item.author}
-            actionIcon={
-              <IconButton
-                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                aria-label={`info about ${item.title}`}
-              >
-                <InfoIcon />
-              </IconButton>
-            }
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
-  );
+    
+    <div style={{ width: '100%', overflowX: 'auto' }}>
+{/*CREAZIONE DEI BOTTONI*/}
+<PopupState variant="popover" popupId="demo-popup-menu">
+    {(popupState) => (
+      <React.Fragment>
+      <IconButton color="primary" variant="contained" {...bindTrigger(popupState)} style={{ position:'relative',marginTop: '10px', marginBottom:'-10px' }} >
+        <Typography variant="inherit" style={{ display: 'flex', alignItems: 'center', marginLeft:'20px',marginRight:'50px',  marginTop:'0px', color: 'black', fontSize: '17px' }}>
+        <FilterCollectionIcon style={{ marginRight: '8px'  }} />  Collezione  
+        </Typography>
+      </IconButton>
+        <Menu {...bindMenu(popupState)}>
+          <MenuItem onClick={popupState.close}>Collezione 1</MenuItem>
+          <MenuItem onClick={popupState.close}>Collezione 2</MenuItem>
+          <MenuItem onClick={popupState.close}>Collezione 3</MenuItem>
+        </Menu>
+      </React.Fragment>
+    )}
+  </PopupState>
+
+  <PopupState variant="popover" popupId="demo-popup-menu">
+    {(popupState) => (
+      <React.Fragment>
+        <IconButton color="primary" variant="contained" {...bindTrigger(popupState)} style={{ position:'relative',marginTop: '10px', marginBottom:'-10px' }}  >
+        <Typography variant="inherit" style={{display: 'flex', alignItems: 'center', marginLeft:'20px',marginRight:'50px', marginTop:'0px', color: 'black', fontSize: '17px' }}>
+        <FilterAltIcon style={{ marginRight: '8px'  }} />  Filtro 2  
+        </Typography>
+      </IconButton>
+        <Menu {...bindMenu(popupState)}>
+          <MenuItem onClick={popupState.close}>filtro 1</MenuItem>
+          <MenuItem onClick={popupState.close}>filtro 2</MenuItem>
+          <MenuItem onClick={popupState.close}>filtro 3</MenuItem>
+        </Menu>
+      </React.Fragment>
+    )}
+  </PopupState>
+
+
+    <ImageList sx={{ width: '100%', maxHeight: '81.06vh', paddingTop:'0px',overflowY: 'auto' }}>
+  {filteredData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img
+        style={{ width: '100%', height: 'auto' }} 
+        srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+        src={`${item.img}?w=248&fit=crop&auto=format`}
+        alt={item.title}
+        loading="lazy"
+      />
+      <ImageListItemBar
+        title={item.title}
+        subtitle={item.author}
+        actionIcon={
+          <IconButton
+            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+            aria-label={`info about ${item.title}`}
+          >
+            <InfoIcon />
+          </IconButton>
+        }
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+
+
+  </div>
+);
 }
+
 
 const itemData = [
   {

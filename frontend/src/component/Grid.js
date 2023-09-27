@@ -8,7 +8,9 @@ import ChooseGeoButton from '../button/ChooseGeojson';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor:'#3b3f41',
   ...theme.typography.body2,
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+  marginTop: theme.spacing(1),
   textAlign: 'center',
   color: '#FFFFFF',
 }));
