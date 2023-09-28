@@ -25,6 +25,8 @@
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^6.15.0",
     "react-scripts": "^5.0.1",
+    "react-step-builder": "^3.0.6",
+    "react-stepper-horizontal": "^1.0.11",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
   },

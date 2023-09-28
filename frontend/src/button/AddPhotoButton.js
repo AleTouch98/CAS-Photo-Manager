@@ -8,6 +8,7 @@ import AddPhotoIcon from '@mui/icons-material/AddAPhoto';
 import IconButton from '@mui/material/IconButton';
 import PhotoUploader from '../component/PhotoUploader'; // Importa il componente PhotoUploader
 import UploadGeoTag from '../component/UploadGeoTag'; 
+import PhotoUploadWizard from '../component/PhotoUploadWizard';
 
 const AddPhotoButton = () => {
   const [open, setOpen] = useState(false);
@@ -31,7 +32,7 @@ const AddPhotoButton = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Carica Foto</DialogTitle>
         <DialogContent>
-          <PhotoUploader /> {/* Mostra il componente PhotoUploader nel popup */}
+          <PhotoUploadWizard /> {/* Mostra il componente PhotoUploader nel popup */}
         </DialogContent>
       </Dialog>
     </div>

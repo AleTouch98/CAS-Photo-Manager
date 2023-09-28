@@ -65,7 +65,7 @@ const PhotoUploader = () => {
           {files.map((file, index) => (
             <div key={file.name}>
               <Typography variant="inherit">Geotag per {file.name}:</Typography>
-              **inserire qui**
+              <UploadGeoTag/>
               <Button
                 variant="outlined"
                 color="secondary"
