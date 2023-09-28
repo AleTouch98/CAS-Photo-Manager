@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import PlacesAutocomplete from 'react-places-autocomplete';
 import UploadSingleGeoTag from './UploadSingleGeoTag';
+
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const [geoTag, setGeoTag] = useState('');
 
   const handleCheckboxChange = () => {
     setCheckboxChecked(!checkboxChecked);
@@ -16,10 +21,18 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
 
   };
 
-  const handleSingleGeoTag = (indice, valore) => {
-    console.log('unico geo tag', indice, ' ', valore);
-    // GESTIRE QUI IL CASO IN CUI IL GEOTAG è UNICO AGGIUNGENDOLO A TUTTE LE FOTO
-  };
+  const handleSingleGeoTag = async (address) => {
+    // GESTIRE L'ASSEGNAMENTO DELLO STESSO GEOTAG A TUTTE LE FOTO
+    setGeoTag(address);
+    try {
+      const results = await geocodeByAddress(address);
+      const latLng = await getLatLng(results[0]);
+      const { lat, lng } = latLng;
+      console.log({address, lat, lng });
+      onGeoTagChange({ address, lat, lng });
+    } catch (error) {
+      console.error('Errore durante la geocodifica:', error);
+    }  };
 
   return (
     <div>
@@ -45,14 +58,14 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
         ))
       ) : (
         <PlacesAutocomplete
-          value=""
-          onChange={(address) => handleSingleGeoTag(0, { address, lat: null, lng: null })}
+          value={geoTag}
+          onChange={(address) => handleSingleGeoTag(address)}
         >
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
             <div>
               <input
                 {...getInputProps({
-                  placeholder: 'Inserisci un indirizzo',
+                  placeholder: `Indirizzo per tutte le foto`,
                 })}
               />
               <div>
