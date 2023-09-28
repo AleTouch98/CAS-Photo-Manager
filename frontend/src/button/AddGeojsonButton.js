@@ -13,14 +13,40 @@ const AddGeojsonButton = () => {
   const formData = new FormData();
 
   const handleButtonClick = () => {
+    setFileName('');
+    for (const key of formData.keys()) {
+      formData.delete(key);
+    }
     setOpen(true);
   };
 
   const handleFileSelection = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file); // Aggiorna lo stato con il file selezionato
-    formData.append('file', file);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const geojsonContent = event.target.result;
+      console.log('sto leggendo il contenuto del json');
+      const geojson = JSON.parse(geojsonContent); 
+      let hasMultiPolygon = false; 
+      if (geojson.features) {
+        for (const feature of geojson.features) {
+          if (feature.geometry && feature.geometry.type === "MultiPolygon") {
+            hasMultiPolygon = true;
+            break; 
+          }
+        }
+      }
+      if (hasMultiPolygon) {
+        console.log('ho settato il file');
+        setSelectedFile(file);
+      } else {
+        e.target.value = null;
+        alert('il geojson caricato non ha una struttura corretta di tipo multipolygon');
+      }
+    };
+    reader.readAsText(file);
   };
+  
 
   const axiosConfig = {
     headers: {
@@ -29,27 +55,32 @@ const AddGeojsonButton = () => {
   };
 
   const handleGeoJSONUpload = async () => {
-    const formDataWithFileName = new FormData();
-    formDataWithFileName.append('file', selectedFile);
-    formDataWithFileName.append('fileName', fileName);
-    try{
-      const result =  await axios.post(
-        `http://localhost:8000/dashboard/${userId}/loadGeoJSON`,
-        formDataWithFileName,
-        axiosConfig
-      );
-      if(result.status == 200) {
-        setOpen(false);
-        alert('geo caricato con successo');
-      } else {
-        alert('nessun geo selezionato');
-      } 
-    } catch (error) {
-      console.error("Si è verificato un errore:", error);
+    if (!fileName.trim()) {
+      alert('Nessun nome file inserito.');
+      return;
+    } else if(!selectedFile) {
+      alert('Nessun file selezionato.');
+      return;
+    } else {
+      const formDataWithFileName = new FormData();
+      formDataWithFileName.append('file', selectedFile);
+      formDataWithFileName.append('fileName', fileName.trim());
+      try {
+        const result = await axios.post(
+          `http://localhost:8000/dashboard/${userId}/loadGeoJSON`,
+          formDataWithFileName,
+          axiosConfig
+        );
+        if (result.status === 200) {
+          setOpen(false);
+          alert('Geo caricato con successo');
+        } else {
+          alert('Errore durante il caricamento del geo');
+        }
+      } catch (error) {
+        console.error('Si è verificato un errore:', error);
+      }
     }
-    
-
-    
   };
 
   const handleClose = () => {

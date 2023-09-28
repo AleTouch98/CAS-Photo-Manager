@@ -21,8 +21,12 @@ function ChooseGeojson({ onGeoJSONChange }) {
   const handleButtonClick = async () => {
     try {
       const result = await axios.get(`http://localhost:8000/dashboard/${userId}/getGeoJSONList`);
+      console.log(result);
       const listaGeoJSON = result.data.lista_geojson;
-      const nomiGeoJSON = listaGeoJSON.map((elemento) => elemento.nomeGeoJSON);
+      if (result.status === 210) {
+        console.log('La lista dei nomi GeoJSON è vuota.');
+        return;
+      }
       setListaNomiGeo(listaGeoJSON);
     } catch (error) {
       console.error("Errore durante la richiesta dei dati:", error);

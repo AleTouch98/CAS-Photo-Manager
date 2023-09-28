@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import AddPhotoIcon from '@mui/icons-material/AddAPhoto';
 import IconButton from '@mui/material/IconButton';
 import PhotoUploader from '../component/PhotoUploader'; // Importa il componente PhotoUploader
-import UploadGeoTag from '../component/UploadGeoTag'; 
+import UploadGeoTag from '../component/UploadGeoTags'; 
 import PhotoUploadWizard from '../component/PhotoUploadWizard';
 
 const AddPhotoButton = () => {

@@ -2,38 +2,23 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import UploadGeoTag from '../component/UploadGeoTag';
+import UploadGeoTag from './UploadGeoTags';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const PhotoUploader = () => {
+const PhotoUploader = ({onFileUpload}) => {
   const [files, setFiles] = useState([]);
-  const [geoTags, setGeoTags] = useState(['']);
 
   const onDrop = (acceptedFiles) => {
-    setFiles(acceptedFiles);
-    setGeoTags(Array(acceptedFiles.length).fill(''));
-  };
-
-  const handleGeoTagChange = (event, index) => {
-    const newGeoTags = [...geoTags];
-    newGeoTags[index] = event.target.value;
-    setGeoTags(newGeoTags);
+    const newFiles = [...files, ...acceptedFiles];
+    setFiles(newFiles);
+    onFileUpload(newFiles); // Passa l'elenco dei file al componente padre
   };
 
   const handleRemoveFile = (index) => {
     const newFiles = [...files];
-    const newGeoTags = [...geoTags];
-
     newFiles.splice(index, 1); // Rimuovi la foto dall'array
-    newGeoTags.splice(index, 1); // Rimuovi il geotag corrispondente
-
     setFiles(newFiles);
-    setGeoTags(newGeoTags);
-  };
-
-  const handleUpload = () => {
-    // Implementa la logica per l'upload delle foto e l'associazione dei geotag
-    console.log('Files:', files);
-    console.log('GeoTags:', geoTags);
+    onFileUpload(newFiles); // Passa l'elenco aggiornato dei file al componente padre
   };
 
   return (
@@ -49,13 +34,13 @@ const PhotoUploader = () => {
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              minHeight: '200px',
+              minHeight: '100px',
               padding: '16px',
             }}
           >
             <input {...getInputProps()} />
             <Typography variant="inherit">
-              Trascina qui le foto o fai clic per selezionarle.
+              Trascina qui le foto o fai clic per selezionarle (solo immagini).
             </Typography>
           </div>
         )}
@@ -64,11 +49,15 @@ const PhotoUploader = () => {
         <div>
           {files.map((file, index) => (
             <div key={file.name}>
-              <Typography variant="inherit">Geotag per {file.name}:</Typography>
-              <UploadGeoTag/>
+              <Typography variant="inherit">{file.name}:</Typography>
+              <img
+                src={URL.createObjectURL(file)} // Crea un'anteprima utilizzando l'URL Object
+                alt={`Preview of ${file.name}`}
+                style={{ maxWidth: '100px', maxHeight: '100px', margin: '8px 0' }}
+              />
               <Button
                 variant="outlined"
-                color="secondary"
+                startIcon={<DeleteIcon />}
                 onClick={() => handleRemoveFile(index)} // Rimuovi la foto quando il pulsante viene cliccato
                 style={{ marginLeft: '8px' }}
               >
@@ -78,14 +67,6 @@ const PhotoUploader = () => {
           ))}
         </div>
       )}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleUpload}
-        style={{ marginTop: '16px' }}
-      >
-        Carica Foto
-      </Button>
     </div>
   );
 };
