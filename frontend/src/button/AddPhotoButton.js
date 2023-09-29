@@ -18,6 +18,10 @@ const AddPhotoButton = () => {
     setOpen(false);
   };
 
+  const handleEndUpload = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <IconButton color="primary" onClick={handleOpen}>
@@ -29,7 +33,7 @@ const AddPhotoButton = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Carica Foto</DialogTitle>
         <DialogContent>
-          <PhotoUploadWizard /> {/* Mostra il componente PhotoUploader nel popup */}
+          <PhotoUploadWizard onClose={handleEndUpload}/> {/* Mostra il componente PhotoUploader nel popup */}
         </DialogContent>
       </Dialog>
     </div>

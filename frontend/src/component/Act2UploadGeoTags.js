@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import UploadSingleGeoTag from './Act12UploadSingleGeoTag';
+import UploadSingleGeoTag from './Act21UploadSingleGeoTag';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -21,7 +21,6 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
 
 
   const handleAllPhotoGeoTag = (indice, valore) => {
-    console.log('all photo geo tag', indice, ' valore ', valore);  
     const geoTagForPhoto = { // Creare un nuovo oggetto geoTag per la foto corrente
       address: valore.address, // Sostituisci con il valore effettivo
       lat: valore.lat, // Sostituisci con la latitudine reale
@@ -48,7 +47,6 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
         lat,
         lng,
       }));
-      console.log(geoTagsArray);
       onGeoTagChange(geoTagsArray);
     } catch (error) {
       console.error('Errore durante la geocodifica:', error);

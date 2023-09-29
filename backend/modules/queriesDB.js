@@ -76,8 +76,9 @@ getNomeUtenteById: async (id) => {
         if (result.rows.length === 1) {
             // Restituisci il nome dell'utente se trovato
             return result.rows[0].nome_utente;
-        } 
-        return null;
+        } else {
+            return null;
+        }
     } catch (e) {
         console.error(e);
         return e; // Gestione dell'errore: restituisci null in caso di errore
@@ -90,25 +91,26 @@ getNomeUtenteById: async (id) => {
 
 
 
-inserisciFoto: async (id, foto, geoTag) => {
+inserisciFoto: async (id, nomeFoto, foto, indirizzo, longitudine, latitudine, collezione) => {
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
     try {
-        const long = geoTag;
-        const lat = geoTag;
+        const point = `POINT(${parseFloat(longitudine)} ${parseFloat(latitudine)})`;
         const query = `
-        INSERT INTO Foto (Immagine, GeoTag, ID_Utente_Caricatore)
-        VALUES ($1, 'POINT(45.6789 -123.4567)', $2);
+        INSERT INTO Foto (Immagine, Nome_Foto, ID_Utente, Indirizzo, GeoTag_Spaziale, Nome_Collezione)
+        VALUES ($1, $2, $3, $4,  ST_GeomFromText($5, 4326), $6);
         `;
-        await client.query(query, [foto, id]);
-        return; // Nessun errore
-      } catch (e) {
+        await client.query(query, [foto, nomeFoto, id, indirizzo, point, collezione]);
+        return null;
+    } catch (e) {
         console.error('Errore nell\'inserimento della foto:', e);
-        return e; // Restituisci l'errore in caso di fallimento
-      } finally {
+        return e;
+    } finally {
         await client.end();
-      }
+    }
 },
+
+
 
 
 getFotoUtente: async (id) => {

@@ -97,18 +97,26 @@ module.exports = {
 
 
     // RICHIESTA PER CARICARE UN'IMMAGINE 
-    app.post("/dashboard/:userId/loadImage", upload.array('file'), async (req, res) => {
+    app.post("/dashboard/:userId/loadImage", upload.single('file'), async (req, res) => {
       const userId = req.params.userId;
-      if (!req.files || req.files.length === 0) {
-        res.status(400).json({ message: 'Nessun file caricato.' });
-      } else {
-        for (const file of req.files) {
-          const imageBuffer = file.buffer;
-          await databasepg.inserisciFoto(userId, imageBuffer);
+      const file = req.file;
+      const fileName = req.file.originalname.split('.')[0];
+      const address = req.body.address;
+      const lat = req.body.lat;
+      const lng = req.body.lng;
+      const collezione = req.body.collezione;
+      try{
+        const imageBuffer = file.buffer;
+        const result = await databasepg.inserisciFoto(userId,fileName, imageBuffer, address, lng, lat, collezione);
+        if(result === null){
+          res.status(200).send('Foto caricata con successo');
+        } else {
+          res.status(215).send('Errore durante il caricamento della foto: ', result);
         }
-        res.status(200).json({ message: 'Upload completato con successo.' })
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Errore del Server Interno");
       }
-      
     });
 
 

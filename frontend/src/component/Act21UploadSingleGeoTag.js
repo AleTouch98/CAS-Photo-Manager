@@ -15,7 +15,6 @@ const UploadSingleGeoTag = ({ file, index, onGeoTagChange }) => {
       const results = await geocodeByAddress(address);
       const latLng = await getLatLng(results[0]);
       const { lat, lng } = latLng;
-      console.log(index, { address, lat, lng });
       onGeoTagChange(index, { address, lat, lng });
     } catch (error) {
       console.error('Errore durante la geocodifica:', error);

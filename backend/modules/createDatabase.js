@@ -111,9 +111,11 @@ const create_user_table = async (client) => {
             await client.query(`
                 CREATE TABLE IF NOT EXISTS Foto (
                   ID SERIAL PRIMARY KEY,
+                  Immagine BYTEA,
                   Nome_Foto TEXT NOT NULL,
                   ID_Utente INT REFERENCES Utenti(ID) NOT NULL, 
-                  Geo_Tag_Spaziale GEOMETRY(Point) NOT NULL,
+                  Indirizzo TEXT NOT NULL,
+                  GeoTag_Spaziale GEOMETRY(Point) NOT NULL,
                   Nome_Collezione TEXT NOT NULL
                 )
             `);
@@ -137,6 +139,9 @@ const create_user_table = async (client) => {
 
 
     
+
+
+
 
 
 
