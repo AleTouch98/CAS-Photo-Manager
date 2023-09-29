@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Checkbox, FormControlLabel, TextField, Select, MenuItem, FormControl, InputLabel, Button, Box } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
 
 const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
     const [checkboxChecked, setCheckboxChecked] = useState(false);
@@ -8,11 +8,8 @@ const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
     const [collezioni, setCollezioni] = useState([]);
 
     useEffect(() => {
-        console.log(collezioniDB);
-        if (typeof collezioniDB !== 'undefined' && collezioniDB !== null) {
-            if (collezioniDB.length > 0) {
-                setCollezioni(collezioniDB);
-            }
+        if (collezioniDB !== null) {
+            setCollezioni(collezioniDB);
         } else {
             setCollezioni([]);
         }
@@ -50,8 +47,8 @@ const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
                         }}
                     >
                         {collezioni.map((collezione) => (
-                            <MenuItem key={collezione.id} value={collezione.id}>
-                                {collezione} {/* Sostituisci con il nome del campo della tua collezione */}
+                            <MenuItem key={collezione.id} value={collezione}>
+                                {collezione}
                             </MenuItem>
                         ))}
                     </Select>
@@ -66,7 +63,6 @@ const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
                     }
                     label="Crea Nuova Collezione"
                 />
-
                 {checkboxChecked && (
                     <TextField
                         label="Nuova Collezione"
