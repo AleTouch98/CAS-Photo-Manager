@@ -8,7 +8,7 @@ const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
     const [collezioni, setCollezioni] = useState([]);
 
     useEffect(() => {
-        if (collezioniDB !== null) {
+        if (typeof collezioniDB !== 'undefined' && collezioniDB !== null) {
             setCollezioni(collezioniDB);
         } else {
             setCollezioni([]);
