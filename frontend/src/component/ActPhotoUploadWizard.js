@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Stepper from 'react-stepper-horizontal';
 import PhotoUploader from './Act1PhotoUploader';
 import UploadGeoTags from './Act2UploadGeoTags';
+import ChooseCollection from './Act3ChooseCollection';
 
 const PhotoUploadWizard = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -64,7 +65,7 @@ const PhotoUploadWizard = () => {
       )}
       {activeStep === 2 && (
         <div>
-          {/* Contenuto della fase 3 (Carica Foto) */}
+          {<ChooseCollection/>}
           <button onClick={handleBack}>Indietro</button>
           <button onClick={onSubmit}>Carica Foto</button>
         </div>
