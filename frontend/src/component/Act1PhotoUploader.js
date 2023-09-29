@@ -7,22 +7,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
   const [files, setFiles] = useState([]);
 
-
-
   useEffect(() => {
     if (fotoCaricate !== null && fotoCaricate.length > 0) {
       setFiles(fotoCaricate);
     }
   }, [fotoCaricate]);
 
-
-
-
   const onDrop = (acceptedFiles) => {
     const newFiles = [...files];
     const duplicateFiles = [];
     acceptedFiles.forEach((acceptedFile) => {
-      const isDuplicate = files.some((file) => file.name === acceptedFile.name); // Verifica se il nome del file è già presente in files
+      const isDuplicate = files.some((file) => file.name === acceptedFile.name);
       if (isDuplicate) {
         duplicateFiles.push(acceptedFile.name);
       } else {
@@ -33,21 +28,15 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
       alert(`Le seguenti foto sono già state caricate: ${duplicateFiles.join(', ')}`);
     }
     setFiles(newFiles);
-    onFileUpload(newFiles); 
+    onFileUpload(newFiles);
   };
-
-
-
 
   const handleRemoveFile = (index) => {
     const newFiles = [...files];
-    newFiles.splice(index, 1); 
+    newFiles.splice(index, 1);
     setFiles(newFiles);
-    onFileUpload(newFiles); 
+    onFileUpload(newFiles);
   };
-
-
-
 
   return (
     <div>
@@ -74,22 +63,24 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
         )}
       </Dropzone>
       {files.length > 0 && (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
           {files.map((file, index) => (
-            <div key={file.name}>
-              <Typography variant="inherit">{file.name}:</Typography>
+            <div key={file.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '16px' }}>
               <img
-                src={URL.createObjectURL(file)} // Crea un'anteprima utilizzando l'URL Object
+                src={URL.createObjectURL(file)}
                 alt={`Preview of ${file.name}`}
                 style={{ maxWidth: '100px', maxHeight: '100px', margin: '8px 0' }}
               />
               <Button
                 variant="outlined"
-                startIcon={<DeleteIcon />}
-                onClick={() => handleRemoveFile(index)} // Rimuovi la foto quando il pulsante viene cliccato
-                style={{ marginLeft: '8px' }}
+                startIcon={<DeleteIcon style ={{marginLeft:'10px'}} />}
+                onClick={() => handleRemoveFile(index)}
+                style={{ marginTop: '8px', color: 'red',border: '1px solid red',
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                  color: 'darkred', 
+                }, }}
               >
-                Rimuovi
               </Button>
             </div>
           ))}

@@ -3,6 +3,8 @@ import Stepper from 'react-stepper-horizontal';
 import PhotoUploader from './Act1PhotoUploader';
 import UploadGeoTags from './Act2UploadGeoTags';
 import ChooseCollection from './Act3ChooseCollection';
+import Button from '@mui/material/Button';
+
 
 const PhotoUploadWizard = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -51,24 +53,34 @@ const PhotoUploadWizard = () => {
     <div>
       <Stepper steps={steps} activeStep={activeStep} />
       {activeStep === 0 && (
-        <div>
-          <PhotoUploader fotoCaricate={foto} onFileUpload={handleCaricamentoFoto} />
-          <button disabled={nextButtonPhoto} onClick={handleNext}>Avanti</button>
-        </div>
+
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
+        <PhotoUploader fotoCaricate={foto} onFileUpload={handleCaricamentoFoto} />
+      <div style={{ marginTop: '16px', marginLeft:"340px",display: 'flex' }}>
+        <Button disabled={nextButtonPhoto} onClick={handleNext}>Avanti</Button>
+    </div>
+    </div>
       )}
       {activeStep === 1 && (
-        <div>
-          <UploadGeoTags onGeoTagChange={handleCaricamentoGeoTag} fotoCaricate={foto} />
-          <button onClick={handleBack}>Indietro</button>
-          <button onClick={handleNext} disabled={nextButtonGeo}>Avanti</button>
-        </div>
+
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
+      <UploadGeoTags onGeoTagChange={handleCaricamentoGeoTag} fotoCaricate={foto} />
+      <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-evenly' }}>
+          <Button onClick={handleBack} style={{ marginRight: '90px' }}>Indietro</Button>
+          <Button onClick={handleNext} disabled={nextButtonGeo}>Avanti</Button>
+      </div>
+    </div>
       )}
       {activeStep === 2 && (
-        <div>
-          {<ChooseCollection/>}
-          <button onClick={handleBack}>Indietro</button>
-          <button onClick={onSubmit}>Carica Foto</button>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
+        <ChooseCollection />
+        <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-evenly' }}>
+          <Button onClick={handleBack} style={{ marginRight: '90px' }}>Indietro</Button>
+          <Button onClick={onSubmit}>Carica Foto</Button>
         </div>
+      </div>
+      
+      
       )}
     </div>
   );
