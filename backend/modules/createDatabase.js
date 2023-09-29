@@ -22,12 +22,11 @@ module.exports = {
            // await initialize_zone_table(total_parking_zone1, tableClient);
            // await initialize_charge_stations_table(tableClient);
             await create_user_table(tableClient);
-            console.log('creata tabella utenti');
             await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
-            console.log('creata tabella geojson');
+            await create_photo_table(tableClient);
             //await create_area_geo_table(tableClient);
             //await create_collection_table(tableClient);
-            //await create_photo_table(tableClient);
+            
             //await create_collab_racc_table(tableClient);
             //await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
             console.log('Tabelle e relazioni create');
@@ -108,6 +107,13 @@ const create_user_table = async (client) => {
         }
     }
 
+
+
+
+
+
+
+    
 
 
 

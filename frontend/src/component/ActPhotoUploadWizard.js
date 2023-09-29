@@ -10,6 +10,7 @@ const PhotoUploadWizard = () => {
 
 
   const [foto, setFoto] = useState(null);
+  const [arrayGeoTags, setArrayGeoTags] = useState(null);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -34,12 +35,12 @@ const PhotoUploadWizard = () => {
     } else {
       setnextButtonPhoto(true);
     }
-    // Aggiorna l'elenco dei file selezionati nel componente padre
   };
 
-  const handleCaricamentoGeoTag = (arrayGeoTag) => {  
-    console.log('ARRAY RISULTATO', arrayGeoTag);
-    if(arrayGeoTag.length === foto.length && !arrayGeoTag.includes(undefined)){
+  const handleCaricamentoGeoTag = (array) => {  
+    console.log('ARRAY RISULTATO', array);
+    setArrayGeoTags(array);
+    if(array.length === foto.length && !array.includes(undefined)){
       console.log('geotag selezionato per tutte le foto');
       setnextButtonGeo(false);
     }
