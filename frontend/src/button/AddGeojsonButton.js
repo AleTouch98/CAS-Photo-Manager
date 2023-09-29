@@ -1,64 +1,28 @@
 import React, { useState } from 'react';
-import { IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
+import { IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography } from '@mui/material';
 import AddGeojsonIcon from '@mui/icons-material/AccountTree'; 
-import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import CustomFileInput from '../component/CustomFileInput';
+
 
 const AddGeojsonButton = () => {
   const [open, setOpen] = useState(false);
   const [fileName, setFileName] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null); // Stato per il file selezionato
+  const [selectedFile, setSelectedFile] = useState(null);
   const { userId } = useParams();
-  const formData = new FormData();
 
   const handleButtonClick = () => {
     setFileName('');
-    for (const key of formData.keys()) {
-      formData.delete(key);
-    }
+    setSelectedFile(null);
     setOpen(true);
-  };
-
-  const handleFileSelection = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const geojsonContent = event.target.result;
-      console.log('sto leggendo il contenuto del json');
-      const geojson = JSON.parse(geojsonContent); 
-      let hasMultiPolygon = false; 
-      if (geojson.features) {
-        for (const feature of geojson.features) {
-          if (feature.geometry && feature.geometry.type === "MultiPolygon") {
-            hasMultiPolygon = true;
-            break; 
-          }
-        }
-      }
-      if (hasMultiPolygon) {
-        console.log('ho settato il file');
-        setSelectedFile(file);
-      } else {
-        e.target.value = null;
-        alert('il geojson caricato non ha una struttura corretta di tipo multipolygon');
-      }
-    };
-    reader.readAsText(file);
-  };
-  
-
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
   };
 
   const handleGeoJSONUpload = async () => {
     if (!fileName.trim()) {
       alert('Nessun nome file inserito.');
       return;
-    } else if(!selectedFile) {
+    } else if (!selectedFile) {
       alert('Nessun file selezionato.');
       return;
     } else {
@@ -69,7 +33,11 @@ const AddGeojsonButton = () => {
         const result = await axios.post(
           `http://localhost:8000/dashboard/${userId}/loadGeoJSON`,
           formDataWithFileName,
-          axiosConfig
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
         );
         if (result.status === 200) {
           setOpen(false);
@@ -98,11 +66,7 @@ const AddGeojsonButton = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Aggiungi Geojson</DialogTitle>
         <DialogContent>
-          <input
-            type="file"
-            accept=".geojson"
-            onChange={handleFileSelection}
-          />
+          <CustomFileInput handleFileSelection={(file) => setSelectedFile(file)} />
           <TextField
             label="Nome del file"
             variant="outlined"

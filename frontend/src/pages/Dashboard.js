@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Drawer, List, ListItem } from '@mui/material';
 import AddPhotoButton from '../button/AddPhotoButton';
 import AddGeojsonButton from '../button/AddGeojsonButton';
-import AddCollectionButton from '../button/AddCollection';
+import ShareButton from '../button/ShareButton';
 import LogoutButton from '../button/LogoutButton';
 import Grid from '@mui/material/Grid';
 import Logo from '../svg/photologo.svg';
@@ -77,7 +77,7 @@ const Dashboard = () => {
             <AddGeojsonButton />
           </ListItem>
           <ListItem button>
-            <AddCollectionButton />
+            <ShareButton />
           </ListItem>
         </List>
         <div style={{ flexGrow: 1 }}></div>

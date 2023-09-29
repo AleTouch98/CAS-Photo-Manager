@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -44,6 +44,9 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = useState(false); // Stato per mostrare/nascondere l'alert
   const [showSuccess, setShowSuccess] = useState(false); // Stato per mostrare/nascondere l'alert
+  const [nomeError, setNomeError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
 
   const handleCloseError = (event, reason) => {
@@ -61,29 +64,53 @@ export default function SignUp() {
     navigate('/');  //Reindirizzamento a login
   };
 
+ // Funzione di validazione
+ const validate = () => {
+  let isValid = true;
 
-  const handleSubmit = async (event) => {
-    
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  // Validazione nome (puoi personalizzare questa logica)
+  if (nome.trim() === '') {
+    setNomeError('Il nome è obbligatorio');
+    isValid = false;
+  } else {
+    setNomeError('');
+  }
 
+  // Validazione email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setEmailError('Email non valida');
+    isValid = false;
+  } else {
+    setEmailError('');
+  }
+
+  // Validazione password (esempio: minimo 6 caratteri)
+  if (password.length < 6) {
+    setPasswordError('La password deve contenere almeno 6 caratteri');
+    isValid = false;
+  } else {
+    setPasswordError('');
+  }
+
+  return isValid;
+};
+
+  
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  if (validate()) {
     try {
-      const response = await axios.post("http://localhost:8000/register", {
+      const response = await axios.post('http://localhost:8000/register', {
         Nome: nome,
         Email: email,
         Password: password,
       });
-      console.log("Response: ");
-      console.log(response.status);
+
       if (response.status === 200) {
-        console.log("Utente inserito con successo");
         setShowSuccess(true);
       } else if (response.status === 201) {
-        console.log("Utente già registrato!");
         setShowAlert(true);
       }
     } catch (error) {
@@ -93,7 +120,20 @@ export default function SignUp() {
       );
       // Gestisci l'errore in base alle tue esigenze
     }
-  };
+  }
+};
+
+useEffect(() => {
+  setNomeError(''); // Pulisci l'errore nome quando il nome cambia
+}, [nome]);
+
+useEffect(() => {
+  setEmailError(''); // Pulisci l'errore email quando l'email cambia
+}, [email]);
+
+useEffect(() => {
+  setPasswordError(''); // Pulisci l'errore password quando la password cambia
+}, [password]);
 
   
 
@@ -144,7 +184,7 @@ export default function SignUp() {
               <Alert
                 onClose={handleCloseError}
                 severity="error"
-                sx={{ width: "350px", height: "50px", display: 'flex', fontSize:"16px", justifyContent:"center"}}
+                sx={{ width: "350px", height: "51px", display: 'flex', fontSize:"16px", justifyContent:"center"}}
               >
                 Account già esistente! Riprovare!
               </Alert>
@@ -163,7 +203,7 @@ export default function SignUp() {
               <Alert
                 onClose={handleCloseSuccess}
                 severity="success"
-                sx={{ width: "350px", height: "50px", display: 'flex', fontSize:"16px", justifyContent:"center"}}
+                sx={{ width: "350px", height: "51px", display: 'flex', fontSize:"16px", justifyContent:"center"}}
               >
                 Account creato con successo!
               </Alert>
@@ -183,6 +223,8 @@ export default function SignUp() {
                   label="Nome"
                   onChange={(event) => setNome(event.target.value)}
                   autoFocus
+                  error={!!nomeError}
+                  helperText={nomeError}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -194,6 +236,8 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                   onChange={(event) => setEmail(event.target.value)}
+                  error={!!emailError}
+                  helperText={emailError}
                   
                 />
               </Grid>
@@ -207,6 +251,8 @@ export default function SignUp() {
                   id="password"
                   autoComplete="new-password"
                   onChange={(e) => setPassword(e.target.value)}
+                  error={!!passwordError}
+                  helperText={passwordError}
                 />
               </Grid>
             </Grid>

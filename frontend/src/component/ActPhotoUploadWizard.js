@@ -100,7 +100,9 @@ const PhotoUploadWizard = ({onClose}) => {
       {activeStep === 0 && (
 
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
+      <div style={{marginLeft:'20px',maxHeight: '365px', overflowY: 'auto'}}>
         <PhotoUploader fotoCaricate={foto} onFileUpload={handleCaricamentoFoto} />
+        </div>
       <div style={{ marginTop: '16px', marginLeft:"340px",display: 'flex' }}>
         <Button disabled={nextButtonPhoto} onClick={handleNext}>Avanti</Button>
     </div>
@@ -109,7 +111,11 @@ const PhotoUploadWizard = ({onClose}) => {
       {activeStep === 1 && (
 
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
+      <div style={{maxHeight: '365px', overflowY: 'auto'}}> 
       <UploadGeoTags onGeoTagChange={handleCaricamentoGeoTag} fotoCaricate={foto} />
+      
+      </div>
+      
       <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-evenly' }}>
           <Button onClick={handleBack} style={{ marginRight: '90px' }}>Indietro</Button>
           <Button onClick={handleNext} disabled={nextButtonGeo}>Avanti</Button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import Avatar from '@mui/material/Avatar';
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -45,7 +45,8 @@ export default function SignIn() {
   const [showAlertErrorPassword, setShowAlertErrorPassword] = useState(false); // Stato per mostrare/nascondere l'alert
   //const [showAlertLoginSuccess, setShowAlertLoginSuccess] = useState(false); // Stato per mostrare/nascondere l'alert
   const [showAlertErrorLogin, setShowAlertErrorLogin] = useState(false); // Stato per mostrare/nascondere l'alert
-
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
 
 
@@ -69,13 +70,37 @@ export default function SignIn() {
     setShowAlertErrorLogin(false);
   };
   
+// Funzione di validazione
+const validate = () => {
+  let isValid = true;
+
+  // Validazione email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setEmailError("Email non valida");
+    isValid = false;
+  } else {
+    setEmailError("");
+  }
+
+  // Validazione password (esempio: minimo 6 caratteri)
+  if (password.length < 6) {
+    setPasswordError("La password deve contenere almeno 6 caratteri");
+    isValid = false;
+  } else {
+    setPasswordError("");
+  }
+
+  return isValid;
+};
 
 
 
 
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  if (validate()) {
     try {
       const response = await axios.post("http://localhost:8000/", {
         Email: email,
@@ -85,8 +110,7 @@ export default function SignIn() {
       console.log(response);
       if (response.status === 200) {
         console.log("Login effettuato", response.data.utente, response.data.id);
-        //setShowAlertLoginSuccess(true);  //messaggio verde di login 
-        navigate(`/dashboard/${response.data.id}`); // chiama l'url con l'id dell'utente loggato
+        navigate(`/dashboard/${response.data.id}`);
       } else if (response.status === 202) {
         console.log("Password errata!");
         setShowAlertErrorPassword(true);
@@ -100,9 +124,16 @@ export default function SignIn() {
         error
       );
     }
-  };
+  }
+};
 
+  useEffect(() => {
+    setEmailError(""); // Pulisci l'errore email quando l'email cambia
+  }, [email]);
 
+  useEffect(() => {
+    setPasswordError(""); // Pulisci l'errore password quando la password cambia
+  }, [password]);
 
 
  
@@ -218,6 +249,8 @@ export default function SignIn() {
               autoComplete="email"
               onChange={(event) => setEmail(event.target.value)}
               autoFocus
+              error={!!emailError}
+              helperText={emailError}
             />
             <TextField
               margin="normal"
@@ -229,6 +262,8 @@ export default function SignIn() {
               id="password"
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
+              error={!!passwordError}
+              helperText={passwordError}
             />
             <Button
               type="submit"

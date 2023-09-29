@@ -22,42 +22,48 @@ const UploadSingleGeoTag = ({ file, index, onGeoTagChange }) => {
   };
 
   return (
-    <Card variant="outlined" style={{ marginBottom: '8px' }}>
-      <CardContent>
-        <img
-          src={URL.createObjectURL(file)}
-          alt={`Preview of ${file.name}`}
-          style={{ maxWidth: '100px', maxHeight: '100px', margin: '8px 0' }}
-        />
-        <Typography variant="body2">{file.name}</Typography>
-        <PlacesAutocomplete
-          value={geoTag}
-          onChange={(address) => handleGeoTagChange(address)}
-        >
-          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div>
-              <input
-                {...getInputProps({
-                  placeholder: `Indirizzo per Foto ${index + 1}`,
-                })}
-              />
-              <div>
-                {loading ? <div>Loading...</div> : null}
-                {suggestions.map((suggestion) => (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      style: { cursor: 'pointer' },
+    <div style={{ maxHeight: '200px', overflowY: 'auto', marginBottom: '8px' }}>
+      <Card variant="outlined">
+        <CardContent style={{ display: 'flex', alignItems: 'center', padding: '8px' }}>
+          <div style={{ marginRight: '16px' }}>
+            <img
+              src={URL.createObjectURL(file)}
+              alt={`Preview of ${file.name}`}
+              style={{ maxWidth: '80px', maxHeight: '80px' }}
+            />
+          </div>
+          <div>
+            <Typography variant="body2">{file.name}</Typography>
+            <PlacesAutocomplete
+              value={geoTag}
+              onChange={(address) => handleGeoTagChange(address)}
+            >
+              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div>
+                  <input
+                    {...getInputProps({
+                      placeholder: `Indirizzo per Foto ${index + 1}`,
                     })}
-                  >
-                    {suggestion.description}
+                  />
+                  <div>
+                    {loading ? <div>Loading...</div> : null}
+                    {suggestions.map((suggestion) => (
+                      <div
+                        {...getSuggestionItemProps(suggestion, {
+                          style: { cursor: 'pointer' },
+                        })}
+                      >
+                        {suggestion.description}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </PlacesAutocomplete>
-      </CardContent>
-    </Card>
+                </div>
+              )}
+            </PlacesAutocomplete>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

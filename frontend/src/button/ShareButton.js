@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { IconButton } from '@mui/material';
-import AddCollectionIcon from '@mui/icons-material/CreateNewFolder';
+import ShareIcon from '@mui/icons-material/Share';
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import UploadCollection from '../component/UploadCollection'; // Importa il componente UploadCollection
+import ShareComponent from '../component/ShareComponent'; // Importa il componente ShareComponent
 
 const AddCollection = () => {
   const [open, setOpen] = useState(false);
@@ -22,14 +22,14 @@ const AddCollection = () => {
     <div>
       <IconButton color="primary" onClick={handleOpen}>
         <Typography variant="inherit" style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: '15px' }}>
-          <AddCollectionIcon style={{ marginRight: '8px' }} /> Aggiungi Collezione
+          <ShareIcon style={{ marginRight: '8px' }} /> Condividi
         </Typography>
       </IconButton>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Carica Collezione</DialogTitle>
+        <DialogTitle>Condividi Collezione...</DialogTitle>
         <DialogContent>
-          <UploadCollection /> {/* Mostra il componente UploadCollection nel popup */}
+          <ShareComponent /> {/* Mostra il componente ShareComponent nel popup */}
         </DialogContent>
       </Dialog>
     </div>

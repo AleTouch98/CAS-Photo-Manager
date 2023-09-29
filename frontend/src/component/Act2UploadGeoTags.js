@@ -81,10 +81,11 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
           onChange={(address) => handleSingleGeoTag(address)}
         >
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div>
+            <div style={{maxHeight:'150px', overflowY:'auto'}}>
               <input
                 {...getInputProps({
                   placeholder: `Indirizzo`,
+                  style: { width: '100%' } 
                 })}
               />
               <div>
@@ -92,7 +93,13 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
                 {suggestions.map((suggestion) => (
                   <div
                     {...getSuggestionItemProps(suggestion, {
-                      style: { cursor: 'pointer' },
+                      style: {
+                        cursor: 'pointer',
+                        backgroundColor: suggestion.active ? 'blue' : 'white', // Cambia il colore di sfondo al passaggio del mouse
+                        color: suggestion.active ? 'white' : 'black', // Cambia il colore del testo al passaggio del mouse
+                      },
+                      
+                      
                     })}
                   >
                     {suggestion.description}
