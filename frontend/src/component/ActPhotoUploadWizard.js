@@ -47,6 +47,11 @@ const PhotoUploadWizard = () => {
     }
   };
 
+
+  const handleSceltaCollezione= (collezione) => {  
+    console.log('Collezione selezionata ', collezione);
+  };
+
   return (
     <div>
       <Stepper steps={steps} activeStep={activeStep} />
@@ -65,7 +70,7 @@ const PhotoUploadWizard = () => {
       )}
       {activeStep === 2 && (
         <div>
-          {<ChooseCollection/>}
+          {<ChooseCollection onChangeSelection={handleSceltaCollezione} collezioniDB={['mare', 'montagna']}/>}
           <button onClick={handleBack}>Indietro</button>
           <button onClick={onSubmit}>Carica Foto</button>
         </div>

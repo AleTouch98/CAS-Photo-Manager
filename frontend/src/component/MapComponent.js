@@ -8,9 +8,7 @@ import axios from 'axios';
 
 const MapComponent = ({ selectedOption }) => {
   const { userId } = useParams();
-  const mapRef = useRef(null);
   const [geojson, setGeojson] = useState('');
-  const [selectedMapOption, setSelectedMapOption] = useState('openstreetmap');
 
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
     setGeojson('');
@@ -22,11 +20,7 @@ const MapComponent = ({ selectedOption }) => {
       console.error("Si è verificato un errore:", error);
     }
   };
-
-  // Funzione per gestire il cambiamento dell'opzione selezionata
-  const handleMapOptionChange = (event) => {
-    setSelectedMapOption(event.target.value);
-  };
+  
 
   return (
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
