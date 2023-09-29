@@ -1,25 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dropzone from 'react-dropzone';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import UploadGeoTag from './UploadGeoTags';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const PhotoUploader = ({onFileUpload}) => {
+const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
   const [files, setFiles] = useState([]);
 
+
+
+  useEffect(() => {
+    if (fotoCaricate !== null && fotoCaricate.length > 0) {
+      setFiles(fotoCaricate);
+    }
+  }, [fotoCaricate]);
+
+
+
+
   const onDrop = (acceptedFiles) => {
-    const newFiles = [...files, ...acceptedFiles];
+    const newFiles = [...files];
+    const duplicateFiles = [];
+    acceptedFiles.forEach((acceptedFile) => {
+      const isDuplicate = files.some((file) => file.name === acceptedFile.name); // Verifica se il nome del file è già presente in files
+      if (isDuplicate) {
+        duplicateFiles.push(acceptedFile.name);
+      } else {
+        newFiles.push(acceptedFile);
+      }
+    });
+    if (duplicateFiles.length > 0) {
+      alert(`Le seguenti foto sono già state caricate: ${duplicateFiles.join(', ')}`);
+    }
     setFiles(newFiles);
-    onFileUpload(newFiles); // Passa l'elenco dei file al componente padre
+    onFileUpload(newFiles); 
   };
+
+
+
 
   const handleRemoveFile = (index) => {
     const newFiles = [...files];
-    newFiles.splice(index, 1); // Rimuovi la foto dall'array
+    newFiles.splice(index, 1); 
     setFiles(newFiles);
-    onFileUpload(newFiles); // Passa l'elenco aggiornato dei file al componente padre
+    onFileUpload(newFiles); 
   };
+
+
+
 
   return (
     <div>

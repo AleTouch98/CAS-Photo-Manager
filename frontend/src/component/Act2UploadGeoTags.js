@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import UploadSingleGeoTag from './UploadSingleGeoTag';
+import UploadSingleGeoTag from './Act12UploadSingleGeoTag';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -9,30 +9,51 @@ import PlacesAutocomplete, {
 
 const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const [geoTagsArray, setGeoTagsArray] = useState([]);
   const [geoTag, setGeoTag] = useState('');
+
+
 
   const handleCheckboxChange = () => {
     setCheckboxChecked(!checkboxChecked);
   };
 
-  const handleAllPhotoGeoTag = (indice, valore) => {
-    console.log('all photo geo tag', indice, ' valore ', valore);
-    // ASSOCIARE AD OGNI FOTO IL SUO GEOTAG 
 
+
+  const handleAllPhotoGeoTag = (indice, valore) => {
+    console.log('all photo geo tag', indice, ' valore ', valore);  
+    const geoTagForPhoto = { // Creare un nuovo oggetto geoTag per la foto corrente
+      address: valore.address, // Sostituisci con il valore effettivo
+      lat: valore.lat, // Sostituisci con la latitudine reale
+      lng: valore.lng, // Sostituisci con la longitudine reale
+    };
+    const updatedGeoTagsArray = [...geoTagsArray]; // Creare una copia dell'array dei geotag
+    updatedGeoTagsArray[indice] = geoTagForPhoto; // Inserire il nuovo geoTag nella posizione specificata dall'indice
+    setGeoTagsArray(updatedGeoTagsArray); // Aggiornare lo stato con il nuovo array dei geotag
+    onGeoTagChange(updatedGeoTagsArray); // Ora puoi passare l'array aggiornato alla funzione onGeoTagChange
   };
 
+
+  
+
   const handleSingleGeoTag = async (address) => {
-    // GESTIRE L'ASSEGNAMENTO DELLO STESSO GEOTAG A TUTTE LE FOTO
     setGeoTag(address);
     try {
       const results = await geocodeByAddress(address);
       const latLng = await getLatLng(results[0]);
       const { lat, lng } = latLng;
-      console.log({address, lat, lng });
-      onGeoTagChange({ address, lat, lng });
+      // Creare un array di geotag con gli stessi dati per ogni foto e un indice
+      const geoTagsArray = fotoCaricate.map((file, index) => ({
+        address,
+        lat,
+        lng,
+      }));
+      console.log(geoTagsArray);
+      onGeoTagChange(geoTagsArray);
     } catch (error) {
       console.error('Errore durante la geocodifica:', error);
-    }  };
+    }
+  };
 
   return (
     <div>
@@ -65,7 +86,7 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
             <div>
               <input
                 {...getInputProps({
-                  placeholder: `Indirizzo per tutte le foto`,
+                  placeholder: `Indirizzo`,
                 })}
               />
               <div>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Stepper from 'react-stepper-horizontal';
-import PhotoUploader from './PhotoUploader';
-import UploadGeoTags from './UploadGeoTags';
+import PhotoUploader from './Act1PhotoUploader';
+import UploadGeoTags from './Act2UploadGeoTags';
 
 const PhotoUploadWizard = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [nextButtonPhoto, setnextButtonPhoto] = useState(true); // Stato del pulsante "Avanti" in foto
+  const [nextButtonGeo, setnextButtonGeo] = useState(true); // Stato del pulsante "Avanti" in geoTag
+
 
   const [foto, setFoto] = useState(null);
 
@@ -24,12 +27,22 @@ const PhotoUploadWizard = () => {
 
 
   const handleCaricamentoFoto = (files) => {
-    console.log('ho letto le seguenti foto ', files);
-    setFoto(files); // Aggiorna l'elenco dei file selezionati nel componente padre
+    setnextButtonGeo(true);
+    if(files.length > 0){
+      setnextButtonPhoto(false);
+      setFoto(files); 
+    } else {
+      setnextButtonPhoto(true);
+    }
+    // Aggiorna l'elenco dei file selezionati nel componente padre
   };
 
-  const handleCaricamentoGeoTag = (files) => {  
-
+  const handleCaricamentoGeoTag = (arrayGeoTag) => {  
+    console.log('ARRAY RISULTATO', arrayGeoTag);
+    if(arrayGeoTag.length === foto.length && !arrayGeoTag.includes(undefined)){
+      console.log('geotag selezionato per tutte le foto');
+      setnextButtonGeo(false);
+    }
   };
 
   return (
@@ -37,15 +50,15 @@ const PhotoUploadWizard = () => {
       <Stepper steps={steps} activeStep={activeStep} />
       {activeStep === 0 && (
         <div>
-          <PhotoUploader onFileUpload={handleCaricamentoFoto} />
-          <button onClick={handleNext}>Avanti</button>
+          <PhotoUploader fotoCaricate={foto} onFileUpload={handleCaricamentoFoto} />
+          <button disabled={nextButtonPhoto} onClick={handleNext}>Avanti</button>
         </div>
       )}
       {activeStep === 1 && (
         <div>
           <UploadGeoTags onGeoTagChange={handleCaricamentoGeoTag} fotoCaricate={foto} />
           <button onClick={handleBack}>Indietro</button>
-          <button onClick={handleNext}>Avanti</button>
+          <button onClick={handleNext} disabled={nextButtonGeo}>Avanti</button>
         </div>
       )}
       {activeStep === 2 && (
