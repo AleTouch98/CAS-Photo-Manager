@@ -19,8 +19,7 @@ module.exports = {
             await client.end();
             await tableClient.connect();
             await tableClient.query("CREATE EXTENSION postgis;");
-           // await initialize_zone_table(total_parking_zone1, tableClient);
-           // await initialize_charge_stations_table(tableClient);
+           
             await create_user_table(tableClient);
             await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
             await create_photo_table(tableClient);
@@ -67,7 +66,6 @@ const create_user_table = async (client) => {
             console.error(e);
             return e;
         }
-
         //inserimento dati di default
         await client.query(`
         INSERT INTO Utenti (Nome_Utente, Email, Password_Utente)
@@ -77,7 +75,6 @@ const create_user_table = async (client) => {
             ('Manuel', 'manuel@email.com', 'intermerda');
         `);
              console.log('Caricamento dati utenti effettuato');
-
         // Creazione del tipo per i ruoli dei collaboratori
         await client.query(`
             CREATE TYPE RuoloCollaboratore AS ENUM ('Visualizzatore', 'Caricatore', 'Commentatore');
@@ -94,9 +91,9 @@ const create_user_table = async (client) => {
             await client.query(`
             CREATE TABLE geojsonTable (
                 ID serial PRIMARY KEY,
-                ID_Utente INT REFERENCES Utenti(ID), 
-                GeoJSON_Path TEXT,
-                NomeGeoJSON TEXT  
+                ID_Utente INT REFERENCES Utenti(ID) NOT NULL, 
+                GeoJSON_Path TEXT NOT NULL,
+                NomeGeoJSON TEXT NOT NULL
             )
           `);
             console.log("Tabella geojson creata");
@@ -106,6 +103,32 @@ const create_user_table = async (client) => {
             return e;
         }
     }
+
+
+    // CREA TABELLA PER LE FOTO
+    const create_photo_table = async (client) => {
+        try {
+            await client.query(`
+                CREATE TABLE IF NOT EXISTS Foto (
+                  ID SERIAL PRIMARY KEY,
+                  Nome_Foto TEXT NOT NULL,
+                  ID_Utente INT REFERENCES Utenti(ID) NOT NULL, 
+                  Geo_Tag_Spaziale GEOMETRY(Point) NOT NULL,
+                  Nome_Collezione TEXT NOT NULL
+                )
+            `);
+            console.log("Tabella foto creata");
+        }
+        catch (e) {
+            console.error(e);
+            return e;
+        }
+    }
+
+    
+
+
+
 
 
 
@@ -192,44 +215,6 @@ const create_collection_table = async (client) => {
 }
 
 
-/**
- * Questa funzione crea una tabella delle foto  
- * Essa contiene 5 campi:
- * id: id delle foto
- * Nome_file: nome della foto
- * Percorso file: percorso della foto
- * Id_Utente_Caricatore: id dell'utente che ha caricato la foto
- * Id_Collezione: Id della collezione a cui appartiene la foto
- * @param {*} client il client del db
- */
-const create_photo_table = async (client) => {
-    try {
-        await client.query(`
-        CREATE TABLE IF NOT EXISTS Foto (
-          ID SERIAL PRIMARY KEY,
-          Nome_File VARCHAR(255),
-          Percorso_File VARCHAR(255),
-          Geo_Tag_Spaziale GEOMETRY(Point),
-          ID_Utente_Caricatore INT REFERENCES Utenti(ID),
-          ID_Collezione INT REFERENCES Collezioni(ID)
-        )
-      `);
-        console.log("Tabella foto creata");
-    }
-    catch (e) {
-        console.error(e);
-        return e;
-    }
-
-    // Impostazione chiave secondaria per Collezioni
-await client.query(`
-ALTER TABLE Collezioni
-ADD CONSTRAINT FK_Collezioni_Foto
-FOREIGN KEY (ID_Foto_Copertina) REFERENCES Foto(ID)
-`);
-console.log('Impostazione chiave secondaria per Collezioni creata');
-
-}
 
 
 /**

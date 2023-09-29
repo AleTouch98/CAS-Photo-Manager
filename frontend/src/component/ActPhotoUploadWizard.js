@@ -49,6 +49,11 @@ const PhotoUploadWizard = () => {
     }
   };
 
+
+  const handleSceltaCollezione= (collezione) => {  
+    console.log('Collezione selezionata ', collezione);
+  };
+
   return (
     <div>
       <Stepper steps={steps} activeStep={activeStep} />
