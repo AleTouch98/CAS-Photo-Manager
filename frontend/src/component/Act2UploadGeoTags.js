@@ -54,8 +54,9 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
   };
 
   return (
-    <div>
-      <FormControlLabel
+    <div style={{width:'400px', height:'auto'}}>
+      <div style={{backgroundColor:'white', position: 'sticky', top: 0, zIndex: 1}}>
+            <FormControlLabel
         control={
           <Checkbox
             size="small"
@@ -65,7 +66,9 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
           />
         }
         label="Unico GeoTag"
-      />
+        />
+    </div>
+      
       {!checkboxChecked ? (
         fotoCaricate.map((file, index) => (
           <UploadSingleGeoTag
@@ -81,22 +84,27 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
           onChange={(address) => handleSingleGeoTag(address)}
         >
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div style={{maxHeight:'150px', overflowY:'auto'}}>
+            <div style={{marginLeft:'50px',marginTop:'17px',maxHeight:'200px'}}>
               <input
                 {...getInputProps({
                   placeholder: `Indirizzo`,
-                  style: { width: '100%' } 
+                  style: { width: '250px' } 
                 })}
               />
               <div>
                 {loading ? <div>Loading...</div> : null}
                 {suggestions.map((suggestion) => (
-                  <div
+                  <div 
                     {...getSuggestionItemProps(suggestion, {
                       style: {
+                        marginRight:'100px',
                         cursor: 'pointer',
                         backgroundColor: suggestion.active ? 'blue' : 'white', // Cambia il colore di sfondo al passaggio del mouse
                         color: suggestion.active ? 'white' : 'black', // Cambia il colore del testo al passaggio del mouse
+                        maxWidth: '350px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap', // Assicura che il testo non venga avvolto
                       },
                       
                       

@@ -50,7 +50,16 @@ const UploadSingleGeoTag = ({ file, index, onGeoTagChange }) => {
                     {suggestions.map((suggestion) => (
                       <div
                         {...getSuggestionItemProps(suggestion, {
-                          style: { cursor: 'pointer' },
+                          style: {
+                            marginRight:'100px',
+                            cursor: 'pointer',
+                            backgroundColor: suggestion.active ? 'blue' : 'white', // Cambia il colore di sfondo al passaggio del mouse
+                            color: suggestion.active ? 'white' : 'black', // Cambia il colore del testo al passaggio del mouse
+                            maxWidth: '350px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap', // Assicura che il testo non venga avvolto
+                          },
                         })}
                       >
                         {suggestion.description}
