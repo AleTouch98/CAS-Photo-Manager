@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import { Typography } from '@mui/material';
@@ -11,18 +10,28 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 export default function TitlebarImageList() {
-  const [filteredData, setFilteredData] = React.useState(itemData);
+  const { userId } = useParams();
+  const [images, setImages] = useState([]);
 
-  const handleShowAll = () => {
-    setFilteredData(itemData);
-  };
-
-  const handleFilter = () => {
-    // Implementa il filtro qui, ad esempio, mostriamo solo le immagini con "featured: true"
-    const filteredItems = itemData.filter(item => item.featured);
-    setFilteredData(filteredItems);
+  const handleAllPhoto = async () => {
+    console.log('Ho cliccato su tutte le foto');
+    try {
+      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+      if(result.status === 200){
+        console.log(result.data);
+        const immagini = result.data.immagini;
+        //console.log(immagini);
+        setImages(immagini);
+      } else {
+        alert(result.data.message);
+      }
+    } catch (error) {
+      console.error('Errore durante il recupero delle immagini:', error);
+    }
   };
 
   
@@ -48,41 +57,28 @@ export default function TitlebarImageList() {
     )}
   </PopupState>
 
-  <PopupState variant="popover" popupId="demo-popup-menu">
-    {(popupState) => (
-      <React.Fragment>
-        <IconButton color="primary" variant="contained" {...bindTrigger(popupState)} style={{ position:'relative',marginTop: '10px', marginBottom:'-10px' }}  >
-        <Typography variant="inherit" style={{display: 'flex', alignItems: 'center', marginLeft:'20px',marginRight:'50px', marginTop:'0px', color: 'black', fontSize: '17px' }}>
-        <FilterAltIcon style={{ marginRight: '8px'  }} />  Filtro 2  
+  <IconButton color="primary" variant="contained" onClick={handleAllPhoto} style={{ position:'relative',marginTop: '10px', marginBottom:'-10px' }}  >
+        <Typography variant="inherit" style={{display: 'flex', alignItems: 'center', marginLeft:'0px',marginRight:'30px', marginTop:'0px', color: 'black', fontSize: '17px' }}>
+        <FilterAltIcon style={{ marginRight: '8px'  }} />  Tutte le foto 
         </Typography>
       </IconButton>
-        <Menu {...bindMenu(popupState)}>
-          <MenuItem onClick={popupState.close}>filtro 1</MenuItem>
-          <MenuItem onClick={popupState.close}>filtro 2</MenuItem>
-          <MenuItem onClick={popupState.close}>filtro 3</MenuItem>
-        </Menu>
-      </React.Fragment>
-    )}
-  </PopupState>
 
 
-    <ImageList sx={{ width: '100%', maxHeight: '81.06vh', paddingTop:'0px',overflowY: 'auto' }}>
-  {filteredData.map((item) => (
-    <ImageListItem key={item.img}>
+  <ImageList sx={{ width: '100%', maxHeight: '81.06vh', paddingTop:'0px',overflowY: 'auto' }}>
+  {images.map((image, index) => (
+    <ImageListItem key={index}>
       <img
-        style={{ width: '100%', height: 'auto' }} 
-        srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-        src={`${item.img}?w=248&fit=crop&auto=format`}
-        alt={item.title}
+        style={{ width: '100%', height: 'auto' }}
+        src={`data:image/jpeg;base64,${image.immaginebase64}`} // Usa 'data:image/jpeg;base64,' per visualizzare immagini in formato base64
+        alt={`Image ${index}`}
         loading="lazy"
       />
       <ImageListItemBar
-        title={item.title}
-        subtitle={item.author}
+        title={`${image.nome_foto}`} // Puoi personalizzare il titolo come preferisci
         actionIcon={
           <IconButton
             sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-            aria-label={`info about ${item.title}`}
+            aria-label={`info about Image ${index}`}
           >
             <InfoIcon />
           </IconButton>
@@ -98,76 +94,3 @@ export default function TitlebarImageList() {
 }
 
 
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast',
-    author: '@bkristastucchio',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
-    author: '@rollelflex_graphy726',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-    author: '@helloimnik',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-    author: '@nolanissac',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats',
-    author: '@hjrc33',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-    author: '@tjdragotta',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-    author: '@katie_wasserman',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms',
-    author: '@silverdalex',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-    author: '@shelleypauls',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-    author: '@peterlaster',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike',
-    author: '@southside_customs',
-    cols: 2,
-  },
-];

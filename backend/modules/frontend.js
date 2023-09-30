@@ -125,6 +125,7 @@ module.exports = {
 
     //QUERY PER CARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
     app.get("/dashboard/:userId/photos", async (req, res) => {
+      console.log('sono entrato nella get');
       try {
         const userId = req.params.userId;
         const result = await databasepg.getFotoUtente(userId);  
@@ -138,6 +139,8 @@ module.exports = {
         res.status(500).send("Errore del Server Interno");
       }
     });
+
+
 
 
 

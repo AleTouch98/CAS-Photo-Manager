@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import PhotoUploadWizard from '../component/ActPhotoUploadWizard';
 
 const AddPhotoButton = () => {
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {

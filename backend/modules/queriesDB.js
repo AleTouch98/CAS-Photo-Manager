@@ -117,16 +117,17 @@ getFotoUtente: async (id) => {
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
     try {
-        const query = 'SELECT ID, encode(Immagine, \'base64\') AS ImmagineBase64 FROM Foto WHERE ID_Utente_Caricatore = $1';
+        const query = 'SELECT ID, Nome_Foto, Indirizzo, encode(Immagine, \'base64\') AS ImmagineBase64 FROM Foto WHERE ID_Utente = $1';
         const result = await client.query(query, [id]);
         return result; // Nessun errore e ritorna il risultato della query
-      } catch (e) {
+    } catch (e) {
         console.error('Errore nel download delle foto:', e);
         return e; // Restituisci l'errore in caso di fallimento
-      } finally {
+    } finally {
         await client.end();
-      }
+    }
 },
+
 
 
 
