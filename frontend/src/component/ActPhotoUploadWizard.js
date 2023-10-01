@@ -79,7 +79,7 @@ const PhotoUploadWizard = ({onClose}) => {
         formData.append('collezione', collezione);
         const result = await axios.post(`http://localhost:8000/dashboard/${userId}/loadImage`, formData, axiosConfig);
         if(result.status !== 200) {
-          alert('Si è verificato un errore durante il caricamento: ', result.data);
+          alert(result.data);
           return;
         } 
       }

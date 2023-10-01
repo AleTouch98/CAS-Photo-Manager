@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '../component/Grid.js';
 import Gallery from '../component/GalleryComponent';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -9,13 +9,20 @@ import axios from 'axios';
 const MapComponent = ({ selectedOption }) => {
   const { userId } = useParams();
   const [geojson, setGeojson] = useState('');
+  const [photos, setPhotos] = useState([]);
+
 
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
     setGeojson('');
     const path = geoJSONSelezionato.geoJSONPath;
     try {
-      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, { path });
+      if(geoJSONSelezionato.nomeGeoJSON === 'Nessun GeoJSON'){
+        return;
+      }
+      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, { path }); // carica il geojson
       setGeojson(result.data);
+      const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, { path }); //carica le foto contenute in quel geojson
+      setPhotos(photoResult.data.data);
     } catch (error) {
       console.error("Si è verificato un errore:", error);
     }
@@ -59,6 +66,20 @@ const MapComponent = ({ selectedOption }) => {
                 })}
               />
             )}
+            {photos.map((photo, index) => (
+              <Marker
+                key={index}
+                position={[photo.longitudine, photo.latitudine]}
+              >
+                <Popup>
+                  <div>
+                    <h3>{photo.Nome_Foto}</h3>
+                    <p>{photo.Indirizzo}</p>
+                    {/* Altre informazioni sulla foto */}
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
       </div>

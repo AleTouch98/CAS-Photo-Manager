@@ -93,7 +93,8 @@ const create_user_table = async (client) => {
                 ID serial PRIMARY KEY,
                 ID_Utente INT REFERENCES Utenti(ID) NOT NULL, 
                 GeoJSON_Path TEXT NOT NULL,
-                NomeGeoJSON TEXT NOT NULL
+                NomeGeoJSON TEXT NOT NULL,
+                FeatureDescrittiva TEXT NOT NULL
             )
           `);
             console.log("Tabella geojson creata");
@@ -116,7 +117,8 @@ const create_user_table = async (client) => {
                   ID_Utente INT REFERENCES Utenti(ID) NOT NULL, 
                   Indirizzo TEXT NOT NULL,
                   GeoTag_Spaziale GEOMETRY(Point) NOT NULL,
-                  Nome_Collezione TEXT NOT NULL
+                  Nome_Collezione TEXT NOT NULL,
+                  CONSTRAINT unique_user_photo UNIQUE (ID_Utente, Nome_Foto)
                 )
             `);
             console.log("Tabella foto creata");

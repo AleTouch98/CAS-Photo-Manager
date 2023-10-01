@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useParams } from 'react-router-dom';
@@ -14,29 +13,27 @@ import Typography from '@mui/material/Typography';
 function ChooseGeojson({ onGeoJSONChange }) {
 
   const { userId } = useParams();
-  const [listaNomiGeo, setListaNomiGeo] = useState([]);
+  const [listaNomiGeo, setListaNomiGeo] = useState([{nomeGeoJSON:'Nessun GeoJSON'}]);
 
  
 
   const handleButtonClick = async () => {
     try {
       const result = await axios.get(`http://localhost:8000/dashboard/${userId}/getGeoJSONList`);
-      console.log(result);
       const listaGeoJSON = result.data.lista_geojson;
       if (result.status === 210) {
-        console.log('La lista dei nomi GeoJSON è vuota.');
         return;
+      } else if (listaGeoJSON.length > 0) {
+        setListaNomiGeo([{nomeGeoJSON:'Nessun GeoJSON'}, ...listaGeoJSON]);
       }
-      setListaNomiGeo(listaGeoJSON);
     } catch (error) {
       console.error("Errore durante la richiesta dei dati:", error);
     }
-
   };
 
  
 
-  const handleMenuItemClick = (opzioneScelta) => {
+  const handleMenuItemClick = async (opzioneScelta) => {
     onGeoJSONChange(opzioneScelta);
   };
 

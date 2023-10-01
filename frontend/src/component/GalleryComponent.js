@@ -30,11 +30,9 @@ export default function TitlebarImageList() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleAllPhoto = async () => {
-    console.log('Ho cliccato su tutte le foto');
     try {
       const result = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
       if (result.status === 200) {
-        console.log(result.data);
         const immagini = result.data.immagini;
         setImages(immagini);
       } else {
@@ -144,8 +142,8 @@ export default function TitlebarImageList() {
               <Box p={1}>
                 <Typography variant="h6">Informazioni:</Typography>
                 <Typography variant="body1">Nome Foto: {image.nome_foto}</Typography>
-                <Typography variant="body1">Autore: {image.autore}</Typography>
-                <Typography variant="body1">Posizione: {image.posizione}</Typography>
+                <Typography variant="body1">Autore: {image.nome_utente}</Typography>
+                <Typography variant="body1">Posizione: {image.indirizzo}</Typography>
               </Box>
             </Popover>
           </ImageListItem>
