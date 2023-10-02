@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import ChooseGeoButton from '../button/ChooseGeojson';
+import ChooseArea from '../button/ChooseArea';
+import ColorMap from '../button/ColorMap';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor:'#3b3f41',
@@ -34,10 +36,14 @@ export default function ResponsiveGrid({geoJSONSelected}) {
         </Item>
         </Grid>
         <Grid item xs={1} sm={4} md={4}>
-          <Item>Scegli paesi</Item>
+          <Item>
+            <ChooseArea/>
+          </Item>
         </Grid>
         <Grid item xs={1} sm={4} md={4}>
-          <Item>Colora Mappa</Item>
+          <Item>
+            <ColorMap/>
+          </Item>
         </Grid>
         
       </Grid>

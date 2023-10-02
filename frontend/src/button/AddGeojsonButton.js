@@ -123,10 +123,15 @@ const AddGeojsonButton = () => {
             style={{ marginTop: '16px' }}
           />
           <FormControl fullWidth style={{ marginTop: '16px' }}>
-            <InputLabel>Seleziona la feature descrittiva</InputLabel>
+            <InputLabel htmlFor="selected-feature">Seleziona la feature descrittiva</InputLabel>
             <Select
               value={selectedFeature}
               onChange={handleFeatureSelect}
+              label="Seleziona la feature descrittiva"
+              inputProps={{
+                name: 'selectedFeature',
+                id: 'selected-feature',
+              }}
             >
               {geojsonFeatures.map((feature, index) => (
                 <MenuItem key={index} value={feature}>
