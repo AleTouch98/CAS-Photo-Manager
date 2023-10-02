@@ -203,7 +203,7 @@ getFotoUtenteInPolygon: async (id, polygon) => {
         FROM Foto
         INNER JOIN Utenti ON Foto.ID_Utente = Utenti.ID
         WHERE Foto.ID_Utente = $1
-          AND ST_Intersects(Foto.GeoTag_Spaziale, ST_GeomFromGeoJSON($2))
+          AND ST_Contains(ST_GeomFromGeoJSON($2), Foto.GeoTag_Spaziale)
         `;
         const result = await client.query(query, [id, polygon]);
         return result; // Nessun errore e ritorna il risultato della query
@@ -239,6 +239,29 @@ cancellaFoto: async (idUtente, idFoto) => {
     }
   },
   
+
+
+
+getCollezioniUtente: async (id) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+        SELECT DISTINCT Nome_Collezione
+        FROM Foto
+        WHERE ID_Utente = $1;
+        `;
+        const result = await client.query(query, [id]);
+        return result; // Nessun errore e ritorna il risultato della query
+    } catch (e) {
+        console.error('Errore nel download delle foto:', e);
+        return e; // Restituisci l'errore in caso di fallimento
+    } finally {
+        await client.end();
+    }
+    },
+
+
 
 
 

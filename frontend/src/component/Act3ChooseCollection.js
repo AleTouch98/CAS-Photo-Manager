@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, FormControlLabel, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
+import axios from "axios";
+import { useParams } from 'react-router-dom';
 
-const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
+const ChooseCollection = ({onChangeSelection }) => {
     const [checkboxChecked, setCheckboxChecked] = useState(false);
     const [selectedCollection, setSelectedCollection] = useState('');
 
     const [collezioni, setCollezioni] = useState([]);
 
+    const { userId } = useParams();
+
+
     useEffect(() => {
-        if (typeof collezioniDB !== 'undefined' && collezioniDB !== null) {
-            setCollezioni(collezioniDB);
-        } else {
-            setCollezioni([]);
-        }
-    }, [collezioniDB]);
+        const caricaDati = async () => {
+            try {
+                const result = await axios.get(`http://localhost:8000/dashboard/${userId}/collection`);
+                setCollezioni(result.data.collezioni);
+            } catch (error) {
+                console.error('Errore nella richiesta HTTP:', error);
+            }
+        };
+        caricaDati(); 
+    }, []);
 
 
     const handleCheckboxChange = () => {
@@ -33,6 +42,8 @@ const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
         onChangeSelection(event.target.value);
     };
 
+
+
     return (
         <div>
             <Box paddingTop="30px " display="flex" flexDirection="column">
@@ -47,8 +58,8 @@ const ChooseCollection = ({ collezioniDB, onChangeSelection }) => {
                         }}
                     >
                         {collezioni.map((collezione) => (
-                            <MenuItem key={collezione.id} value={collezione}>
-                                {collezione}
+                            <MenuItem key={collezione.id} value={collezione.nome_collezione}>
+                                {collezione.nome_collezione}
                             </MenuItem>
                         ))}
                     </Select>

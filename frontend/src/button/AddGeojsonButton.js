@@ -95,7 +95,6 @@ const AddGeojsonButton = () => {
   };
 
   const handleFeatureSelect = (event) => {
-    console.log(event.target.value);
     setSelectedFeature(event.target.value);
   };
 

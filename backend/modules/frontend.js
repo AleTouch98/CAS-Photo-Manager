@@ -208,48 +208,63 @@ module.exports = {
 
 
     //QUERY PER CARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
+
+    // Funzione per gestire la lettura del file in modo asincrono
+    function readFileAsync(filePath) {
+      return new Promise((resolve, reject) => {
+        fs.readFile(filePath, 'utf8', (err, fileData) => {
+          if (err) {
+            console.error('Errore nella lettura del file:', err);
+            reject(err);
+          } else {
+            resolve(fileData);
+          }
+        });
+      });
+    }
+    
+    // Funzione principale per l'endpoint API
     app.post("/dashboard/:userId/photosInGeoJSON", async (req, res) => {
       try {
         const userId = req.params.userId;
-        const filePath = req.body.path; 
-        fs.readFile(filePath, 'utf8', async (err, fileData) => {
-          if (err) {
-            console.error('Errore nella lettura del file:', err);
-            return res.status(500).json({ error: 'Errore nella lettura del file' });
-          }
-          try {
-            const geojsonData = JSON.parse(fileData); // Parsa il GeoJSON
-            if (geojsonData && geojsonData.features) {
-              const geometryFeatures = geojsonData.features.filter(feature => feature.geometry);
-              const results = [];
-              // Utilizza Promise.all per eseguire le chiamate asincrone in parallelo
-              await Promise.all(geometryFeatures.map(async (feature) => { // esegue una chiamata per ogni feature di tipo geometry estratta in precedenza
-                const geometry = feature.geometry;
-                const queryResult = await databasepg.getFotoUtenteInPolygon(userId, geometry);
-                results.push(queryResult.rows);
-              }));
-              const flatResults = results.reduce((accumulator, currentArray) => { // serve per schiacciare l'array
-                return accumulator.concat(currentArray);
-              }, []);
-              const uniquePhotos = flatResults.filter((photo, index, self) => { //elimina foto con lo stesso id, se ci sono 
-                const firstIndex = self.findIndex(p => p.id === photo.id);
-                return index === firstIndex; // Manteniamo solo la prima occorrenza di ogni ID
-              });
-              res.status(200).json({ message: 'Foto filtrate con successo.', data: uniquePhotos});
-            } else {
-              res.status(400).json({ error: 'Il file GeoJSON non contiene features valide.' });
-            }
-          } catch (error) {
-            console.error('Errore nel parsing del GeoJSON:', error);
-            res.status(400).json({ error: 'Errore nel parsing del GeoJSON' });
-          }
-        });
+        const geojson = req.body.geojson;
+        const filePath = geojson.geoJSONPath;
+        const featureDescrittiva = geojson.featureDescrittiva;
+        const area = req.body.area;
+        // Leggi il file GeoJSON in modo asincrono
+        const fileData = await readFileAsync(filePath);
+        const geojsonData = JSON.parse(fileData); // Parsa il GeoJSON
+        if (geojsonData && geojsonData.features) {
+          let geometryFeatures;
+          if (area === 'all') {
+            geometryFeatures = geojsonData.features.filter(feature => feature.geometry);
+          } else {
+            const areaFeatures = geojsonData.features.filter(feature => feature.properties[featureDescrittiva] === area);
+            geometryFeatures = areaFeatures.filter(feature => feature.geometry);
+          }          
+          const results = await Promise.all(geometryFeatures.map(async (feature) => {
+            const geometry = feature.geometry;
+            const queryResult = await databasepg.getFotoUtenteInPolygon(userId, geometry);
+            return queryResult.rows;
+          }));
+          const flatResults = results.flat(); // Serve per schiacciare l'array
+          // Elimina le foto con lo stesso ID
+          const uniquePhotos = flatResults.filter((photo, index, self) => {
+            const firstIndex = self.findIndex(p => p.id === photo.id);
+            return index === firstIndex;
+          });
+          res.status(200).json({ message: 'Foto filtrate con successo.', data: uniquePhotos });
+        } else {
+          res.status(400).json({ error: 'Il file GeoJSON non contiene features valide.' });
+        }
       } catch (error) {
-        console.error(error);
+        console.error('Errore generale:', error);
         res.status(500).json({ error: "Errore del Server Interno" });
       }
     });
     
+
+  
     
 
 
@@ -268,6 +283,27 @@ module.exports = {
       res.status(500).json({ error: "Errore del Server Interno" });
     }
   });
+
+
+
+
+  app.get("/dashboard/:userId/collection", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const result = await databasepg.getCollezioniUtente(userId);  
+      if(result.rows.length > 0){
+        res.status(200).json({ message: "Nomi collezione caricati con successo.", collezioni: result.rows });
+      } else {
+        res.status(210).json({ message: "Nessuna collezione creata da questo utente." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Errore del Server Interno");
+    }
+  });
+
+
+
 
     
   },

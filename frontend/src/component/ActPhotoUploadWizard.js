@@ -124,7 +124,7 @@ const PhotoUploadWizard = ({onClose}) => {
       )}
       {activeStep === 2 && (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
-        <ChooseCollection onChangeSelection={handleSceltaCollezione} collezioniDB={['mare', 'montagna']}/>
+        <ChooseCollection onChangeSelection={handleSceltaCollezione}/>
         <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-evenly' }}>
           <Button onClick={handleBack} style={{ marginRight: '90px' }}>Indietro</Button>
           <Button onClick={handleCaricaFoto}>Carica Foto</Button>
