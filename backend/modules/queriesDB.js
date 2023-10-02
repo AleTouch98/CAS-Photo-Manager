@@ -215,6 +215,30 @@ getFotoUtenteInPolygon: async (id, polygon) => {
 },
 
 
+cancellaFoto: async (idUtente, idFoto) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+      const query = `
+        DELETE FROM Foto
+        WHERE ID_Utente = $1
+          AND ID = $2;
+      `;
+      const result = await client.query(query, [idUtente, idFoto]);
+      if (result.rowCount === 0) {
+        return false; // Nessuna riga cancellata, la foto non esisteva
+      } else {
+        return true; // La foto è stata cancellata con successo
+      }
+    } catch (e) {
+      console.error('Errore nella cancellazione della foto:', e);
+      return e;
+    } finally {
+      await client.end();
+    }
+  },
+  
+
 
 
 }

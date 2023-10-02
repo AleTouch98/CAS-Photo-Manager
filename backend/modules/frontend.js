@@ -253,7 +253,21 @@ module.exports = {
     
 
 
-
+  app.post('/dashboard/:userId/deletePhoto', async (req, res) => {
+    const userId = req.params.userId;
+    const photoId = req.body.id_photo; // Leggi il percorso del file dal corpo della richiesta
+    try {
+      const result = await databasepg.cancellaFoto(userId,photoId);
+      if(result === true){
+        res.status(200).send('Immagine cancellata con successo');
+      } else{
+        res.status(216).send('Si è verificato un errore durante la cancellazione dell\'immagine');
+      } 
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Errore del Server Interno" });
+    }
+  });
 
 
 

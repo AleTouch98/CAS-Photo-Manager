@@ -7,7 +7,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Typography } from '@mui/material';
 import FilterCollectionIcon from '@mui/icons-material/Filter';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import PopupState, { bindTrigger, bindMenu  } from 'material-ui-popup-state';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import Popover from '@mui/material/Popover';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -25,7 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 export default function TitlebarImageList() {
   const { userId } = useParams();
   const [images, setImages] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEls, setAnchorEls] = useState([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -35,6 +35,7 @@ export default function TitlebarImageList() {
       if (result.status === 200) {
         const immagini = result.data.immagini;
         setImages(immagini);
+        setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
       } else {
         alert(result.data.message);
       }
@@ -48,10 +49,15 @@ export default function TitlebarImageList() {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    // Aggiungi qui la logica per l'eliminazione dell'immagine
-    // Puoi utilizzare l'ID o qualsiasi altro identificativo unico dell'immagine per eliminarla dal server.
-    // Una volta completata l'eliminazione, puoi chiudere il dialogo di conferma.
+  const handleDeleteConfirm = async () => {
+    const result = await axios.post(`http://localhost:8000/dashboard/${userId}/deletePhoto`, {id_photo:selectedImage.id});
+    if(result.status === 200){
+      alert('Foto eliminata con successo');
+      const nuoveImmagini = images.filter(image => image.id !== selectedImage.id);
+      setImages(nuoveImmagini);
+    } else {
+      alert('Si è verificato un errore durante la cancellazione: \n', result.data);
+    } 
     setIsDeleteDialogOpen(false);
   };
 
@@ -60,43 +66,92 @@ export default function TitlebarImageList() {
     setIsDeleteDialogOpen(false);
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (event, index) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = event.currentTarget;
+    setAnchorEls(newAnchorEls);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (index) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = null;
+    setAnchorEls(newAnchorEls);
   };
-
-  const open = Boolean(anchorEl);
 
   return (
     <div style={{ width: '100%', overflowX: 'auto' }}>
-     {/*CREAZIONE DEI BOTTONI*/}
-<PopupState variant="popover" popupId="demo-popup-menu">
-    {(popupState) => (
-      <React.Fragment>
-      <IconButton color="primary" variant="contained" {...bindTrigger(popupState)} style={{ position:'relative',marginTop: '10px', marginBottom:'-10px' }} >
-        <Typography variant="inherit" style={{ display: 'flex', alignItems: 'center', marginLeft:'20px',marginRight:'50px',  marginTop:'0px', color: 'black', fontSize: '17px' }}>
-        <FilterCollectionIcon style={{ marginRight: '8px'  }} />  Collezione  
+      {/* CREAZIONE DEI BOTTONI */}
+      <PopupState variant="popover" popupId="demo-popup-menu">
+        {(popupState) => (
+          <React.Fragment>
+            <IconButton
+              color="primary"
+              variant="contained"
+              {...bindTrigger(popupState)}
+              style={{
+                position: 'relative',
+                marginTop: '10px',
+                marginBottom: '-10px',
+              }}
+            >
+              <Typography
+                variant="inherit"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: '20px',
+                  marginRight: '50px',
+                  marginTop: '0px',
+                  color: 'black',
+                  fontSize: '17px',
+                }}
+              >
+                <FilterCollectionIcon style={{ marginRight: '8px' }} /> Collezione
+              </Typography>
+            </IconButton>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem onClick={popupState.close}>Collezione 1</MenuItem>
+              <MenuItem onClick={popupState.close}>Collezione 2</MenuItem>
+              <MenuItem onClick={popupState.close}>Collezione 3</MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+      </PopupState>
+
+      <IconButton
+        color="primary"
+        variant="contained"
+        onClick={handleAllPhoto}
+        style={{
+          position: 'relative',
+          marginTop: '10px',
+          marginBottom: '-10px',
+        }}
+      >
+        <Typography
+          variant="inherit"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: '0px',
+            marginRight: '30px',
+            marginTop: '0px',
+            color: 'black',
+            fontSize: '17px',
+          }}
+        >
+          <FilterAltIcon style={{ marginRight: '8px' }} /> Tutte le foto
         </Typography>
       </IconButton>
-        <Menu {...bindMenu(popupState)}>
-          <MenuItem onClick={popupState.close}>Collezione 1</MenuItem>
-          <MenuItem onClick={popupState.close}>Collezione 2</MenuItem>
-          <MenuItem onClick={popupState.close}>Collezione 3</MenuItem>
-        </Menu>
-      </React.Fragment>
-    )}
-  </PopupState>
 
-      <IconButton color="primary" variant="contained" onClick={handleAllPhoto} style={{ position: 'relative', marginTop: '10px', marginBottom: '-10px' }}>
-        <Typography variant="inherit" style={{ display: 'flex', alignItems: 'center', marginLeft: '0px', marginRight: '30px', marginTop: '0px', color: 'black', fontSize: '17px' }}>
-          <FilterAltIcon style={{ marginRight: '8px' }} />  Tutte le foto
-        </Typography>
-      </IconButton>
-
-      <ImageList sx={{ width: '100%', maxHeight: '81.06vh', paddingTop: '0px', overflowY: 'auto' }}>
+      <ImageList
+        sx={{
+          width: '100%',
+          maxHeight: '81.06vh',
+          paddingTop: '0px',
+          overflowY: 'auto',
+        }}
+      >
         {images.map((image, index) => (
           <ImageListItem key={index}>
             <img
@@ -112,7 +167,7 @@ export default function TitlebarImageList() {
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`info about Image ${index}`}
-                    onClick={handleClick}
+                    onClick={(event) => handleClick(event, index)}
                   >
                     <InfoIcon />
                   </IconButton>
@@ -127,9 +182,9 @@ export default function TitlebarImageList() {
               }
             />
             <Popover
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleClose}
+              open={Boolean(anchorEls[index])}
+              anchorEl={anchorEls[index]}
+              onClose={() => handleClose(index)}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -167,8 +222,7 @@ export default function TitlebarImageList() {
             </Button>
           </DialogActions>
         </Dialog>
-        )}
-
+      )}
     </div>
   );
 }
