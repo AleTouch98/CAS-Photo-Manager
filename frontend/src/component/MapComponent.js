@@ -103,8 +103,7 @@ const MapComponent = ({ selectedOption }) => {
             )}
             {geojson && (
               <GeoJSON
-                key={JSON.stringify(geoJSONView)} //utilizzata per forzare l'aggiornamento della mappa
-                data={geoJSONView}
+                data={geojson}
                 style={() => ({
                   color: 'blue',
                   opacity: 1,
@@ -117,19 +116,42 @@ const MapComponent = ({ selectedOption }) => {
               <Marker
                 key={index}
                 position={[photo.longitudine, photo.latitudine]}
+                
               >
-                <Popup>
-                  <div>
-                    <h3>{photo.Nome_Foto}</h3>
-                    <p>{photo.Indirizzo}</p>
-                    {/* Altre informazioni sulla foto */}
-                  </div>
-                </Popup>
+              <Popup>
+                <div style={{ width: '300px', overflowY: 'auto', maxHeight: '400px' }}>
+                  <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>{photo.indirizzo}</h3>
+                  {photos
+                    .filter((otherPhoto) => otherPhoto.indirizzo === photo.indirizzo)
+                    .map((otherPhoto, index) => (
+                      <div key={index} style={{ marginBottom: '8px', width: '100%' }}>
+                        {otherPhoto.nome_foto && (
+                          <h4 style={{ fontWeight: 'bold' }}>{otherPhoto.nome_foto}</h4>
+                        )}
+                        {otherPhoto.immaginebase64 && (
+                          <img
+                            src={`data:image/jpeg;base64,${otherPhoto.immaginebase64}`}
+                            alt={otherPhoto.Nome_Foto}
+                            style={{ width: '100%', maxWidth: '100%', height: 'auto' }}
+                          />
+                        )}
+                        <p style={{ fontWeight: 'bold', display: 'inline-block', marginRight: '8px' }}>
+                          Caricato da:
+                        </p>
+                        <p style={{ display: 'inline-block' }}>{otherPhoto.nome_utente}</p>
+                        {/* Altre informazioni sulla foto */}
+                      </div>
+                    ))}
+                    {photos
+                      .filter((otherPhoto) => otherPhoto.indirizzo === photo.indirizzo).length > 1 && (
+                      <hr /> // Inserisce una linea solo se ci sono più foto
+                    )}
+                </div>
+              </Popup>
               </Marker>
             ))}
           </MapContainer>
         </div>
-
 
 
       </div>

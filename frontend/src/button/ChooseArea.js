@@ -91,11 +91,17 @@ function ChooseArea({selectedGeoJSON, onAreaChange}) {
             }}
           >
             {listaAree.map((area, index) => (
-              <MenuItem key={index} onClick={() => handleMenuItemClick(area)}>
+              <MenuItem key={index} onClick={() => {
+                handleMenuItemClick(area);
+                popupState.close(); 
+              }}> 
                 {area}
               </MenuItem>
+              
             ))}
+            
           </Menu>
+          
         </React.Fragment>
       )}
     </PopupState>
