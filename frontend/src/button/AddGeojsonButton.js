@@ -38,11 +38,8 @@ const AddGeojsonButton = () => {
             const properties = primaFeature.properties;
             const propertyNamesList = [];
             for (const propertyName in properties) {
-              const propertyValue = properties[propertyName];
-              console.log(`Nome della proprietà: ${propertyName}, Valore: ${propertyValue}`);
               propertyNamesList.push(propertyName);
             }
-            console.log(propertyNamesList);
             setGeojsonFeatures(propertyNamesList);
           }
         } catch (error) {

@@ -118,13 +118,14 @@ getListaGeoJSON: async () => {
     await client.connect();
     try {
         const query = `
-        SELECT NomeGeoJSON, GeoJSON_Path
+        SELECT NomeGeoJSON, GeoJSON_Path, FeatureDescrittiva
         FROM geojsonTable;
         `;
         const result = await client.query(query);
         const geoJSONList = result.rows.map(row => ({
             nomeGeoJSON: row.nomegeojson,
-            geoJSONPath: row.geojson_path // Assicurati che il nome della colonna sia corretto
+            geoJSONPath: row.geojson_path,
+            featureDescrittiva: row.featuredescrittiva
         }));
         return geoJSONList;
     } catch (e) {

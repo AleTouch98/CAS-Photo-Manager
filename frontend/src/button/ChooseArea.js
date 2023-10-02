@@ -10,14 +10,14 @@ import Typography from '@mui/material/Typography';
 
  
 
-function ChooseArea() {
+function ChooseArea({selectedGeoJSON}) {
 
   
 
  
 
   const handleButtonClick = async () => {
-    
+    console.log(selectedGeoJSON);
   };
 
  
