@@ -16,7 +16,9 @@ const ChooseCollection = ({onChangeSelection }) => {
         const caricaDati = async () => {
             try {
                 const result = await axios.get(`http://localhost:8000/dashboard/${userId}/collection`);
-                setCollezioni(result.data.collezioni);
+                if(result.status === 200){
+                    setCollezioni(result.data.collezioni);
+                }
             } catch (error) {
                 console.error('Errore nella richiesta HTTP:', error);
             }
