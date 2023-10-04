@@ -174,7 +174,7 @@ getFotoUtente: async (id) => {
     await client.connect();
     try {
         const query = `
-        SELECT Foto.ID, Foto.Nome_Foto, Foto.Indirizzo, Utenti.Nome_utente AS Nome_Utente,
+        SELECT Foto.ID, Foto.Nome_Foto, Foto.Indirizzo, Utenti.Nome_utente AS Nome_Utente,ST_X(GeoTag_Spaziale) AS longitudine, ST_Y(GeoTag_Spaziale) AS latitudine,
         encode(Foto.Immagine, 'base64') AS ImmagineBase64
         FROM Foto
         INNER JOIN Utenti ON Foto.ID_Utente = Utenti.ID
@@ -189,6 +189,29 @@ getFotoUtente: async (id) => {
         await client.end();
     }
 },
+
+
+getFotoUtenteInCollection: async (id, collection) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+        SELECT Foto.ID, Foto.Nome_Foto, Foto.Indirizzo, Utenti.Nome_utente AS Nome_Utente, ST_X(GeoTag_Spaziale) AS longitudine, ST_Y(GeoTag_Spaziale) AS latitudine,
+        encode(Foto.Immagine, 'base64') AS ImmagineBase64
+        FROM Foto
+        INNER JOIN Utenti ON Foto.ID_Utente = Utenti.ID
+        WHERE Foto.ID_Utente = $1 AND Foto.Nome_Collezione = $2
+        `;
+        const result = await client.query(query, [id, collection]);
+        return result; // Nessun errore e ritorna il risultato della query
+    } catch (e) {
+        console.error('Errore nel download delle foto:', e);
+        return e; // Restituisci l'errore in caso di fallimento
+    } finally {
+        await client.end();
+    }
+},
+
 
 
 

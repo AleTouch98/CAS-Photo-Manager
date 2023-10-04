@@ -1,12 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 const databasepg = require("./queriesDB");
-/*const kmeans = require('node-kmeans');
-var clustering = require('density-clustering');*/
 const { Client } = require("pg");
 const { QUERY_CONFIGURATION } = require("./Configuration");
 const express = require('express');
 const multer = require('multer');
+const axios = require('axios');
+const kmeans = require('node-kmeans');
+var clustering = require('density-clustering');
+
+
 
 module.exports = {
   createRoutes: (app) => {
@@ -287,7 +290,7 @@ module.exports = {
 
 
 
-  app.get("/dashboard/:userId/collection", async (req, res) => {
+  app.get("/dashboard/:userId/collectionsName", async (req, res) => {
     try {
       const userId = req.params.userId;
       const result = await databasepg.getCollezioniUtente(userId);  
@@ -303,6 +306,134 @@ module.exports = {
   });
 
 
+  app.post("/dashboard/:userId/fotoCollection", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const collection = req.body.collection;
+      const result = await databasepg.getFotoUtenteInCollection(userId, collection);  
+      if(result.rows.length > 0){
+        res.status(200).json({ message: "Foto della collezione caricate con successo.", immagini: result.rows });
+      } else {
+        res.status(219).json({ message: "Nessuna foto nella collezione richiesta." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Errore del Server Interno");
+    }
+  });
+
+
+  // ---------------------------- KMEANS E DBSCAN ----------------------------- //
+
+
+
+
+  // FUNZIONE UTILIZZATA PER CALCOLARE IL NUMERO OTTIMALE DI CLUSTER  
+  async function calculateOptimalClusterNumber(data, maxClusters) {
+    const sseArray = [];
+    const kValues = Array.from({ length: maxClusters }, (_, i) => i + 1);
+    for (const k of kValues) {
+      await new Promise((resolve, reject) => {
+        kmeans.clusterize(data, { k }, (err, result) => {
+          if (err) {
+            console.error(`Errore durante l'esecuzione di K-Means con k=${k}:`, err);
+            reject(err); // Aggiungi questa riga per gestire errori
+          } else {
+            const sse = result.reduce((accumulator, cluster) => {
+              return accumulator + cluster.cluster.reduce((acc, dataPoint) => {
+                const squaredDistance = Math.pow(dataPoint[0] - cluster.centroid[0], 2) + Math.pow(dataPoint[1] - cluster.centroid[1], 2);
+                return acc + squaredDistance;
+              }, 0);
+            }, 0);
+            sseArray.push(sse);
+            resolve(); // Risolvi la promise quando hai i risultati
+          }
+        });
+      });
+    }
+    const sseDifferences = sseArray.slice(1).map((sse, index) => sseArray[index] - sse);
+    let elbowIndex = 0;
+    for (let i = 1; i < sseDifferences.length; i++) {
+      if (sseDifferences[i] < sseDifferences[i - 1]) {
+        elbowIndex = i;
+        break;
+      }
+    }
+    const optimalNumClusters = elbowIndex + 1;
+    return optimalNumClusters;
+  }
+
+
+  
+  app.post("/dashboard/:userId/kmeans", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const nCluster = req.body.ncluster;
+      const photos = await databasepg.getFotoUtente(userId);
+      const data = photos.rows.map(photo => [photo.latitudine, photo.longitudine]);
+      let k; 
+      if(typeof nCluster === 'undefined'){
+        k = await calculateOptimalClusterNumber(data, 6);
+      } else {
+        k = nCluster;
+      }
+      if(k > data.length){
+        res.status(218).json({
+          message: "Impossibile eseguide il k-means con un numero di cluster maggiore dei punti dati.",
+        });
+      }
+      var kmeans = new clustering.KMEANS();
+      const clusters = kmeans.run(data, k);
+      if (clusters) {
+        const clusteredData = clusters.map(cluster => cluster.map(index => data[index]));
+        res.status(200).json({
+          message: "Risultati DBSCAN",
+          clusters: clusteredData,
+        });
+      } else {
+        res.status(217).json({
+          message: "Nessun cluster trovato con i parametri dati.",
+          clusters: [],
+        });
+      }
+    } catch (error) {
+      console.error('Errore generale:', error);
+      res.status(500).json({ error: "Errore del Server Interno" });
+    }
+  });
+
+
+
+  app.post("/dashboard/:userId/dbscan", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const epsilon = req.body.epsilon; // Raggio dell'intorno
+      const minPoints = req.body.minpoints; // Numero minimo di punti in un cluster
+  
+      const photos = await databasepg.getFotoUtente(userId);
+      const data = photos.rows.map(photo => [photo.latitudine, photo.longitudine]);
+  
+      var dbscan = new clustering.DBSCAN();
+      const clusters = dbscan.run(data, epsilon, minPoints);
+      if (clusters) {
+        // Ottieni i punti appartenenti a ciascun cluster
+        const clusteredData = clusters.map(cluster => cluster.map(index => data[index]));
+        res.status(200).json({
+          message: "Risultati DBSCAN",
+          clusters: clusteredData,
+        });
+      } else {
+        res.status(200).json({
+          message: "Nessun cluster trovato con i parametri dati.",
+          clusters: [],
+        });
+      }
+    } catch (error) {
+      console.error('Errore generale:', error);
+      res.status(500).json({ error: "Errore del Server Interno" });
+    }
+  });
+  
 
 
     

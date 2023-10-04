@@ -1,91 +1,79 @@
 import React, { useState } from 'react';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ColorizeIcon from '@mui/icons-material/Colorize';
+import PopupState from 'material-ui-popup-state';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
- 
+function ColorMap({ optionSelected }) {
 
-function ColorMap({optionSelected}) {
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const [listaValori, setListaValori] = useState(['Nessuno', 'HeatMap', 'Colora mappa']);
-  
-
- 
-
-  const handleButtonClick = async () => {
-    
+  const handleMenuItemClick = (option) => {
+    let updatedOptions;
+    if (selectedOptions.includes(option)) {
+      updatedOptions = selectedOptions.filter((item) => item !== option);
+    } else {
+      updatedOptions = [...selectedOptions, option];
+    }
+    setSelectedOptions(updatedOptions);
+    optionSelected(updatedOptions); 
   };
-
- 
-
-  const handleMenuItemClick = async (opzioneScelta) => {
-    optionSelected(opzioneScelta);
-  };
-
- 
 
   return (
-
     <PopupState variant="popover" popupId="demo-popup-menu">
-    {(popupState) => (
-      <React.Fragment>
-        <IconButton
-          color="primary"
-          variant="contained"
-          style={{ padding: '0px' }}
-          {...bindTrigger(popupState)}
-          onClick={() => {
-            handleButtonClick();
-            popupState.open();
-          }}
-        >
-          <Typography
-            variant="inherit"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              color: 'white',
-              fontSize: '15px',
-            }}
-          >
-            <ColorizeIcon style={{ marginRight: '8px' }} /> Heatmap / Color Map
-          </Typography>
-        </IconButton>
-        <Menu
-          {...bindMenu(popupState)}
-          anchorReference="anchorPosition"
-          anchorPosition={{
-            top: 32, // Regola questa altezza per spostare il menu più in alto o in basso
-            left: 8, // Regola questa larghezza per spostare il menu più a sinistra o a destra
-          }}
-          getContentAnchorEl={null}
-          style={{
-            position: 'fixed',
-            marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
-            marginLeft: '720px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
-          }}
-        >
-          {listaValori.map((option, index) => (
-            <MenuItem key={index} onClick={() => {
-              handleMenuItemClick(option);
-              popupState.close(); 
-            }}>
-              {option}
-            </MenuItem>
-          ))}
-        </Menu>
-      </React.Fragment>
-    )}
-  </PopupState>
+  {(popupState) => (
+    <div style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
+      <FormControl component="fieldset">
+        <FormGroup>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FormControlLabel
+  control={
+    <Checkbox
+      checked={selectedOptions.includes('Color')}
+      onChange={() => handleMenuItemClick('Color')}
+      name="Color"
+      color="primary"
+    />
+  }
+  label="Color"
+  style={{
+    marginRight: '5px',
+    fontSize: '12px', // Imposta il valore desiderato per la dimensione del testo
+    textAlign: 'center'
+  }}
+/>
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={selectedOptions.includes('Heatmap')}
+      onChange={() => handleMenuItemClick('Heatmap')}
+      name="Heatmap"
+      color="primary"
+    />
+  }
+  label="Heatmap"
+  style={{
+    fontSize: '12px', // Imposta il valore desiderato per la dimensione del testo
+    textAlign: 'center'
+  }}
+/>
+
+          </div>
+        </FormGroup>
+      </FormControl>
+    </div>
+  )}
+</PopupState>
+
+
+
+
+
   
 
   );
 }
 
-
 export default ColorMap;
+

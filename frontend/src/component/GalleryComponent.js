@@ -28,6 +28,8 @@ export default function TitlebarImageList() {
   const [anchorEls, setAnchorEls] = useState([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [collezioni, setCollezioni] = useState([]);
+
 
   const handleAllPhoto = async () => {
     try {
@@ -78,6 +80,32 @@ export default function TitlebarImageList() {
     setAnchorEls(newAnchorEls);
   };
 
+  const handleClickMenuCollection = async () => {
+    try {
+      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/collectionsName`);
+      if(result.status === 200){
+          setCollezioni(result.data.collezioni);
+      }
+    } catch (error) {
+        console.error('Errore nella richiesta HTTP:', error);
+    }
+  };
+
+
+  const handleCollectionSelected = async (option) => {
+    try {
+      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/fotoCollection`,{collection: option.nome_collezione});
+      if(result.status === 200){
+        setImages(result.data.immagini);
+      } else {
+        alert(result.data.message);
+      } 
+    } catch (error) {
+        console.error('Errore nella richiesta HTTP:', error);
+    }
+  };
+
+
   return (
     <div style={{ width: '100%', overflowX: 'auto' }}>
       {/* CREAZIONE DEI BOTTONI */}
@@ -92,6 +120,10 @@ export default function TitlebarImageList() {
                 position: 'relative',
                 marginTop: '10px',
                 marginBottom: '-10px',
+              }}
+              onClick={() => {
+                handleClickMenuCollection();
+                popupState.open();
               }}
             >
               <Typography
@@ -110,9 +142,14 @@ export default function TitlebarImageList() {
               </Typography>
             </IconButton>
             <Menu {...bindMenu(popupState)}>
-              <MenuItem onClick={popupState.close}>Collezione 1</MenuItem>
-              <MenuItem onClick={popupState.close}>Collezione 2</MenuItem>
-              <MenuItem onClick={popupState.close}>Collezione 3</MenuItem>
+            {collezioni.map((option, index) => (
+              <MenuItem key={index} onClick={() => {
+                handleCollectionSelected(option);
+                popupState.close();
+              }}>
+                {option.nome_collezione}
+              </MenuItem>
+            ))}
             </Menu>
           </React.Fragment>
         )}

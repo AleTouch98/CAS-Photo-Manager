@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import ChooseGeoButton from '../button/ChooseGeojson';
 import ChooseArea from '../button/ChooseArea';
 import HeatColorMap from '../button/HeatColorMap';
-import HeatMapButton from '../button/DBScan';
+import ClusterinButton from '../button/ClusteringButton';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor:'#3b3f41',
@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: '#FFFFFF',
 }));
 
-export default function ResponsiveGrid({geoJSONSelected, areaSelected, optionSelected}) {
+export default function ResponsiveGrid({geoJSONSelected, areaSelected, optionSelected, clustersFound}) {
   
   const [geoJSONSelezionato, setGeoJSONSelezionato] = useState('');
   const [chooseAreaDisabled, setChooseAreaDisabled] = useState(true);
@@ -41,7 +41,12 @@ export default function ResponsiveGrid({geoJSONSelected, areaSelected, optionSel
   }
 
   function handleOptionChange(option) {
+    console.log(option);
     optionSelected(option);
+  }
+
+  function handleClusteringButton(clusters) {
+    clustersFound(clusters);
   }
 
   
@@ -65,7 +70,7 @@ export default function ResponsiveGrid({geoJSONSelected, areaSelected, optionSel
     </Grid>
     <Grid item xs={1} sm={3} md={3}>
       <Item>
-        <HeatMapButton />
+        <ClusterinButton resultClustering={handleClusteringButton} />
       </Item>
     </Grid>
   </Grid>

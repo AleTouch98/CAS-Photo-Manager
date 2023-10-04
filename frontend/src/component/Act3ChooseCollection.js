@@ -15,7 +15,7 @@ const ChooseCollection = ({onChangeSelection }) => {
     useEffect(() => {
         const caricaDati = async () => {
             try {
-                const result = await axios.get(`http://localhost:8000/dashboard/${userId}/collection`);
+                const result = await axios.get(`http://localhost:8000/dashboard/${userId}/collectionsName`);
                 if(result.status === 200){
                     setCollezioni(result.data.collezioni);
                 }

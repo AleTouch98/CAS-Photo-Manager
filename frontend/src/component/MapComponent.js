@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '../component/Grid.js';
 import Gallery from '../component/GalleryComponent';
-import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, CircleMarker, Popup } from 'react-leaflet';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
 import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
+const randomColor = require('randomcolor');
+
 
 
 const MapComponent = ({ selectedOption }) => {
@@ -17,6 +19,7 @@ const MapComponent = ({ selectedOption }) => {
   const [geoJSONColor, setGeoJSONColor] = useState('');//area visualizzata (intero geojson o parte del geojson)
   const [loading, setLoading] = useState(false);
   const [heatmapData, setHeatmapData] = useState([]);
+  const [pointsClusters, setPointsClusters] = useState([]);
   const colors = ['#FF0000', '#FF8000', '#FFFF00'];
 
   
@@ -83,12 +86,12 @@ const MapComponent = ({ selectedOption }) => {
 
   async function handleOptionSelected(option) {
     setGeoJSONView('');
-    if (option === 'Nessuno') {
+    if (option.length === 0) {
       setGeoJSONColor('');
       setHeatmapData([]);
       // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
       //setGeoJSONView(geojson);
-    } else if (option === 'HeatMap') {
+    } else if (option.includes('Heatmap')) {
 
       const heatmapCoordinates = photos.map((photo) => ({
         lat: photo.latitudine,
@@ -141,7 +144,26 @@ const MapComponent = ({ selectedOption }) => {
     }
   }
   
-  
+
+
+  const handleClusters =  (clusters) => {
+    setPointsClusters([]);
+    const pointsWithColor = [];
+    clusters.forEach((cluster, clusterIndex) => {
+      const clusterColor = randomColor();
+      cluster.forEach((point) => {
+        const latitude = point[0]; 
+        const longitude = point[1]; 
+        const pointObject = {
+          latitudine: latitude,
+          longitudine: longitude,
+          colore: clusterColor,
+        };
+        pointsWithColor.push(pointObject);
+      });
+    });
+    setPointsClusters(pointsWithColor);
+  };
   
   
   
@@ -152,7 +174,7 @@ const MapComponent = ({ selectedOption }) => {
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
       <div style={{ width: '70%', position: 'relative', top: '80px', left: '0', right: '0', bottom: '0' }}>
         <div>
-          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} optionSelected={handleOptionSelected}/>
+          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} optionSelected={handleOptionSelected} clustersFound={handleClusters}/>
         </div>
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
@@ -223,6 +245,15 @@ const MapComponent = ({ selectedOption }) => {
                 })}
               />
             )}
+            {pointsClusters.map((point, index) => (
+              <CircleMarker
+                key={JSON.stringify(point) + index}
+                center={[point.latitudine, point.longitudine]}
+                radius={8} // Imposta il raggio del cerchio
+                color={point.colore} // Imposta il colore in base all'attributo "colore"
+              >
+              </CircleMarker>
+            ))}
             {photos.map((photo, index) => (
               <Marker
                 key={index}
