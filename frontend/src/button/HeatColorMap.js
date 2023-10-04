@@ -5,37 +5,35 @@ import MenuItem from '@mui/material/MenuItem';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
-import ChoseGeoj from '@mui/icons-material/Map';
 import Typography from '@mui/material/Typography';
+import ColorizeIcon from '@mui/icons-material/Colorize';
 
-function ChooseGeojson({ onGeoJSONChange }) {
-  const { userId } = useParams();
-  const [listaNomiGeo, setListaNomiGeo] = useState([{ nomeGeoJSON: 'Nessun GeoJSON' }]);
-  const [selectedOption, setSelectedOption] = useState(null); 
+ 
+
+function ColorMap({optionSelected}) {
+
+  const [listaValori, setListaValori] = useState(['Nessuno', 'HeatMap', 'Colora mappa']);
+  
+
+ 
 
   const handleButtonClick = async () => {
-    try {
-      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/getGeoJSONList`);
-      const listaGeoJSON = result.data.lista_geojson;
-      if (result.status === 210) {
-        return;
-      } else if (listaGeoJSON.length > 0) {
-        setListaNomiGeo([{ nomeGeoJSON: 'Nessun GeoJSON' }, ...listaGeoJSON]);
-      }
-    } catch (error) {
-      console.error("Errore durante la richiesta dei dati:", error);
-    }
+    
   };
+
+ 
 
   const handleMenuItemClick = async (opzioneScelta) => {
-    onGeoJSONChange(opzioneScelta);
-    setSelectedOption(opzioneScelta); 
+    optionSelected(opzioneScelta);
   };
 
+ 
+
   return (
+
     <PopupState variant="popover" popupId="demo-popup-menu">
     {(popupState) => (
-      <div style={{ height: '30px' }}> 
+      <React.Fragment>
         <IconButton
           color="primary"
           variant="contained"
@@ -55,8 +53,8 @@ function ChooseGeojson({ onGeoJSONChange }) {
               fontSize: '15px',
             }}
           >
-            <ChoseGeoj style={{ marginRight: '8px' }} /> 
-            {selectedOption && selectedOption.nomeGeoJSON !== 'Nessun GeoJSON' ? selectedOption.nomeGeoJSON : 'Scegli GeoJSON'}          </Typography>
+            <ColorizeIcon style={{ marginRight: '8px' }} /> Heatmap / Color Map
+          </Typography>
         </IconButton>
         <Menu
           {...bindMenu(popupState)}
@@ -69,23 +67,25 @@ function ChooseGeojson({ onGeoJSONChange }) {
           style={{
             position: 'fixed',
             marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
-            marginLeft: '220px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
+            marginLeft: '720px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
           }}
         >
-          {listaNomiGeo.map((option, index) => (
+          {listaValori.map((option, index) => (
             <MenuItem key={index} onClick={() => {
               handleMenuItemClick(option);
-              popupState.close();
+              popupState.close(); 
             }}>
-              {option.nomeGeoJSON}
+              {option}
             </MenuItem>
           ))}
         </Menu>
-      </div>
+      </React.Fragment>
     )}
   </PopupState>
   
+
   );
 }
 
-export default ChooseGeojson;
+
+export default ColorMap;

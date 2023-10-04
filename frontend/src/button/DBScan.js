@@ -6,11 +6,10 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ColorizeIcon from '@mui/icons-material/Colorize';
-
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
  
 
-function ColorMap() {
+function HeatMapButton() {
 
   
 
@@ -51,7 +50,7 @@ function ColorMap() {
               fontSize: '15px',
             }}
           >
-            <ColorizeIcon style={{ marginRight: '8px' }} /> Scegli Area
+            <ScatterPlotIcon style={{ marginRight: '8px' }} /> DBScan
           </Typography>
         </IconButton>
         <Menu
@@ -79,4 +78,4 @@ function ColorMap() {
 }
 
 
-export default ColorMap;
+export default HeatMapButton;

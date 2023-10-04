@@ -198,7 +198,7 @@ getFotoUtenteInPolygon: async (id, polygon) => {
     await client.connect();
     try {
         const query = `
-        SELECT Foto.ID, Foto.Nome_Foto, Foto.Indirizzo, ST_X(GeoTag_Spaziale) AS latitudine, ST_Y(GeoTag_Spaziale) AS longitudine, Utenti.Nome_utente AS Nome_Utente,
+        SELECT Foto.ID, Foto.Nome_Foto, Foto.Indirizzo, ST_X(GeoTag_Spaziale) AS longitudine, ST_Y(GeoTag_Spaziale) AS latitudine, Utenti.Nome_utente AS Nome_Utente,
         encode(Foto.Immagine, 'base64') AS ImmagineBase64
         FROM Foto
         INNER JOIN Utenti ON Foto.ID_Utente = Utenti.ID

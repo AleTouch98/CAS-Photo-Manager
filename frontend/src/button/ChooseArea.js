@@ -10,12 +10,14 @@ import Typography from '@mui/material/Typography';
 
  
 
-function ChooseArea({selectedGeoJSON, onAreaChange}) {
+function ChooseArea({selectedGeoJSON, onAreaChange, iconButtonDisabled}) {
 
   const { userId } = useParams();
 
 
   const [listaAree, setListaAree] = useState([]);
+
+  const [selectedOption, setSelectedOption] = useState(null); 
   
 
  
@@ -32,6 +34,7 @@ function ChooseArea({selectedGeoJSON, onAreaChange}) {
         const geojsonData = response.data;
         if (geojsonData && geojsonData.features) {
           const featureList = geojsonData.features.map((feature) => feature.properties[selectedGeoJSON.featureDescrittiva]);
+          featureList.unshift('Nessuna area');
           setListaAree(featureList);
         }
       } else {
@@ -46,65 +49,67 @@ function ChooseArea({selectedGeoJSON, onAreaChange}) {
 
   const handleMenuItemClick = async (opzioneScelta) => {
     onAreaChange(opzioneScelta);
+    setSelectedOption(opzioneScelta);
   };
 
- 
+  if (iconButtonDisabled) {
+    return null;
+  }
 
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">
-      {(popupState) => (
-        <React.Fragment>
-          <IconButton
-            color="primary"
-            variant="contained"
-            style={{ padding: '0px' }}
-            {...bindTrigger(popupState)}
-            onClick={() => {
-              handleButtonClick();
-              popupState.open();
-            }}
-          >
-            <Typography
-              variant="inherit"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: 'white',
-                fontSize: '15px',
-              }}
-            >
-              <FlagIcon style={{ marginRight: '8px' }} /> Scegli Area
-            </Typography>
-          </IconButton>
-          <Menu
-            {...bindMenu(popupState)}
-            anchorReference="anchorPosition"
-            anchorPosition={{
-              top: 32,
-              left: 8,
-            }}
-            getContentAnchorEl={null}
-            style={{
-              position: 'fixed',
-              marginTop: '85px',
-              marginLeft: '540px',
-            }}
-          >
-            {listaAree.map((area, index) => (
-              <MenuItem key={index} onClick={() => {
-                handleMenuItemClick(area);
-                popupState.close(); 
-              }}> 
-                {area}
-              </MenuItem>
-              
-            ))}
-            
-          </Menu>
-          
-        </React.Fragment>
-      )}
-    </PopupState>
+  {(popupState) => (
+    <div style={{ height: '30px' }}> {/* Imposta l'altezza fissa desiderata */}
+      <IconButton
+        color="primary"
+        variant="contained"
+        style={{ padding: '0px' }}
+        {...bindTrigger(popupState)}
+        onClick={() => {
+          handleButtonClick();
+          popupState.open();
+        }}
+      >
+        <Typography
+          variant="inherit"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            color: 'white',
+            fontSize: '15px',
+          }}
+        >
+          <FlagIcon style={{ marginRight: '8px' }} /> 
+          {selectedOption ? selectedOption : 'Scegli Area'}
+        </Typography>
+      </IconButton>
+      <Menu
+        {...bindMenu(popupState)}
+        anchorReference="anchorPosition"
+        anchorPosition={{
+          top: 32, // Regola questa altezza per spostare il menu più in alto o in basso
+          left: 8, // Regola questa larghezza per spostare il menu più a sinistra o a destra
+        }}
+        getContentAnchorEl={null}
+        style={{
+          position: 'fixed',
+          marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
+          marginLeft: '540px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
+        }}
+      >
+        {listaAree.map((area, index) => (
+          <MenuItem key={index} onClick={() => {
+            handleMenuItemClick(area);
+            popupState.close(); 
+          }}> 
+            {area}
+          </MenuItem>
+        ))}
+      </Menu>
+    </div>
+  )}
+</PopupState>
+
   );
   
 }

@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
+import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
 
 
 const MapComponent = ({ selectedOption }) => {
@@ -12,14 +13,21 @@ const MapComponent = ({ selectedOption }) => {
   const [photos, setPhotos] = useState([]);
   const [geoJSONSelezionato, setGeoJSONSelezionato] = useState(null); //intero geojson inteso come valore restituito dal db
   const [geojson, setGeojson] = useState(''); //geojson completo caricato dal percorso file
-  const [geoJSONView, setGeoJSONView] = useState(''); //area visualizzata (intero geojson o parte del geojson)
+  const [geoJSONView, setGeoJSONView] = useState(''); 
+  const [geoJSONColor, setGeoJSONColor] = useState('');//area visualizzata (intero geojson o parte del geojson)
   const [loading, setLoading] = useState(false);
+  const [heatmapData, setHeatmapData] = useState([]);
+  const colors = ['#FF0000', '#FF8000', '#FFFF00'];
+
+  
+
 
 
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
     setLoading(true); 
     setPhotos([]);
     setGeoJSONView('');
+    setGeoJSONColor('');
     setGeoJSONSelezionato(geoJSONSelezionato);
     const path = geoJSONSelezionato.geoJSONPath;
     try {
@@ -42,10 +50,14 @@ const MapComponent = ({ selectedOption }) => {
 
 
   const handleAreaSelezionata = async (areaSelezionata) => {
+    if(areaSelezionata === 'Nessuna area'){
+      await handleGeoJSONSelezionato(geoJSONSelezionato);
+      return;
+    }
     setGeoJSONView('');
     setPhotos([]);
     setLoading(true);
-    try{
+    try {
       if (!geojson || !geojson.features) {
         return;
       }
@@ -54,16 +66,83 @@ const MapComponent = ({ selectedOption }) => {
       });
       if (featureSelezionata) {
         setGeoJSONView(featureSelezionata);
-        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, { geojson: geoJSONSelezionato, area: areaSelezionata }); //carica le foto contenute in quel geojson
+        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, {
+          geojson: geoJSONSelezionato,
+          area: areaSelezionata
+        });
         setPhotos(photoResult.data.data);
-      } 
+      }
     } catch (error) {
       console.error("Si è verificato un errore:", error);
     } finally {
       setLoading(false);
     }
-    
   };
+  
+
+
+  async function handleOptionSelected(option) {
+    setGeoJSONView('');
+    if (option === 'Nessuno') {
+      setGeoJSONColor('');
+      setHeatmapData([]);
+      // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
+      //setGeoJSONView(geojson);
+    } else if (option === 'HeatMap') {
+
+      const heatmapCoordinates = photos.map((photo) => ({
+        lat: photo.latitudine,
+        lng: photo.longitudine,
+      }));
+      setHeatmapData(heatmapCoordinates);
+      // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
+      //setGeoJSONView(geojson);
+    } else {
+      setGeoJSONView('');
+      // Calcola il numero di foto per ciascuna feature del geoJSON
+      const featuresWithCounts = await Promise.all(geojson.features.map(async (feature) => {
+        const areaName = feature.properties[geoJSONSelezionato.featureDescrittiva];
+        const featureSelezionata = geojson.features.find((feature) => {
+          return feature.properties[geoJSONSelezionato.featureDescrittiva] === areaName;
+        });
+        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, {
+          geojson: geoJSONSelezionato,
+          area: areaName
+        });
+        
+        // 2. verifica se photo.latitudine e photo.longitudine sono nella geometry
+        // 3. se si aggiungi 
+        const numPhotosInArea = photoResult.data.data.length;
+        return { ...feature, numPhotos: numPhotosInArea };
+      }));
+      // Calcola il massimo e il minimo numero di foto tra le feature
+      const maxNumPhotos = Math.max(...featuresWithCounts.map((feature) => feature.numPhotos));
+      const minNumPhotos = Math.min(...featuresWithCounts.map((feature) => feature.numPhotos));
+    
+      // Assegna un colore in base al numero di foto per ciascuna feature
+      const coloredGeoJSON = {
+        ...geojson,
+        features: featuresWithCounts.map((feature) => {
+          const colorIndex = Math.round(
+            ((feature.numPhotos - minNumPhotos) / (maxNumPhotos - minNumPhotos)) * (colors.length - 1)
+          );
+          const fillColor = colors[colorIndex];
+          return {
+            ...feature,
+            properties: {
+              ...feature.properties,
+              fillColor: fillColor,
+            },
+          };
+        }),
+      };
+      setGeoJSONColor(coloredGeoJSON);
+      setHeatmapData([]); // Rimuovi i dati del heatmap se necessario
+    }
+  }
+  
+  
+  
   
   
   
@@ -73,7 +152,7 @@ const MapComponent = ({ selectedOption }) => {
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
       <div style={{ width: '70%', position: 'relative', top: '80px', left: '0', right: '0', bottom: '0' }}>
         <div>
-          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} />
+          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} optionSelected={handleOptionSelected}/>
         </div>
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
@@ -101,10 +180,29 @@ const MapComponent = ({ selectedOption }) => {
                 attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
             )}
+            {
+              <HeatmapLayer
+                points={heatmapData}
+                longitudeExtractor={(point) => point.lng}
+                latitudeExtractor={(point) => point.lat}
+                intensityExtractor={(point) => {
+                  const totalNumPhotos = heatmapData.length;
+                  const numPhotos = heatmapData.filter((photo) => {
+                    const latDiff = Math.abs(photo.lat - point.lat);
+                    const lngDiff = Math.abs(photo.lng - point.lng);
+                    return latDiff < 0.01 && lngDiff < 0.01; // Imposta una soglia per considerare le foto vicine
+                  }).length;
+                  return (numPhotos / totalNumPhotos) * 100; // L'intensità sarà il numero di foto nella stessa area
+                }}
+                colors={['#FF0000', '#FFFF00', '#00FF00']} // Personalizza i colori del heatmap
+                blur={10}
+                radius={20} // Personalizza il blur del heatmap
+              />
+            }
             {geoJSONView && (
               <GeoJSON
-              key={JSON.stringify(geoJSONView)}
                 data={geoJSONView}
+                key={JSON.stringify(geoJSONView)} //utilizzata per forzare l'aggiornamento della mappa
                 style={() => ({
                   color: 'blue',
                   opacity: 1,
@@ -113,10 +211,22 @@ const MapComponent = ({ selectedOption }) => {
                 })}
               />
             )}
+            {geoJSONColor && (
+              <GeoJSON
+                key={JSON.stringify(geoJSONView)}
+                data={geoJSONColor}
+                style={(feature) => ({
+                  color: 'orange',
+                  opacity: 0.4,
+                  fillColor: feature.properties.fillColor, // Usa il colore dalle proprietà delle feature
+                  fillOpacity: 0.6,
+                })}
+              />
+            )}
             {photos.map((photo, index) => (
               <Marker
                 key={index}
-                position={[photo.longitudine, photo.latitudine]}
+                position={[photo.latitudine, photo.longitudine]}
                 
               >
               <Popup>
@@ -151,6 +261,8 @@ const MapComponent = ({ selectedOption }) => {
               </Popup>
               </Marker>
             ))}
+            
+
           </MapContainer>
         </div>
 
