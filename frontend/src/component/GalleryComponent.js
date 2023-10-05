@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -22,13 +22,27 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function TitlebarImageList() {
+export default function TitlebarImageList({imageRemove}) {
   const { userId } = useParams();
   const [images, setImages] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [collezioni, setCollezioni] = useState([]);
+
+
+  useEffect(() => {
+    const caricaDati = async () => {
+      try {
+        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        setImages(photoResult.data.immagini);
+      } catch (error) {
+        console.error("Si è verificato un errore:", error);
+      } finally {
+      }
+    };
+    caricaDati();
+  }, []);
 
 
   const handleAllPhoto = async () => {
@@ -55,6 +69,7 @@ export default function TitlebarImageList() {
     const result = await axios.post(`http://localhost:8000/dashboard/${userId}/deletePhoto`, {id_photo:selectedImage.id});
     if(result.status === 200){
       alert('Foto eliminata con successo');
+      imageRemove(selectedImage.id);
       const nuoveImmagini = images.filter(image => image.id !== selectedImage.id);
       setImages(nuoveImmagini);
     } else {

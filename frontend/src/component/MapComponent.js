@@ -6,7 +6,11 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
 import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
+import { scaleSequential } from 'd3-scale';
+import { interpolateOrRd } from 'd3-scale-chromatic';
+
 const randomColor = require('randomcolor');
+
 
 
 
@@ -20,9 +24,25 @@ const MapComponent = ({ selectedOption }) => {
   const [loading, setLoading] = useState(false);
   const [heatmapData, setHeatmapData] = useState([]);
   const [pointsClusters, setPointsClusters] = useState([]);
-  const colors = ['#FF0000', '#FF8000', '#FFFF00'];
 
   
+
+  useEffect(() => {
+    const caricaDati = async () => {
+      setLoading(true);
+      try {
+        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        setPhotos(photoResult.data.immagini);
+      } catch (error) {
+        console.error("Si è verificato un errore:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    caricaDati();
+  }, []);
+  
+
 
 
 
@@ -35,13 +55,15 @@ const MapComponent = ({ selectedOption }) => {
     const path = geoJSONSelezionato.geoJSONPath;
     try {
       if(geoJSONSelezionato.nomeGeoJSON === 'Nessun GeoJSON'){
-        return;
-      }
-      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, { path }); // carica il geojson
-      setGeojson(result.data);
-      setGeoJSONView(result.data);
-      const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, { geojson: geoJSONSelezionato, area: 'all' }); //carica le foto contenute in quel geojson
-      setPhotos(photoResult.data.data);
+        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        setPhotos(photoResult.data.immagini);
+      } else {
+        const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, { path }); // carica il geojson
+        setGeojson(result.data);
+        setGeoJSONView(result.data);
+        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, { geojson: geoJSONSelezionato, area: 'all' }); //carica le foto contenute in quel geojson
+        setPhotos(photoResult.data.data);
+      } 
     } catch (error) {
       console.error("Si è verificato un errore:", error);
     } finally {
@@ -112,9 +134,6 @@ const MapComponent = ({ selectedOption }) => {
           geojson: geoJSONSelezionato,
           area: areaName
         });
-        
-        // 2. verifica se photo.latitudine e photo.longitudine sono nella geometry
-        // 3. se si aggiungi 
         const numPhotosInArea = photoResult.data.data.length;
         return { ...feature, numPhotos: numPhotosInArea };
       }));
@@ -126,10 +145,10 @@ const MapComponent = ({ selectedOption }) => {
       const coloredGeoJSON = {
         ...geojson,
         features: featuresWithCounts.map((feature) => {
-          const colorIndex = Math.round(
-            ((feature.numPhotos - minNumPhotos) / (maxNumPhotos - minNumPhotos)) * (colors.length - 1)
-          );
-          const fillColor = colors[colorIndex];
+          const colorScale = scaleSequential(interpolateOrRd) // Usa l'interpolazione di colori "OrRd" da d3
+            .domain([minNumPhotos, maxNumPhotos]);
+          const fillColor = colorScale(feature.numPhotos);
+      
           return {
             ...feature,
             properties: {
@@ -163,6 +182,11 @@ const MapComponent = ({ selectedOption }) => {
       });
     });
     setPointsClusters(pointsWithColor);
+  };
+
+  const handleImageRemove = (idImage) => {
+    const updatedPhotos = photos.filter((photo) => photo.id !== idImage);
+    setPhotos(updatedPhotos);
   };
   
   
@@ -300,7 +324,7 @@ const MapComponent = ({ selectedOption }) => {
 
       </div>
       <div style={{ width: '30%', height: '90vh', position: 'relative', marginTop: '80px', marginBottom: '100px', marginLeft: '10px' }}>
-        <Gallery />
+        <Gallery imageRemove={handleImageRemove}/>
       </div>
     </div>
   );

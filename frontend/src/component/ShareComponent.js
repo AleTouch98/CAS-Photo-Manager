@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Button, TextField, Typography } from '@mui/material';
+import React from 'react';
 
 const ShareComponent = ({ onClose }) => {
 
