@@ -228,8 +228,22 @@ const MapComponent = ({ selectedOption }) => {
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
           {loading && ( // Mostra CircularProgress durante il caricamento
-            <div className="loading-overlay">
-              <CircularProgress />
+            <div className="loading-overlay"
+            style={{
+              position: 'absolute',
+              top: 0,
+              down: 0,
+              left: 0,
+              width: '100%',
+              height: '82vh',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)', // Sfondo semitrasparente
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 999, // Posiziona sopra la mappa
+            }}
+            >
+              <CircularProgress size={80} />
             </div>
           )}
           <MapContainer
@@ -266,8 +280,8 @@ const MapComponent = ({ selectedOption }) => {
                   return (numPhotos / totalNumPhotos) * 100; // L'intensità sarà il numero di foto nella stessa area
                 }}
                 colors={['#FF0000', '#FFFF00', '#00FF00']} // Personalizza i colori del heatmap
-                blur={10}
-                radius={30} // Personalizza il blur del heatmap
+                blur={60}
+                radius={80} // Personalizza il blur del heatmap
               />
             }
             {geoJSONView && (

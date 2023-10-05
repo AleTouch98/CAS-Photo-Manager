@@ -159,7 +159,19 @@ export default function TitlebarImageList({imageRemove}) {
                 <FilterCollectionIcon style={{ marginRight: '8px' }} /> Collezione
               </Typography>
             </IconButton>
-            <Menu {...bindMenu(popupState)}>
+            <Menu  {...bindMenu(popupState)}
+          anchorReference="anchorPosition"
+          anchorPosition={{
+            top: 32, // Regola questa altezza per spostare il menu più in alto o in basso
+            left: 8, // Regola questa larghezza per spostare il menu più a sinistra o a destra
+          }}
+          getContentAnchorEl={null}
+          style={{
+            position: 'fixed',
+            marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
+            marginLeft: '1150px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
+          }}
+        >
             {collezioni.map((option, index) => (
               <MenuItem key={index} onClick={() => {
                 handleCollectionSelected(option);

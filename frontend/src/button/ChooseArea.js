@@ -94,7 +94,7 @@ function ChooseArea({selectedGeoJSON, onAreaChange, iconButtonDisabled}) {
         style={{
           position: 'fixed',
           marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
-          marginLeft: '540px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
+          marginLeft: '420px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
         }}
       >
         {listaAree.map((area, index) => (
