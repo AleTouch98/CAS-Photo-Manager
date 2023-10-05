@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import ChooseGeoButton from '../button/ChooseGeojson';
 import ChooseArea from '../button/ChooseArea';
-import HeatColorMap from '../button/HeatColorMap';
 import ClusterinButton from '../button/ClusteringButton';
+import ColorCheckbox from '../button/ColorCheckbox';
+import HeatmapCheckbox from '../button/HeatmapCheckbox';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor:'#3b3f41',
@@ -18,19 +19,11 @@ const Item = styled(Paper)(({ theme }) => ({
   color: '#FFFFFF',
 }));
 
-export default function ResponsiveGrid({geoJSONSelected, areaSelected, optionSelected, clustersFound}) {
+export default function ResponsiveGrid({geoJSONSelected, areaSelected, clustersFound, valueColorCheckbox, chooseAreaAndColorDisabled, valueHeatmapCheckbox}) {
   
   const [geoJSONSelezionato, setGeoJSONSelezionato] = useState('');
-  const [chooseAreaDisabled, setChooseAreaDisabled] = useState(true);
 
   function handleGeoJSONChange(geoJSONSelezionato) {
-    console.log(geoJSONSelezionato);
-    if(geoJSONSelezionato.nomeGeoJSON === 'Nessun GeoJSON'){
-      console.log('setto a true');
-      setChooseAreaDisabled(true);
-    } else {
-      setChooseAreaDisabled(false);
-    }
     setGeoJSONSelezionato(geoJSONSelezionato);
     geoJSONSelected(geoJSONSelezionato);
   }
@@ -40,41 +33,50 @@ export default function ResponsiveGrid({geoJSONSelected, areaSelected, optionSel
     areaSelected(area);
   }
 
-  function handleOptionChange(option) {
-    console.log(option);
-    optionSelected(option);
-  }
-
   function handleClusteringButton(clusters) {
     clustersFound(clusters);
+  }
+
+  function handleValueCheckboxColor(value) {
+    valueColorCheckbox(value);
+  }
+
+  function handleValueCheckboxHeatmap(value) {
+    valueHeatmapCheckbox(value);
   }
 
   
   return (
     <Box sx={{ flexGrow: 1 }}>
-  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-    <Grid item xs={1} sm={3} md={3}>
-      <Item>
-        <ChooseGeoButton onGeoJSONChange={handleGeoJSONChange} />
-      </Item>
+    <Grid container spacing={2} columns={12}>
+      <Grid item xs={2} sm={3} md={3}>
+        <Item>
+          <ChooseGeoButton onGeoJSONChange={handleGeoJSONChange} />
+        </Item>
+      </Grid>
+      <Grid item xs={2} sm={3} md={3}>
+        <Item>
+          {chooseAreaAndColorDisabled ? null : <ChooseArea selectedGeoJSON={geoJSONSelezionato} onAreaChange={handleAreaChange} />}
+        </Item>
+      </Grid>
+      <Grid item xs={2} sm={2} md={2}>
+        <Item>
+          {chooseAreaAndColorDisabled ? null : <ColorCheckbox valueCheckbox={handleValueCheckboxColor}/>}
+        </Item>
+      </Grid>
+      <Grid item xs={2} sm={2} md={2}>
+        <Item>
+          <HeatmapCheckbox valueCheckbox={handleValueCheckboxHeatmap} />
+        </Item>
+      </Grid>
+      <Grid item xs={2} sm={2} md={2}>
+        <Item>
+          <ClusterinButton resultClustering={handleClusteringButton} />
+        </Item>
+      </Grid>
     </Grid>
-    <Grid item xs={1} sm={3} md={3}>
-      <Item>
-        {chooseAreaDisabled ? null : <ChooseArea selectedGeoJSON={geoJSONSelezionato} onAreaChange={handleAreaChange} />}
-      </Item>
-    </Grid>
-    <Grid item xs={1} sm={3} md={3}>
-      <Item>
-        <HeatColorMap optionSelected={handleOptionChange} />
-      </Item>
-    </Grid>
-    <Grid item xs={1} sm={3} md={3}>
-      <Item>
-        <ClusterinButton resultClustering={handleClusteringButton} />
-      </Item>
-    </Grid>
-  </Grid>
-</Box>
+  </Box>
+  
 
   );
 }

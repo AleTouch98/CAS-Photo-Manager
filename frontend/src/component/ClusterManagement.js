@@ -62,6 +62,12 @@ function ClusterManagement({ onClose, resultClustering }) {
     onClose();
   };
 
+  const handleRimuoviClusters = () => {
+    resultClustering([]);
+    onClose();
+  };
+
+
 
   const renderAlgorithmSpecificOptions = () => {
     if (algorithmType === 'K-Means') {
@@ -145,29 +151,40 @@ function ClusterManagement({ onClose, resultClustering }) {
 
   return (
     <Box p={2}>
-      <Tabs
-        value={algorithmType}
-        onChange={handleAlgorithmTabChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        <Tab label="K-Means" value="K-Means" />
-        <Tab label="DBScan" value="DBScan" />
-      </Tabs>
+  <Tabs
+    value={algorithmType}
+    onChange={handleAlgorithmTabChange}
+    indicatorColor="primary"
+    textColor="primary"
+    centered
+  >
+    <Tab label="K-Means" value="K-Means" />
+    <Tab label="DBScan" value="DBScan" />
+  </Tabs>
 
-      {renderAlgorithmSpecificOptions()}
+  {renderAlgorithmSpecificOptions()}
 
-      <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        sx={{ mt: 2 }}
-        onClick={handleClusterButtonClick}
-      >
-        Esegui {algorithmType}
-      </Button>
-    </Box>
+  <Button
+    variant="contained"
+    color="primary"
+    fullWidth
+    sx={{ mt: 2 }}
+    onClick={handleClusterButtonClick}
+  >
+    Esegui {algorithmType}
+  </Button>
+
+  <Button
+    variant="contained"
+    color="error" // Impostiamo il colore su "secondary" per ottenere un pulsante rosso
+    fullWidth
+    sx={{ mt: 2 }}
+    onClick={handleRimuoviClusters} // Aggiungiamo un gestore di eventi per il clic del pulsante
+  >
+    Rimuovi clusters
+  </Button>
+</Box>
+
   );
 }
 

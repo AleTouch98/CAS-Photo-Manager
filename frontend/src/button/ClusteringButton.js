@@ -28,7 +28,7 @@ const ClusterButton = ({resultClustering}) => {
       <IconButton
           color="primary"
           variant="contained"
-          style={{ padding: '0px' }}
+          style={{ padding: '0px' , height: '30px'}}
           onClick={() => {
             handleOpen();
           }}

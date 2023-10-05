@@ -29,6 +29,7 @@ export default function TitlebarImageList({imageRemove}) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [collezioni, setCollezioni] = useState([]);
+  const [collezioneSelezionata, setCollezioneSelezionata] = useState('');
 
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function TitlebarImageList({imageRemove}) {
     try {
       const result = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
       if (result.status === 200) {
+        setCollezioneSelezionata('');
         const immagini = result.data.immagini;
         setImages(immagini);
         setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
@@ -111,6 +113,7 @@ export default function TitlebarImageList({imageRemove}) {
     try {
       const result = await axios.post(`http://localhost:8000/dashboard/${userId}/fotoCollection`,{collection: option.nome_collezione});
       if(result.status === 200){
+        setCollezioneSelezionata(option.nome_collezione);
         setImages(result.data.immagini);
       } else {
         alert(result.data.message);

@@ -24,6 +24,8 @@ const MapComponent = ({ selectedOption }) => {
   const [loading, setLoading] = useState(false);
   const [heatmapData, setHeatmapData] = useState([]);
   const [pointsClusters, setPointsClusters] = useState([]);
+  const [isHeatmapEnabled, setIsHeatmapEnabled] = useState(false);
+  const [isAreaAndColorDisabled, setIsAreaAndColorDisabled] = useState(true);
 
   
 
@@ -41,6 +43,14 @@ const MapComponent = ({ selectedOption }) => {
     };
     caricaDati();
   }, []);
+
+
+  useEffect(() => {
+    // Questo effetto viene chiamato ogni volta che `photos` cambia
+    if (isHeatmapEnabled) {
+      handleHeatmap(true);
+    }
+  }, [photos, isHeatmapEnabled]);
   
 
 
@@ -57,14 +67,18 @@ const MapComponent = ({ selectedOption }) => {
       if(geoJSONSelezionato.nomeGeoJSON === 'Nessun GeoJSON'){
         const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
         setPhotos(photoResult.data.immagini);
+        setIsAreaAndColorDisabled(true);
       } else {
-        const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, { path }); // carica il geojson
+        const result = await axios.post(`http://localhost:8000/dashboard/${userId}/downloadGeoJSON`, { path });// carica il geojson
         setGeojson(result.data);
         setGeoJSONView(result.data);
+        setIsAreaAndColorDisabled(false);
         const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, { geojson: geoJSONSelezionato, area: 'all' }); //carica le foto contenute in quel geojson
         setPhotos(photoResult.data.data);
       } 
     } catch (error) {
+      setIsAreaAndColorDisabled(true);
+      alert('Si è verificato un errore durante il caricamento del geojson. \n');
       console.error("Si è verificato un errore:", error);
     } finally {
       setLoading(false);
@@ -80,6 +94,7 @@ const MapComponent = ({ selectedOption }) => {
       return;
     }
     setGeoJSONView('');
+    setGeoJSONColor('');
     setPhotos([]);
     setLoading(true);
     try {
@@ -103,26 +118,11 @@ const MapComponent = ({ selectedOption }) => {
       setLoading(false);
     }
   };
-  
 
 
-  async function handleOptionSelected(option) {
-    setGeoJSONView('');
-    if (option.length === 0) {
-      setGeoJSONColor('');
-      setHeatmapData([]);
-      // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
-      //setGeoJSONView(geojson);
-    } else if (option.includes('Heatmap')) {
 
-      const heatmapCoordinates = photos.map((photo) => ({
-        lat: photo.latitudine,
-        lng: photo.longitudine,
-      }));
-      setHeatmapData(heatmapCoordinates);
-      // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
-      //setGeoJSONView(geojson);
-    } else {
+  async function handleColor(option){
+    if(option){
       setGeoJSONView('');
       // Calcola il numero di foto per ciascuna feature del geoJSON
       const featuresWithCounts = await Promise.all(geojson.features.map(async (feature) => {
@@ -134,6 +134,9 @@ const MapComponent = ({ selectedOption }) => {
           geojson: geoJSONSelezionato,
           area: areaName
         });
+        if(photoResult.status !== 200){
+          alert('Si è verificato un errore durante il caricamento del geoJSON\n', photoResult.data.message);
+        }
         const numPhotosInArea = photoResult.data.data.length;
         return { ...feature, numPhotos: numPhotosInArea };
       }));
@@ -160,9 +163,30 @@ const MapComponent = ({ selectedOption }) => {
       };
       setGeoJSONColor(coloredGeoJSON);
       setHeatmapData([]); // Rimuovi i dati del heatmap se necessario
-    }
+    } else {
+      setGeoJSONColor('');
+    } 
   }
-  
+
+
+
+  async function handleHeatmap(option){
+    setIsHeatmapEnabled(option);
+    // se è selezionato un geojson fa l'heatmap sul geojson altrimenti lo fa su tutte le foto
+    if(option){
+      const heatmapCoordinates = photos.map((photo) => ({
+        lat: photo.latitudine,
+        lng: photo.longitudine,
+      }));
+      setHeatmapData(heatmapCoordinates);
+      // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
+      //setGeoJSONView(geojson);
+    } else {
+      setHeatmapData([]);
+    }
+    
+  }
+
 
 
   const handleClusters =  (clusters) => {
@@ -184,21 +208,21 @@ const MapComponent = ({ selectedOption }) => {
     setPointsClusters(pointsWithColor);
   };
 
+
+
   const handleImageRemove = (idImage) => {
     const updatedPhotos = photos.filter((photo) => photo.id !== idImage);
     setPhotos(updatedPhotos);
   };
-  
-  
-  
-  
+
+
   
 
   return (
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
       <div style={{ width: '70%', position: 'relative', top: '80px', left: '0', right: '0', bottom: '0' }}>
         <div>
-          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} optionSelected={handleOptionSelected} clustersFound={handleClusters}/>
+          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} valueColorCheckbox={handleColor} chooseAreaAndColorDisabled={isAreaAndColorDisabled} valueHeatmapCheckbox={handleHeatmap} clustersFound={handleClusters}/>
         </div>
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
@@ -241,8 +265,8 @@ const MapComponent = ({ selectedOption }) => {
                   return (numPhotos / totalNumPhotos) * 100; // L'intensità sarà il numero di foto nella stessa area
                 }}
                 colors={['#FF0000', '#FFFF00', '#00FF00']} // Personalizza i colori del heatmap
-                blur={10}
-                radius={20} // Personalizza il blur del heatmap
+                blur={20}
+                radius={30} // Personalizza il blur del heatmap
               />
             }
             {geoJSONView && (
