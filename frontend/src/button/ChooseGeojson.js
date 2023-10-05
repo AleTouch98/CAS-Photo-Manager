@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import ChoseGeoj from '@mui/icons-material/Map';
 import Typography from '@mui/material/Typography';
 
-function ChooseGeojson({ onGeoJSONChange }) {
+function ChooseGeojson({ onGeoJSONChange , valueTestoGeoJSON}) {
   const { userId } = useParams();
   const [listaNomiGeo, setListaNomiGeo] = useState([{ nomeGeoJSON: 'Nessun GeoJSON' }]);
   const [selectedOption, setSelectedOption] = useState(null); 
@@ -56,7 +56,7 @@ function ChooseGeojson({ onGeoJSONChange }) {
             }}
           >
             <ChoseGeoj style={{ marginRight: '8px' }} /> 
-            {selectedOption && selectedOption.nomeGeoJSON !== 'Nessun GeoJSON' ? selectedOption.nomeGeoJSON : 'Scegli GeoJSON'}          </Typography>
+            {valueTestoGeoJSON}         </Typography>
         </IconButton>
         <Menu
           {...bindMenu(popupState)}

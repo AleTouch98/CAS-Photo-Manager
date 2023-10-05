@@ -78,6 +78,7 @@ const MapComponent = ({ selectedOption }) => {
       } 
     } catch (error) {
       setIsAreaAndColorDisabled(true);
+      setGeoJSONSelezionato(null);
       alert('Si è verificato un errore durante il caricamento del geojson. \n');
       console.error("Si è verificato un errore:", error);
     } finally {
@@ -222,7 +223,7 @@ const MapComponent = ({ selectedOption }) => {
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
       <div style={{ width: '70%', position: 'relative', top: '80px', left: '0', right: '0', bottom: '0' }}>
         <div>
-          <Grid geoJSONSelected={handleGeoJSONSelezionato} areaSelected={handleAreaSelezionata} valueColorCheckbox={handleColor} chooseAreaAndColorDisabled={isAreaAndColorDisabled} valueHeatmapCheckbox={handleHeatmap} clustersFound={handleClusters}/>
+          <Grid geoJSONSelected={handleGeoJSONSelezionato} valueTestoGeoJSON={geoJSONSelezionato ? geoJSONSelezionato.nomeGeoJSON : 'Scegli GeoJSON'} areaSelected={handleAreaSelezionata} valueColorCheckbox={handleColor} chooseAreaAndColorDisabled={isAreaAndColorDisabled} valueHeatmapCheckbox={handleHeatmap} clustersFound={handleClusters}/>
         </div>
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
@@ -265,7 +266,7 @@ const MapComponent = ({ selectedOption }) => {
                   return (numPhotos / totalNumPhotos) * 100; // L'intensità sarà il numero di foto nella stessa area
                 }}
                 colors={['#FF0000', '#FFFF00', '#00FF00']} // Personalizza i colori del heatmap
-                blur={20}
+                blur={10}
                 radius={30} // Personalizza il blur del heatmap
               />
             }

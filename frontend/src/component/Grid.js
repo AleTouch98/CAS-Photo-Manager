@@ -19,7 +19,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: '#FFFFFF',
 }));
 
-export default function ResponsiveGrid({geoJSONSelected, areaSelected, clustersFound, valueColorCheckbox, chooseAreaAndColorDisabled, valueHeatmapCheckbox}) {
+export default function ResponsiveGrid({geoJSONSelected, valueTestoGeoJSON, areaSelected, clustersFound, valueColorCheckbox, chooseAreaAndColorDisabled, valueHeatmapCheckbox}) {
   
   const [geoJSONSelezionato, setGeoJSONSelezionato] = useState('');
 
@@ -51,7 +51,7 @@ export default function ResponsiveGrid({geoJSONSelected, areaSelected, clustersF
     <Grid container spacing={2} columns={12}>
       <Grid item xs={2} sm={3} md={3}>
         <Item>
-          <ChooseGeoButton onGeoJSONChange={handleGeoJSONChange} />
+          <ChooseGeoButton onGeoJSONChange={handleGeoJSONChange} valueTestoGeoJSON={valueTestoGeoJSON} />
         </Item>
       </Grid>
       <Grid item xs={2} sm={3} md={3}>
