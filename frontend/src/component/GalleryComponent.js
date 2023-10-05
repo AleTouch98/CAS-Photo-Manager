@@ -21,6 +21,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 
 export default function TitlebarImageList({imageRemove}) {
   const { userId } = useParams();
@@ -30,6 +33,11 @@ export default function TitlebarImageList({imageRemove}) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [collezioni, setCollezioni] = useState([]);
   const [collezioneSelezionata, setCollezioneSelezionata] = useState('');
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarClass, setSnackbarClass] = useState('');
+
 
 
   useEffect(() => {
@@ -55,8 +63,13 @@ export default function TitlebarImageList({imageRemove}) {
         setImages(immagini);
         setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
       } else {
-        alert(result.data.message);
+        setSnackbarMessage(`${result.data.message}`);
+        setSnackbarSeverity('error');
+        setSnackbarClass('error-snackbar');
+        
       }
+      setIsSnackbarOpen(true);
+      
     } catch (error) {
       console.error('Errore durante il recupero delle immagini:', error);
     }
@@ -68,17 +81,29 @@ export default function TitlebarImageList({imageRemove}) {
   };
 
   const handleDeleteConfirm = async () => {
-    const result = await axios.post(`http://localhost:8000/dashboard/${userId}/deletePhoto`, {id_photo:selectedImage.id});
-    if(result.status === 200){
-      alert('Foto eliminata con successo');
-      imageRemove(selectedImage.id);
-      const nuoveImmagini = images.filter(image => image.id !== selectedImage.id);
-      setImages(nuoveImmagini);
-    } else {
-      alert('Si è verificato un errore durante la cancellazione: \n', result.data);
-    } 
-    setIsDeleteDialogOpen(false);
+    try {
+      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/deletePhoto`, { id_photo: selectedImage.id });
+
+      if (result.status === 200) {
+        setSnackbarMessage('Foto eliminata con successo');
+        setSnackbarSeverity('success');
+        setSnackbarClass('success-snackbar');
+        imageRemove(selectedImage.id);
+        const nuoveImmagini = images.filter(image => image.id !== selectedImage.id);
+        setImages(nuoveImmagini);
+      } else {
+        setSnackbarMessage(`Si è verificato un errore durante la cancellazione: ${result.data}`);
+        setSnackbarSeverity('error');
+        setSnackbarClass('error-snackbar');
+      }
+
+      setIsSnackbarOpen(true);
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      console.error('Si è verificato un errore:', error);
+    }
   };
+
 
   const handleDeleteCancel = () => {
     setSelectedImage(null);
@@ -116,8 +141,12 @@ export default function TitlebarImageList({imageRemove}) {
         setCollezioneSelezionata(option.nome_collezione);
         setImages(result.data.immagini);
       } else {
-        alert(result.data.message);
+        setSnackbarMessage(`${result.data.message}`);
+        setSnackbarSeverity('error');
+        setSnackbarClass('error-snackbar');
+        
       } 
+      setIsSnackbarOpen(true);
     } catch (error) {
         console.error('Errore nella richiesta HTTP:', error);
     }
@@ -125,6 +154,9 @@ export default function TitlebarImageList({imageRemove}) {
 
 
   return (
+
+
+    
     <div style={{ width: '100%', overflowX: 'auto' }}>
       {/* CREAZIONE DEI BOTTONI */}
       <PopupState variant="popover" popupId="demo-popup-menu">
@@ -289,7 +321,29 @@ export default function TitlebarImageList({imageRemove}) {
             </Button>
           </DialogActions>
         </Dialog>
+
+        
       )}
+
+    <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setIsSnackbarOpen(false)}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        className={snackbarClass}
+      >
+        <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    
     </div>
   );
 }

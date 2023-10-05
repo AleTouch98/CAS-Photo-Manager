@@ -8,6 +8,8 @@ import { CircularProgress } from '@mui/material';
 import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
 import { scaleSequential } from 'd3-scale';
 import { interpolateOrRd } from 'd3-scale-chromatic';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const randomColor = require('randomcolor');
 
@@ -26,6 +28,10 @@ const MapComponent = ({ selectedOption }) => {
   const [pointsClusters, setPointsClusters] = useState([]);
   const [isHeatmapEnabled, setIsHeatmapEnabled] = useState(false);
   const [isAreaAndColorDisabled, setIsAreaAndColorDisabled] = useState(true);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("");
+  const [snackbarClass, setSnackbarClass] = useState("");
 
   
 
@@ -79,7 +85,9 @@ const MapComponent = ({ selectedOption }) => {
     } catch (error) {
       setIsAreaAndColorDisabled(true);
       setGeoJSONSelezionato(null);
-      alert('Si è verificato un errore durante il caricamento del geojson. \n');
+      setSnackbarMessage(`Si è verificato un errore durante il caricamento del geoJSON. \n`);
+      setSnackbarSeverity('error');
+      setIsSnackbarOpen(true);
       console.error("Si è verificato un errore:", error);
     } finally {
       setLoading(false);
@@ -136,7 +144,10 @@ const MapComponent = ({ selectedOption }) => {
           area: areaName
         });
         if(photoResult.status !== 200){
-          alert('Si è verificato un errore durante il caricamento del geoJSON\n', photoResult.data.message);
+          setSnackbarMessage(`Si è verificato un errore durante il caricamento del geoJSON\n,  ${photoResult.data.message}`);
+          setSnackbarSeverity('error');
+          setIsSnackbarOpen(true);
+          
         }
         const numPhotosInArea = photoResult.data.data.length;
         return { ...feature, numPhotos: numPhotosInArea };
@@ -365,6 +376,26 @@ const MapComponent = ({ selectedOption }) => {
       <div style={{ width: '30%', height: '90vh', position: 'relative', marginTop: '80px', marginBottom: '100px', marginLeft: '10px' }}>
         <Gallery imageRemove={handleImageRemove}/>
       </div>
+
+      <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={6000} // Imposta la durata in millisecondi (opzionale)
+          onClose={() => setIsSnackbarOpen(false)}
+          sx={{ zIndex: 9999 }}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <Alert
+            onClose={() => setIsSnackbarOpen(false)}
+            severity={snackbarSeverity}
+            sx={{ width: "100%" }}
+            className={snackbarClass} // Imposta la classe CSS per la Snackbar
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
     </div>
   );
 };

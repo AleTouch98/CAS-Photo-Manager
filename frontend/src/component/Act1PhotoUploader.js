@@ -3,9 +3,14 @@ import Dropzone from 'react-dropzone';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
   const [files, setFiles] = useState([]);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   useEffect(() => {
     if (fotoCaricate !== null && fotoCaricate.length > 0) {
@@ -25,7 +30,9 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
       }
     });
     if (duplicateFiles.length > 0) {
-      alert(`Le seguenti foto sono già state caricate: ${duplicateFiles.join(', ')}`);
+      setSnackbarMessage(`Le seguenti foto sono già state caricate: ${duplicateFiles.join(', ')}`);
+      setSnackbarSeverity('error');
+      setIsSnackbarOpen(true);
     }
     setFiles(newFiles);
     onFileUpload(newFiles);
@@ -86,6 +93,25 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
           ))}
         </div>
       )}
+
+      {/* Snackbar per messaggi */}
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setIsSnackbarOpen(false)}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
