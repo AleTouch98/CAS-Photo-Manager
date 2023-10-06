@@ -78,12 +78,11 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
         setImages(immagini);
         setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
       } else {
-        setSnackbarMessage(`${result.data.message}`);
-        setSnackbarSeverity('error');
-        setSnackbarClass('error-snackbar');
+        alert(`${result.data.message}`);
+        
         
       }
-      setIsSnackbarOpen(true);
+    
       
     } catch (error) {
       console.error('Errore durante il recupero delle immagini:', error);
@@ -156,12 +155,8 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
         setCollezioneSelezionata(option.nome_collezione);
         setImages(result.data.immagini);
       } else {
-        setSnackbarMessage(`${result.data.message}`);
-        setSnackbarSeverity('error');
-        setSnackbarClass('error-snackbar');
-        
+        alert(`${result.data.message}`);
       } 
-      setIsSnackbarOpen(true);
     } catch (error) {
         console.error('Errore nella richiesta HTTP:', error);
     }
@@ -203,7 +198,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
                   fontSize: '17px',
                 }}
               >
-                <FilterCollectionIcon style={{ marginRight: '8px' }} /> {collezioneSelezionata ? collezioneSelezionata : 'Scegli collezione'}
+                <FilterCollectionIcon style={{ marginRight: '8px' }} /> {collezioneSelezionata ? collezioneSelezionata : ' collezione'}
               </Typography>
             </IconButton>
             <Menu  {...bindMenu(popupState)}

@@ -96,14 +96,18 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
       }
       onClose();
       handleAggiornamento(true);
-      setSnackbarSeverity('success');
-      setSnackbarMessage('Foto caricate con successo');
-      setIsSnackbarOpen(true);
-      return;
+      
+     
     } else {
       console.error('Le liste foto e arrayGeoTags non hanno la stessa lunghezza.');
     }
+    setSnackbarSeverity('success');
+    setSnackbarMessage('Foto caricate con successo');
+    setIsSnackbarOpen(true);
+
   };
+
+
 
   return (
     <div>
