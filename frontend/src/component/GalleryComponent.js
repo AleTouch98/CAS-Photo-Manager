@@ -173,34 +173,32 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
         {(popupState) => (
           <React.Fragment>
             <IconButton
-              color="primary"
-              variant="contained"
-              {...bindTrigger(popupState)}
-              style={{
-                position: 'relative',
-                marginTop: '10px',
-                marginBottom: '-10px',
-              }}
-              onClick={() => {
-                handleClickMenuCollection();
-                popupState.open();
-              }}
-            >
-              <Typography
-                variant="inherit"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginLeft: '20px',
-                  marginRight: '50px',
-                  marginTop: '0px',
-                  color: 'black',
-                  fontSize: '17px',
-                }}
-              >
-                <FilterCollectionIcon style={{ marginRight: '8px' }} /> {collezioneSelezionata ? collezioneSelezionata : ' collezione'}
-              </Typography>
-            </IconButton>
+  color="primary"
+  variant="contained"
+  {...bindTrigger(popupState)}
+  style={{
+    position: 'relative',
+    marginTop: '10px',
+    marginBottom: '-10px',
+  }}
+  onClick={() => {
+    handleClickMenuCollection();
+    popupState.open();
+  }}
+>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <FilterCollectionIcon style={{ marginRight: '8px' }} />
+    <Typography
+      variant="inherit"
+      style={{
+        color: 'black',
+        fontSize: '16px',
+      }}
+    >
+      {collezioneSelezionata ? collezioneSelezionata : 'Scegli collezione'}
+    </Typography>
+  </div>
+</IconButton>
             <Menu  {...bindMenu(popupState)}
           anchorReference="anchorPosition"
           anchorPosition={{
@@ -228,30 +226,29 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
       </PopupState>
 
       <IconButton
-        color="primary"
-        variant="contained"
-        onClick={handleAllPhoto}
+    color="primary"
+    variant="contained"
+    onClick={handleAllPhoto}
+    style={{
+      position: 'absolute',
+      top: '10px',
+      right: '40px', // Posizione fissa a destra
+    }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <FilterAltIcon style={{ marginRight: '8px' }} />
+      <Typography
+        variant="inherit"
         style={{
-          position: 'relative',
-          marginTop: '10px',
-          marginBottom: '-10px',
+          color: 'black',
+          fontSize: '16px',
         }}
       >
-        <Typography
-          variant="inherit"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginLeft: '0px',
-            marginRight: '30px',
-            marginTop: '0px',
-            color: 'black',
-            fontSize: '17px',
-          }}
-        >
-          <FilterAltIcon style={{ marginRight: '8px' }} /> Tutte le foto
-        </Typography>
-      </IconButton>
+        Tutte le foto
+      </Typography>
+    </div>
+  </IconButton>
+
 
       <ImageList
         sx={{

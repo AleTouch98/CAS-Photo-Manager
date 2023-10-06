@@ -6,10 +6,16 @@ import DialogContent from '@mui/material/DialogContent';
 import AddPhotoIcon from '@mui/icons-material/AddAPhoto';
 import IconButton from '@mui/material/IconButton';
 import PhotoUploadWizard from '../component/ActPhotoUploadWizard';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const AddPhotoButton = ({handleAggiornamento}) => {
 
   const [open, setOpen] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -21,6 +27,9 @@ const AddPhotoButton = ({handleAggiornamento}) => {
 
   const handleEndUpload = () => {
     setOpen(false);
+    setSnackbarSeverity('success');
+    setSnackbarMessage('Foto caricate con successo');
+    setIsSnackbarOpen(true);
   };
 
   return (
@@ -37,6 +46,24 @@ const AddPhotoButton = ({handleAggiornamento}) => {
           <PhotoUploadWizard onClose={handleEndUpload} handleAggiornamento={handleAggiornamento}/> {/* Mostra il componente PhotoUploader nel popup */}
         </DialogContent>
       </Dialog>
+
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setIsSnackbarOpen(false)}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

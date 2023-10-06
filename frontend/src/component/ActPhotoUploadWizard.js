@@ -101,9 +101,7 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
     } else {
       console.error('Le liste foto e arrayGeoTags non hanno la stessa lunghezza.');
     }
-    setSnackbarSeverity('success');
-    setSnackbarMessage('Foto caricate con successo');
-    setIsSnackbarOpen(true);
+    
 
   };
 
