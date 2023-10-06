@@ -9,7 +9,7 @@ import axios from "axios";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-const PhotoUploadWizard = ({onClose}) => {
+const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
   const [activeStep, setActiveStep] = useState(0);
   const [nextButtonPhoto, setnextButtonPhoto] = useState(true); 
   const [nextButtonGeo, setnextButtonGeo] = useState(true); 
@@ -64,6 +64,7 @@ const PhotoUploadWizard = ({onClose}) => {
   };
 
   const handleCaricaFoto = async () => {
+    handleAggiornamento(false);
     if (foto.length === arrayGeoTags.length) {
       for (let i = 0; i < foto.length; i++) {
         const formData = new FormData();
@@ -94,6 +95,7 @@ const PhotoUploadWizard = ({onClose}) => {
         }
       }
       onClose();
+      handleAggiornamento(true);
       setSnackbarSeverity('success');
       setSnackbarMessage('Foto caricate con successo');
       setIsSnackbarOpen(true);

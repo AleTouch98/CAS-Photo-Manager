@@ -7,7 +7,7 @@ import AddPhotoIcon from '@mui/icons-material/AddAPhoto';
 import IconButton from '@mui/material/IconButton';
 import PhotoUploadWizard from '../component/ActPhotoUploadWizard';
 
-const AddPhotoButton = () => {
+const AddPhotoButton = ({handleAggiornamento}) => {
 
   const [open, setOpen] = useState(false);
 
@@ -34,7 +34,7 @@ const AddPhotoButton = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Carica Foto</DialogTitle>
         <DialogContent>
-          <PhotoUploadWizard onClose={handleEndUpload}/> {/* Mostra il componente PhotoUploader nel popup */}
+          <PhotoUploadWizard onClose={handleEndUpload} handleAggiornamento={handleAggiornamento}/> {/* Mostra il componente PhotoUploader nel popup */}
         </DialogContent>
       </Dialog>
     </div>

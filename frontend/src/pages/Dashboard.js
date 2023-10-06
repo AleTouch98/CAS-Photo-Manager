@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState('option1'); // Stato per tenere traccia dell'opzione selezionata
   const { userId } = useParams();
   const [userName, setUserName] = useState(''); 
+  const [statoAggiornamento, setStatoAggiornamento] = useState(false);
 
   useEffect(() => {
     const caricaDati = async () => {
@@ -33,6 +34,11 @@ const Dashboard = () => {
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
+
+  const handleAggiornamento = (value) => {
+    setStatoAggiornamento(value);
+  };
+  
 
   return (
     <div>
@@ -71,7 +77,7 @@ const Dashboard = () => {
         </Grid>
         <List>
           <ListItem button>
-            <AddPhotoButton />
+            <AddPhotoButton handleAggiornamento={handleAggiornamento}/>
           </ListItem>
           <ListItem button>
             <AddGeojsonButton />
@@ -91,7 +97,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div style={{ marginLeft: '195px', marginTop:'-23px'}}>
         {/* style={{ marginLeft: '195px', marginTop:'182px', marginRight:'-5px' }} */}
-        <MapComponent selectedOption={selectedOption} /> {/* Ad esempio: <MapComponent /> */}
+        <MapComponent selectedOption={selectedOption} statoAggiornamento={statoAggiornamento} /> {/* Ad esempio: <MapComponent /> */}
       </div>
       
     </div>

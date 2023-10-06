@@ -25,7 +25,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 
-export default function TitlebarImageList({imageRemove}) {
+export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
   const { userId } = useParams();
   const [images, setImages] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
@@ -52,6 +52,21 @@ export default function TitlebarImageList({imageRemove}) {
     };
     caricaDati();
   }, []);
+
+  useEffect(() => {
+    const aggiornaDati = async () => {
+      if(statoAggiornamento){
+        if(collezioneSelezionata !== ''){
+          console.log('aggiorno la collezione');
+          await handleCollectionSelected({nome_collezione: collezioneSelezionata});
+        } else {
+          console.log('aggiorno tutte le foto');
+          await handleAllPhoto();
+        }
+      }
+    };
+    aggiornaDati();
+  }, [statoAggiornamento]);
 
 
   const handleAllPhoto = async () => {
@@ -188,7 +203,7 @@ export default function TitlebarImageList({imageRemove}) {
                   fontSize: '17px',
                 }}
               >
-                <FilterCollectionIcon style={{ marginRight: '8px' }} /> Collezione
+                <FilterCollectionIcon style={{ marginRight: '8px' }} /> {collezioneSelezionata ? collezioneSelezionata : 'Scegli collezione'}
               </Typography>
             </IconButton>
             <Menu  {...bindMenu(popupState)}
@@ -251,7 +266,7 @@ export default function TitlebarImageList({imageRemove}) {
           overflowY: 'auto',
         }}
       >
-        {images.map((image, index) => (
+        {images && images.map((image, index) => (
           <ImageListItem key={index}>
             <img
               style={{ width: '100%', height: 'auto' }}

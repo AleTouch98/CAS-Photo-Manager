@@ -16,10 +16,11 @@ const randomColor = require('randomcolor');
 
 
 
-const MapComponent = ({ selectedOption }) => {
+const MapComponent = ({ selectedOption, statoAggiornamento }) => {
   const { userId } = useParams();
   const [photos, setPhotos] = useState([]);
   const [geoJSONSelezionato, setGeoJSONSelezionato] = useState(null); //intero geojson inteso come valore restituito dal db
+  const [areaSelected, setAreaSelected] = useState(null); 
   const [geojson, setGeojson] = useState(''); //geojson completo caricato dal percorso file
   const [geoJSONView, setGeoJSONView] = useState(''); 
   const [geoJSONColor, setGeoJSONColor] = useState('');//area visualizzata (intero geojson o parte del geojson)
@@ -57,21 +58,44 @@ const MapComponent = ({ selectedOption }) => {
       handleHeatmap(true);
     }
   }, [photos, isHeatmapEnabled]);
+
   
+  useEffect(() => {
+    const aggiornaDati = async () => {
+      if(statoAggiornamento){
+        if(statoAggiornamento){}
+        console.log('stato aggiornamento è cambiato');
+        if(areaSelected !== null) {  // se è selezionata un'area aggiorna i dati in quell'area 
+          console.log("SONO IN  CASO AREA");
+          await handleAreaSelezionata(areaSelected);
+        } else if (geoJSONSelezionato !== null) { // se è selezionato un geojson aggiorna i dati nel geojson
+          console.log("SONO IN CASO GEOJSON ",  geoJSONSelezionato.nomeGeoJSON);
+          await handleGeoJSONSelezionato(geoJSONSelezionato);
+        } else {  // altrimenti aggiorna tutte le foto 
+          const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+          setPhotos(photoResult.data.immagini);
+        }
+      }
+    };
+    aggiornaDati();
+  }, [statoAggiornamento]);
 
 
 
 
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
+    console.log('eseguo il caricamento delle foto del geojson');
     setLoading(true); 
     setPhotos([]);
     setGeoJSONView('');
     setGeoJSONColor('');
     setGeoJSONSelezionato(geoJSONSelezionato);
+    setAreaSelected(null);
     const path = geoJSONSelezionato.geoJSONPath;
     try {
       if(geoJSONSelezionato.nomeGeoJSON === 'Nessun GeoJSON'){
         const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        setGeoJSONSelezionato(null);
         setPhotos(photoResult.data.immagini);
         setIsAreaAndColorDisabled(true);
       } else {
@@ -99,6 +123,7 @@ const MapComponent = ({ selectedOption }) => {
 
   const handleAreaSelezionata = async (areaSelezionata) => {
     if(areaSelezionata === 'Nessuna area'){
+      setAreaSelected(null);
       await handleGeoJSONSelezionato(geoJSONSelezionato);
       return;
     }
@@ -114,6 +139,7 @@ const MapComponent = ({ selectedOption }) => {
         return feature.properties[geoJSONSelezionato.featureDescrittiva] === areaSelezionata;
       });
       if (featureSelezionata) {
+        setAreaSelected(areaSelezionata);
         setGeoJSONView(featureSelezionata);
         const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, {
           geojson: geoJSONSelezionato,
@@ -122,6 +148,7 @@ const MapComponent = ({ selectedOption }) => {
         setPhotos(photoResult.data.data);
       }
     } catch (error) {
+      setAreaSelected(null);
       console.error("Si è verificato un errore:", error);
     } finally {
       setLoading(false);
@@ -227,7 +254,6 @@ const MapComponent = ({ selectedOption }) => {
     setPhotos(updatedPhotos);
   };
 
-
   
 
   return (
@@ -291,8 +317,8 @@ const MapComponent = ({ selectedOption }) => {
                   return (numPhotos / totalNumPhotos) * 100; // L'intensità sarà il numero di foto nella stessa area
                 }}
                 colors={['#FF0000', '#FFFF00', '#00FF00']} // Personalizza i colori del heatmap
-                blur={60}
-                radius={80} // Personalizza il blur del heatmap
+                blur={30}
+                radius={30} // Personalizza il blur del heatmap
               />
             }
             {geoJSONView && (
@@ -328,7 +354,7 @@ const MapComponent = ({ selectedOption }) => {
               >
               </CircleMarker>
             ))}
-            {photos.map((photo, index) => (
+            {photos && photos.map((photo, index) => (
               <Marker
                 key={index}
                 position={[photo.latitudine, photo.longitudine]}
@@ -374,7 +400,7 @@ const MapComponent = ({ selectedOption }) => {
 
       </div>
       <div style={{ width: '30%', height: '90vh', position: 'relative', marginTop: '80px', marginBottom: '100px', marginLeft: '10px' }}>
-        <Gallery imageRemove={handleImageRemove}/>
+        <Gallery imageRemove={handleImageRemove} statoAggiornamento={statoAggiornamento}/>
       </div>
 
       <Snackbar
