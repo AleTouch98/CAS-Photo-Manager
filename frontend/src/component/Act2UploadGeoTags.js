@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import UploadSingleGeoTag from './Act21UploadSingleGeoTag';
 
@@ -11,6 +11,12 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [geoTagsArray, setGeoTagsArray] = useState([]);
   const [geoTag, setGeoTag] = useState('');
+
+
+  useEffect(() => {
+    setGeoTagsArray([]);
+    onGeoTagChange([]);
+  }, []);
 
 
 

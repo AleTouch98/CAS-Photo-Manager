@@ -284,6 +284,61 @@ getCollezioniUtente: async (id) => {
     }
     },
 
+// -------------------------- QUERY PER LA CONDIVISIONE TRA UTENTEI ---------------------------
+
+getNomiUtenti: async (excludedId) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+            SELECT ID, nome_utente FROM utenti WHERE ID <> $1;
+        `;
+        const result = await client.query(query, [excludedId]);
+        return result;
+    } catch (e) {
+        console.error(e);
+        return e;
+    } finally {
+        await client.end();
+    }
+},
+
+getCondivisioniUtente: async (id) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+        SELECT Utente1 FROM Shares WHERE Utente2 = $1;
+        `;
+        const result = await client.query(query, [id]);
+        return result; // Nessun errore e ritorna il risultato della query
+    } catch (e) {
+        console.error('Errore nel recupero degli amici: ', e);
+        return e; // Restituisci l'errore in caso di fallimento
+    } finally {
+        await client.end();
+    }
+},
+
+
+
+aggiungiCondivisione: async (id1, id2) => {
+    const client = new Client(QUERY_CONFIGURATION);
+    await client.connect();
+    try {
+        const query = `
+        INSERT INTO Shares (Utente1, Utente2) VALUES ($1, $2);
+        `;
+        const result = await client.query(query, [id1, id2]);
+        return true; // Nessun errore e ritorna il risultato della query
+    } catch (e) {
+        console.error('Errore nell\'inserimento della condivisione: ', e);
+        return e; // Restituisci l'errore in caso di fallimento
+    } finally {
+        await client.end();
+    }
+    },
+
 
 
 

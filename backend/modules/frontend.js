@@ -194,10 +194,10 @@ module.exports = {
 
 
     //QUERY PER CARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
-    app.get("/dashboard/:userId/photos", async (req, res) => {
+    app.get("/dashboard/:userLog/:userView/photos", async (req, res) => {
       try {
-        const userId = req.params.userId;
-        const result = await databasepg.getFotoUtente(userId);  
+        const userView = req.params.userView
+        const result = await databasepg.getFotoUtente(userView);  
         if(result.rows.length > 0){
           res.status(200).json({ message: "Download foto completato con successo.", immagini: result.rows });
         } else {
@@ -227,9 +227,9 @@ module.exports = {
     }
     
     // Funzione principale per l'endpoint API
-    app.post("/dashboard/:userId/photosInGeoJSON", async (req, res) => {
+    app.post("/dashboard/:userLog/:userView/photosInGeoJSON", async (req, res) => {
       try {
-        const userId = req.params.userId;
+        const userView = req.params.userView;
         const geojson = req.body.geojson;
         const filePath = geojson.geoJSONPath;
         const featureDescrittiva = geojson.featureDescrittiva;
@@ -247,7 +247,7 @@ module.exports = {
           }          
           const results = await Promise.all(geometryFeatures.map(async (feature) => {
             const geometry = feature.geometry;
-            const queryResult = await databasepg.getFotoUtenteInPolygon(userId, geometry);
+            const queryResult = await databasepg.getFotoUtenteInPolygon(userView, geometry);
             return queryResult.rows;
           }));
           const flatResults = results.flat(); // Serve per schiacciare l'array
@@ -306,11 +306,28 @@ module.exports = {
   });
 
 
-  app.post("/dashboard/:userId/fotoCollection", async (req, res) => {
+  // NUOVA RICHIESTA PER NOMI COLLEZIONI AMICO 
+  app.get("/dashboard/:userId/:userView/collectionsName", async (req, res) => {
     try {
-      const userId = req.params.userId;
+      const userView = req.params.userView;
+      const result = await databasepg.getCollezioniUtente(userView);  
+      if(result.rows.length > 0){
+        res.status(200).json({ message: "Nomi collezione caricati con successo.", collezioni: result.rows });
+      } else {
+        res.status(210).json({ message: "Nessuna collezione creata da questo utente." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Errore del Server Interno");
+    }
+  });
+
+
+  app.post("/dashboard/:userId/:userView/fotoCollection", async (req, res) => {
+    try {
+      const userView = req.params.userView;
       const collection = req.body.collection;
-      const result = await databasepg.getFotoUtenteInCollection(userId, collection);  
+      const result = await databasepg.getFotoUtenteInCollection(userView, collection);  
       if(result.rows.length > 0){
         res.status(200).json({ message: "Foto della collezione caricate con successo.", immagini: result.rows });
       } else {
@@ -329,9 +346,9 @@ module.exports = {
 
 
   // FUNZIONE UTILIZZATA PER CALCOLARE IL NUMERO OTTIMALE DI CLUSTER  
-  async function calculateOptimalClusterNumber(data, maxClusters) {
+  async function calculateOptimalClusterNumber(data) {
     const sseArray = [];
-    const kValues = Array.from({ length: maxClusters }, (_, i) => i + 1);
+    const kValues = Array.from({ length: data.length }, (_, i) => i + 1);
     for (const k of kValues) {
       await new Promise((resolve, reject) => {
         kmeans.clusterize(data, { k }, (err, result) => {
@@ -365,21 +382,31 @@ module.exports = {
 
 
   
-  app.post("/dashboard/:userId/kmeans", async (req, res) => {
+  app.post("/dashboard/:userId/:userView/kmeans", async (req, res) => {
     try {
-      const userId = req.params.userId;
+      const userView = req.params.userView;
       const nCluster = req.body.ncluster;
-      const photos = await databasepg.getFotoUtente(userId);
+      const photos = await databasepg.getFotoUtente(userView);
+      if(photos.rowCount === 0){
+        return res.status(218).json({
+          message: "Impossibile eseguide il k-means. Nessuna foto caricata da questo utente",
+        });
+      } 
+      if(photos.rowCount === 1){
+        return res.status(218).json({
+          message: "Impossibile eseguire il k-means su un numero di foto inferiore di 2.",
+        });
+      }
       const data = photos.rows.map(photo => [photo.latitudine, photo.longitudine]);
       let k; 
       if(typeof nCluster === 'undefined'){
-        k = await calculateOptimalClusterNumber(data, 6);
+        k = await calculateOptimalClusterNumber(data);
       } else {
         k = nCluster;
       }
-      if(k > data.length){
-        res.status(218).json({
-          message: "Impossibile eseguide il k-means con un numero di cluster maggiore dei punti dati.",
+      if(k > data.length || k < 0){
+        return res.status(218).json({
+          message: "Impossibile eseguide il k-means con un numero di cluster maggiore dei punti dati / minore di zero.",
         });
       }
       var kmeans = new clustering.KMEANS();
@@ -404,16 +431,29 @@ module.exports = {
 
 
 
-  app.post("/dashboard/:userId/dbscan", async (req, res) => {
+  app.post("/dashboard/:userId/:userView/dbscan", async (req, res) => {
     try {
-      const userId = req.params.userId;
+      const userView = req.params.userView;
       const epsilon = req.body.epsilon; // Raggio dell'intorno
       const minPoints = req.body.minpoints; // Numero minimo di punti in un cluster
-  
-      const photos = await databasepg.getFotoUtente(userId);
+      const photos = await databasepg.getFotoUtente(userView);
+      if(photos.rowCount === 0){
+        return res.status(218).json({
+          message: "Impossibile eseguide il k-means. Nessuna foto caricata da questo utente",
+        });
+      }
+      if(photos.rowCount === 1){
+        return res.status(218).json({
+          message: "Impossibile eseguide il dbscan su un numero di foto inferiore di 2.",
+        });
+      }
       const data = photos.rows.map(photo => [photo.latitudine, photo.longitudine]);
-  
       var dbscan = new clustering.DBSCAN();
+      if(minPoints > data.length || minPoints < 0){
+        return res.status(218).json({
+          message: "Impossibile eseguide il dbscan con un numero di minpoints maggiore del numero di punti / minore di zero.",
+        });
+      }
       const clusters = dbscan.run(data, epsilon, minPoints);
       if (clusters) {
         // Ottieni i punti appartenenti a ciascun cluster
@@ -423,7 +463,7 @@ module.exports = {
           clusters: clusteredData,
         });
       } else {
-        res.status(200).json({
+        res.status(217).json({
           message: "Nessun cluster trovato con i parametri dati.",
           clusters: [],
         });
@@ -433,7 +473,68 @@ module.exports = {
       res.status(500).json({ error: "Errore del Server Interno" });
     }
   });
+
+
+
   
+ // ---------------------------- CONDIVISIONE ----------------------------- //
+
+
+
+ app.get("/dashboard/:userId/getAllUsers", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const result = await databasepg.getNomiUtenti(userId);  
+    if(result.rows.length > 0){
+      res.status(200).json({ message: "Nomi utenti caricati con successo.", utenti: result.rows });
+    } else {
+      res.status(210).json({ message: "Nessun nome utente caricato" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Errore del Server Interno");
+  }
+});
+
+
+app.post("/dashboard/:userId/addShare", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const condividicon = req.body.condividicon;
+    const result = await databasepg.aggiungiCondivisione(userId, condividicon);  
+    if(result === true){
+      res.status(200).json({ message: "Condivisione inserita con successo."});
+    } else {
+      res.status(210).json({ message: " Esiste già una condivisione con questo utente"});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Errore del Server Interno");
+  }
+});
+
+app.get("/dashboard/:userId/getUserFriends", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const result = await databasepg.getCondivisioniUtente(userId);
+    if (result.rows.length > 0) {
+      const utentiAmici = [];
+      for (const utente of result.rows) {
+        const nome_utente = await databasepg.getNomeUtenteById(utente.utente1);
+        utentiAmici.push({
+          id: utente.utente1,
+          nome_utente: nome_utente,
+        });
+      }
+      res.status(200).json({ message: "Nomi utenti amici caricati con successo.", utenti: utentiAmici });
+    } else {
+      res.status(210).json({ message: "Nessun utente amico caricato" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Errore del Server Interno");
+  }
+});
 
 
     

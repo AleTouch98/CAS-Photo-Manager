@@ -19,6 +19,7 @@ import { Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -110,6 +111,9 @@ const handleSubmit = async (event) => {
 
       if (response.status === 200) {
         setShowSuccess(true);
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
       } else if (response.status === 201) {
         setShowAlert(true);
       }

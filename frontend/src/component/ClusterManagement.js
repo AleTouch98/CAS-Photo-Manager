@@ -13,13 +13,15 @@ import {
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-function ClusterManagement({ onClose, resultClustering }) {
+function ClusterManagement({ onClose, resultClustering, removeClusters }) {
   const [autoConfig, setAutoConfig] = useState(true);
   const [manualClusterCount, setManualClusterCount] = useState(1);
   const [algorithmType, setAlgorithmType] = useState('K-Means');
   const [epsilon, setEpsilon] = useState(1); // Aggiunta variabile epsilon
   const [minPoints, setMinPoints] = useState(1); // Aggiunta variabile minPoints
   const { userId } = useParams();
+
+  const userView = userId;
 
   const handleConfigChange = (event) => {
     const { name, value } = event.target;
@@ -41,29 +43,21 @@ function ClusterManagement({ onClose, resultClustering }) {
   const handleClusterButtonClick = async () => {
     if(algorithmType === 'K-Means'){
         if(autoConfig){
-            const result = await axios.post(`http://localhost:8000/dashboard/${userId}/kmeans`);
-            if(result.status !== 200){
-              alert(result.data.message);
-            } else {
-              resultClustering(result.data.clusters);
-            }  
+            const result = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/kmeans`);
+            resultClustering(result);
         } else {
-            const result = await axios.post(`http://localhost:8000/dashboard/${userId}/kmeans`, {ncluster: manualClusterCount});
-            if(result.status !== 200){
-              alert(result.data.message);
-            } else {
-              resultClustering(result.data.clusters);
-            }  
+            const result = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/kmeans`, {ncluster: manualClusterCount});
+            resultClustering(result); 
         }
     } else {
-        const result = await axios.post(`http://localhost:8000/dashboard/${userId}/dbscan`, {epsilon: epsilon, minpoints: minPoints});
-        resultClustering(result.data.clusters);
+        const result = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/dbscan`, {epsilon: epsilon, minpoints: minPoints});
+        resultClustering(result);
     }
     onClose();
   };
 
   const handleRimuoviClusters = () => {
-    resultClustering([]);
+    removeClusters();
     onClose();
   };
 
@@ -103,6 +97,9 @@ function ClusterManagement({ onClose, resultClustering }) {
                 label="Numero di Cluster"
                 variant="outlined"
                 fullWidth
+                inputProps={{
+                  min: 1,
+                }}
               />
             </FormControl>
           )}
@@ -124,6 +121,9 @@ function ClusterManagement({ onClose, resultClustering }) {
               label="Epsilon"
               variant="outlined"
               fullWidth
+              inputProps={{
+                  min: 0,
+                }}
             />
           </FormControl>
 
@@ -140,6 +140,9 @@ function ClusterManagement({ onClose, resultClustering }) {
               label="Min Points"
               variant="outlined"
               fullWidth
+              inputProps={{
+                  min: 1,
+                }}
             />
           </FormControl>
         </div>
@@ -184,6 +187,7 @@ function ClusterManagement({ onClose, resultClustering }) {
     Rimuovi clusters
   </Button>
 </Box>
+
 
   );
 }

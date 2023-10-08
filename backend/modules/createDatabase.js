@@ -23,7 +23,7 @@ module.exports = {
             await create_user_table(tableClient);
             await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
             await create_photo_table(tableClient);
-            //await create_area_geo_table(tableClient);
+            await create_shares_table(tableClient);
             //await create_collection_table(tableClient);
             
             //await create_collab_racc_table(tableClient);
@@ -122,6 +122,25 @@ const create_user_table = async (client) => {
                 )
             `);
             console.log("Tabella foto creata");
+        }
+        catch (e) {
+            console.error(e);
+            return e;
+        }
+    }
+
+    // CREA TABELLA PER LE CONDIVISIONI l'utente 1 condivide con l'utente 2
+    const create_shares_table = async (client) => {
+        try {
+            await client.query(`
+                CREATE TABLE IF NOT EXISTS Shares (
+                  ID SERIAL PRIMARY KEY,
+                  Utente1 INT REFERENCES Utenti(ID) NOT NULL, 
+                  Utente2 INT REFERENCES Utenti(ID) NOT NULL,
+                  CONSTRAINT unique_share_users UNIQUE (Utente1, Utente2)
+                )
+            `);
+            console.log("Tabella shares creata");
         }
         catch (e) {
             console.error(e);

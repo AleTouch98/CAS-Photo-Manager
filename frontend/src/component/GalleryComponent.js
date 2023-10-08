@@ -25,7 +25,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 
-export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
+export default function TitlebarImageList({imageRemove, statoAggiornamento, userView}) {
   const { userId } = useParams();
   const [images, setImages] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
@@ -37,30 +37,28 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarClass, setSnackbarClass] = useState('');
-
+  const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(false);
 
 
   useEffect(() => {
     const caricaDati = async () => {
       try {
-        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/photos`);
         setImages(photoResult.data.immagini);
       } catch (error) {
         console.error("Si è verificato un errore:", error);
-      } finally {
-      }
+      } 
     };
     caricaDati();
-  }, []);
+    setIsRemoveButtonDisabled(userView !== userId);
+  }, [userView]);
 
   useEffect(() => {
     const aggiornaDati = async () => {
       if(statoAggiornamento){
         if(collezioneSelezionata !== ''){
-          console.log('aggiorno la collezione');
           await handleCollectionSelected({nome_collezione: collezioneSelezionata});
         } else {
-          console.log('aggiorno tutte le foto');
           await handleAllPhoto();
         }
       }
@@ -71,7 +69,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
 
   const handleAllPhoto = async () => {
     try {
-      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/photos`);
       if (result.status === 200) {
         setCollezioneSelezionata('');
         const immagini = result.data.immagini;
@@ -138,7 +136,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
 
   const handleClickMenuCollection = async () => {
     try {
-      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/collectionsName`);
+      const result = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/collectionsName`);
       if(result.status === 200){
           setCollezioni(result.data.collezioni);
       }
@@ -150,7 +148,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
 
   const handleCollectionSelected = async (option) => {
     try {
-      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/fotoCollection`,{collection: option.nome_collezione});
+      const result = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/fotoCollection`,{collection: option.nome_collezione});
       if(result.status === 200){
         setCollezioneSelezionata(option.nome_collezione);
         setImages(result.data.immagini);
@@ -281,6 +279,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento}) {
                     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`delete Image ${index}`}
                     onClick={() => handleDeleteClick(image)}
+                    disabled={isRemoveButtonDisabled}
                   >
                     <DeleteIcon />
                   </IconButton>

@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import ClusterManagement from '../component/ClusterManagement'; // Importa il componente ClusterManagement
 
-const ClusterButton = ({resultClustering}) => {
+const ClusterButton = ({resultClustering, removeClusters}) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -18,8 +18,8 @@ const ClusterButton = ({resultClustering}) => {
     setOpen(false);
   };
   
-  const handleClusterFound = (clusters) => {
-    resultClustering(clusters);
+  const handleResultClustering = (result) => {
+    resultClustering(result);
   };
 
 
@@ -49,7 +49,7 @@ const ClusterButton = ({resultClustering}) => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Configura il clustering</DialogTitle>
         <DialogContent>
-          <ClusterManagement onClose={handleClose} resultClustering={handleClusterFound} /> {/* Passa la funzione di chiusura al componente ClusterManagement */}
+          <ClusterManagement onClose={handleClose} resultClustering={handleResultClustering} removeClusters={removeClusters}/> {/* Passa la funzione di chiusura al componente ClusterManagement */}
         </DialogContent>
       </Dialog>
     </div>

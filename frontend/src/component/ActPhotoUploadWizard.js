@@ -19,6 +19,7 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [valueButtonCarica, setValueButtonCarica] = useState(true);
 
   const { userId } = useParams();
 
@@ -50,11 +51,18 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
     setArrayGeoTags(array);
     if (array.length === foto.length && !array.includes(undefined)) {
       setnextButtonGeo(false);
+    } else {
+      setnextButtonGeo(true);
     }
   };
 
   const handleSceltaCollezione = (collezione) => {  
     setCollezione(collezione);
+    if(collezione){
+      setValueButtonCarica(false);
+    } else {
+      setValueButtonCarica(true);
+    }
   };
 
   const axiosConfig = {
@@ -136,7 +144,7 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
           <ChooseCollection onChangeSelection={handleSceltaCollezione} />
           <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-evenly' }}>
             <Button onClick={handleBack} style={{ marginRight: '90px' }}>Indietro</Button>
-            <Button onClick={handleCaricaFoto}>Carica Foto</Button>
+            <Button onClick={handleCaricaFoto} disabled={valueButtonCarica}>Carica Foto</Button>
           </div>
         </div>
       )}

@@ -10,13 +10,16 @@ import { scaleSequential } from 'd3-scale';
 import { interpolateOrRd } from 'd3-scale-chromatic';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import IconCamera from '../iconMarker/iconCamera.png';
+import L from 'leaflet';
+
 
 const randomColor = require('randomcolor');
 
 
 
 
-const MapComponent = ({ selectedOption, statoAggiornamento }) => {
+const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
   const { userId } = useParams();
   const [photos, setPhotos] = useState([]);
   const [geoJSONSelezionato, setGeoJSONSelezionato] = useState(null); //intero geojson inteso come valore restituito dal db
@@ -34,13 +37,19 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
   const [snackbarClass, setSnackbarClass] = useState("");
 
+  const customIcon = new L.Icon({
+    iconUrl: IconCamera, 
+    iconSize: [32, 40], 
+    iconAnchor: [16, 40],
+    popupAnchor: [0, -40], 
+  });
   
 
   useEffect(() => {
     const caricaDati = async () => {
       setLoading(true);
       try {
-        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/photos`);
         setPhotos(photoResult.data.immagini);
       } catch (error) {
         console.error("Si è verificato un errore:", error);
@@ -49,12 +58,12 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
       }
     };
     caricaDati();
-  }, []);
+  }, [userView]);
 
 
   useEffect(() => {
     // Questo effetto viene chiamato ogni volta che `photos` cambia
-    if (isHeatmapEnabled) {
+    if (isHeatmapEnabled && photos && photos.length > 0) {
       handleHeatmap(true);
     }
   }, [photos, isHeatmapEnabled]);
@@ -63,16 +72,12 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
   useEffect(() => {
     const aggiornaDati = async () => {
       if(statoAggiornamento){
-        if(statoAggiornamento){}
-        console.log('stato aggiornamento è cambiato');
         if(areaSelected !== null) {  // se è selezionata un'area aggiorna i dati in quell'area 
-          console.log("SONO IN  CASO AREA");
           await handleAreaSelezionata(areaSelected);
         } else if (geoJSONSelezionato !== null) { // se è selezionato un geojson aggiorna i dati nel geojson
-          console.log("SONO IN CASO GEOJSON ",  geoJSONSelezionato.nomeGeoJSON);
           await handleGeoJSONSelezionato(geoJSONSelezionato);
         } else {  // altrimenti aggiorna tutte le foto 
-          const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+          const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/photos`);
           setPhotos(photoResult.data.immagini);
         }
       }
@@ -84,7 +89,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
 
 
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
-    console.log('eseguo il caricamento delle foto del geojson');
     setLoading(true); 
     setPhotos([]);
     setGeoJSONView('');
@@ -94,7 +98,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
     const path = geoJSONSelezionato.geoJSONPath;
     try {
       if(geoJSONSelezionato.nomeGeoJSON === 'Nessun GeoJSON'){
-        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/photos`);
+        const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/photos`);
         setGeoJSONSelezionato(null);
         setPhotos(photoResult.data.immagini);
         setIsAreaAndColorDisabled(true);
@@ -103,7 +107,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
         setGeojson(result.data);
         setGeoJSONView(result.data);
         setIsAreaAndColorDisabled(false);
-        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, { geojson: geoJSONSelezionato, area: 'all' }); //carica le foto contenute in quel geojson
+        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/photosInGeoJSON`, { geojson: geoJSONSelezionato, area: 'all' }); //carica le foto contenute in quel geojson
         setPhotos(photoResult.data.data);
       } 
     } catch (error) {
@@ -141,7 +145,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
       if (featureSelezionata) {
         setAreaSelected(areaSelezionata);
         setGeoJSONView(featureSelezionata);
-        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, {
+        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/photosInGeoJSON`, {
           geojson: geoJSONSelezionato,
           area: areaSelezionata
         });
@@ -166,7 +170,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
         const featureSelezionata = geojson.features.find((feature) => {
           return feature.properties[geoJSONSelezionato.featureDescrittiva] === areaName;
         });
-        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/photosInGeoJSON`, {
+        const photoResult = await axios.post(`http://localhost:8000/dashboard/${userId}/${userView}/photosInGeoJSON`, {
           geojson: geoJSONSelezionato,
           area: areaName
         });
@@ -211,40 +215,61 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
 
   async function handleHeatmap(option){
     setIsHeatmapEnabled(option);
-    // se è selezionato un geojson fa l'heatmap sul geojson altrimenti lo fa su tutte le foto
     if(option){
-      const heatmapCoordinates = photos.map((photo) => ({
-        lat: photo.latitudine,
-        lng: photo.longitudine,
-      }));
-      setHeatmapData(heatmapCoordinates);
-      // Qui puoi reimpostare il colore predefinito del geoJSON se necessario
-      //setGeoJSONView(geojson);
+      if(photos && photos.length > 0){
+        const heatmapCoordinates = photos.map((photo) => ({
+          lat: photo.latitudine,
+          lng: photo.longitudine,
+        }));
+        setHeatmapData(heatmapCoordinates);
+      } else {
+        setSnackbarMessage(`Nessuna foto caricata. Impossibile visualizzare l'heatmap. \n`);
+        setSnackbarSeverity('error');
+        setIsSnackbarOpen(true);
+      }
     } else {
       setHeatmapData([]);
     }
-    
   }
 
 
 
-  const handleClusters =  (clusters) => {
-    setPointsClusters([]);
-    const pointsWithColor = [];
-    clusters.forEach((cluster, clusterIndex) => {
-      const clusterColor = randomColor();
-      cluster.forEach((point) => {
-        const latitude = point[0]; 
-        const longitude = point[1]; 
-        const pointObject = {
-          latitudine: latitude,
-          longitudine: longitude,
-          colore: clusterColor,
-        };
-        pointsWithColor.push(pointObject);
+  const handleClusters =  (result) => {
+    if(result.status === 200){
+      const clusters = result.data.clusters;
+      setPointsClusters([]);
+      const pointsWithColor = [];
+      clusters.forEach((cluster, clusterIndex) => {
+        const clusterColor = randomColor();
+        cluster.forEach((point) => {
+          const latitude = point[0]; 
+          const longitude = point[1]; 
+          const pointObject = {
+            latitudine: latitude,
+            longitudine: longitude,
+            colore: clusterColor,
+          };
+          pointsWithColor.push(pointObject);
+        });
       });
-    });
-    setPointsClusters(pointsWithColor);
+      setPointsClusters(pointsWithColor);
+      setSnackbarSeverity('success');
+      setSnackbarMessage('Clustering eseguito con successo');
+      setIsSnackbarOpen(true);
+    } else {
+      setSnackbarMessage(`Errore durante l'esecuzione del clustering. ` + result.data.message);
+      setSnackbarSeverity('error');
+      setIsSnackbarOpen(true);
+    }
+    
+  };
+
+
+  const handleRemoveClusters = () => {
+    setPointsClusters([]);
+    setSnackbarSeverity('success');
+    setSnackbarMessage('Clusters rimossi con successo.');
+    setIsSnackbarOpen(true);
   };
 
 
@@ -260,7 +285,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
       <div style={{ width: '70%', position: 'relative', top: '80px', left: '0', right: '0', bottom: '0' }}>
         <div>
-          <Grid geoJSONSelected={handleGeoJSONSelezionato} valueTestoGeoJSON={geoJSONSelezionato ? geoJSONSelezionato.nomeGeoJSON : 'Scegli GeoJSON'} areaSelected={handleAreaSelezionata} valueColorCheckbox={handleColor} chooseAreaAndColorDisabled={isAreaAndColorDisabled} valueHeatmapCheckbox={handleHeatmap} clustersFound={handleClusters}/>
+          <Grid geoJSONSelected={handleGeoJSONSelezionato} valueTestoGeoJSON={geoJSONSelezionato ? geoJSONSelezionato.nomeGeoJSON : 'Scegli GeoJSON'} areaSelected={handleAreaSelezionata} valueColorCheckbox={handleColor} chooseAreaAndColorDisabled={isAreaAndColorDisabled} valueHeatmapCheckbox={handleHeatmap} clustersFound={handleClusters} removeClusters={handleRemoveClusters}/>
         </div>
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
@@ -357,8 +382,8 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
             {photos && photos.map((photo, index) => (
               <Marker
                 key={index}
-                position={[photo.latitudine, photo.longitudine]}
-                
+                position={[photo.latitudine, photo.longitudine]}  
+                icon={customIcon}
               >
               <Popup>
                 <div style={{ width: '300px', overflowY: 'auto', maxHeight: '400px' }}>
@@ -400,7 +425,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento }) => {
 
       </div>
       <div style={{ width: '30%', height: '90vh', position: 'relative', marginTop: '80px', marginBottom: '100px', marginLeft: '10px' }}>
-        <Gallery imageRemove={handleImageRemove} statoAggiornamento={statoAggiornamento}/>
+        <Gallery imageRemove={handleImageRemove} statoAggiornamento={statoAggiornamento} userView={userView}/>
       </div>
 
       <Snackbar
