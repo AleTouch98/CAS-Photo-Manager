@@ -78,8 +78,11 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
         setImages(immagini);
         setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
       } else {
-        alert(`${result.data.message}`);
+        setSnackbarMessage(`${result.data.message}`);
+        setSnackbarSeverity('error');
+        setSnackbarClass('error-snackbar');
       }
+      setIsSnackbarOpen(true);
     } catch (error) {
       console.error('Errore durante il recupero delle immagini:', error);
     }

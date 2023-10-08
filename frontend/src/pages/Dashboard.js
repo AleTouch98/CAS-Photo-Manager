@@ -77,23 +77,39 @@ const Dashboard = () => {
         <Typography variant="h6" style={{ marginLeft: '10px' }}>Tipo Mappa</Typography>
       </div>
       <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center', // Imposta l'altezza al 100% della viewport
-      }}>
-        <Select
-          value={userSelected}
-          onChange={handleSelectChange}
-          label="Selezione"
-          style={{ height: '50px' }}
-        >
-          {userFriends && userFriends.length > 0 && userFriends.map((user, index) => (
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white', // Colore del testo
+    fontSize: '20px', // Dimensione del carattere
+    fontWeight: 'bold', // Grassetto
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' // Ombra del testo
+}}>
+    Stai visualizzando
+    <Select
+        value={userSelected}
+        onChange={handleSelectChange}
+        label="Selezione"
+        style={{
+            marginLeft: '15px',
+            backgroundColor: "#F88463",
+            height: '50px',
+            color: 'white', // Colore del testo nella select
+            fontSize: '16px', // Dimensione del carattere nella select
+            fontWeight: 'bold', // Grassetto nella select
+            textShadow: '2px 2px 8px rgba(0, 0, 0, 0.5)' // Ombra del testo nella select
+        }}
+    >
+        {userFriends && userFriends.length > 0 && userFriends.map((user, index) => (
             <MenuItem key={user.id} value={user.id}>
-              {user.nome_utente}
+                {index === 0 ? user.nome_utente : `Profilo di ${user.nome_utente}`}
             </MenuItem>
-          ))}
-        </Select>
-      </div>
+        ))}
+    </Select>
+</div>
+
+
+
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ marginRight: '10px' }}>
           <Typography variant="subtitle1">TIPO DI MAPPA:</Typography>

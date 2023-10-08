@@ -37,7 +37,7 @@ const LogoutButton = () => {
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Conferma Logout</DialogTitle>
-        <DialogContent>
+        <DialogContent style={{fontFamily:'Arial'}}>
           Sei sicuro di voler effettuare il logout?
         </DialogContent>
         <DialogActions>
