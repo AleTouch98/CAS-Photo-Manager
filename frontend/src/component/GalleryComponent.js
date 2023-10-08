@@ -53,6 +53,8 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
     setIsRemoveButtonDisabled(userView !== userId);
   }, [userView]);
 
+
+  
   useEffect(() => {
     const aggiornaDati = async () => {
       if(statoAggiornamento){
@@ -77,11 +79,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
         setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
       } else {
         alert(`${result.data.message}`);
-        
-        
       }
-    
-      
     } catch (error) {
       console.error('Errore durante il recupero delle immagini:', error);
     }
