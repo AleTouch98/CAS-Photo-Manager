@@ -113,15 +113,16 @@ inserisciGeoJSON: async (id, geojson, nome, feature) => {
 
 
 
-getListaGeoJSON: async () => {
+getListaGeoJSON: async (userID) => {
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
     try {
         const query = `
         SELECT NomeGeoJSON, GeoJSON_Path, FeatureDescrittiva
-        FROM geojsonTable;
+        FROM geojsonTable
+        WHERE ID_Utente = $1;
         `;
-        const result = await client.query(query);
+        const result = await client.query(query, [userID]);
         const geoJSONList = result.rows.map(row => ({
             nomeGeoJSON: row.nomegeojson,
             geoJSONPath: row.geojson_path,

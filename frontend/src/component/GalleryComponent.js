@@ -76,9 +76,14 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
         setCollezioneSelezionata('');
         const immagini = result.data.immagini;
         setImages(immagini);
-        setAnchorEls(Array(immagini.length).fill(null)); // Inizializza l'array di anchorEl
+        setSnackbarMessage(`${result.data.message}`);
+        setSnackbarSeverity('success');
+        setSnackbarClass('success-snackbar');
+        setAnchorEls(Array(immagini.length).fill(null));
+
       } else {
         setSnackbarMessage(`${result.data.message}`);
+        console.log(result.data.message);
         setSnackbarSeverity('error');
         setSnackbarClass('error-snackbar');
       }
@@ -153,9 +158,16 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
       if(result.status === 200){
         setCollezioneSelezionata(option.nome_collezione);
         setImages(result.data.immagini);
+        setSnackbarMessage(`${result.data.message}`);
+        setSnackbarSeverity('success');
+        setSnackbarClass('success-snackbar');
       } else {
-        alert(`${result.data.message}`);
+
+        setSnackbarMessage(`${result.data.message}`);
+        setSnackbarSeverity('error');
+        setSnackbarClass('error-snackbar');
       } 
+      setIsSnackbarOpen(true);
     } catch (error) {
         console.error('Errore nella richiesta HTTP:', error);
     }

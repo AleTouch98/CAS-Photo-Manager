@@ -27,12 +27,10 @@ const AddGeojsonButton = () => {
   const [selectedFeature, setSelectedFeature] = useState("");
   const [geojsonFeatures, setGeojsonFeatures] = useState([]);
   const { userId } = useParams();
-
-  // Stati per la Snackbar
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("");
-  const [snackbarClass, setSnackbarClass] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarClass, setSnackbarClass] = useState('');
 
   const handleButtonClick = () => {
     setFileName("");
@@ -102,12 +100,12 @@ const AddGeojsonButton = () => {
         );
         if (result.status === 200) {
           setOpen(false);
-          setSnackbarMessage("Geo caricato con successo");
+          setSnackbarMessage("Geojson caricato con successo");
           setSnackbarSeverity("success");
           setSnackbarClass("success-snackbar");
           setIsSnackbarOpen(true);
         } else {
-          setSnackbarMessage("Errore durante il caricamento del geo");
+          setSnackbarMessage("Errore durante il caricamento del geojson");
           setSnackbarSeverity("error");
           setSnackbarClass("error-snackbar");
           setIsSnackbarOpen(true);
@@ -190,26 +188,28 @@ const AddGeojsonButton = () => {
           </Button>
         </DialogActions>
 
-        <Snackbar
-          open={isSnackbarOpen}
-          autoHideDuration={6000} // Imposta la durata in millisecondi (opzionale)
-          onClose={() => setIsSnackbarOpen(false)}
-          sx={{ zIndex: 9999 }}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-        >
-          <Alert
-            onClose={() => setIsSnackbarOpen(false)}
-            severity={snackbarSeverity}
-            sx={{ width: "100%" }}
-            className={snackbarClass} // Imposta la classe CSS per la Snackbar
-          >
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
+       
       </Dialog>
+
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setIsSnackbarOpen(false)}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        className={snackbarClass}
+      >
+        <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+        
+      </Snackbar>
     </div>
   );
 };

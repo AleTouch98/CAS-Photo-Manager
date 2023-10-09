@@ -146,7 +146,7 @@ module.exports = {
     app.get("/dashboard/:userId/getGeoJSONList", async (req, res) => {
       try {
         const userId = req.params.userId;
-        const result = await databasepg.getListaGeoJSON();  
+        const result = await databasepg.getListaGeoJSON(userId);  
         if(result.length > 0){
           res.status(200).json({ message: "Lista GeoJSON caricata con successo.", lista_geojson: result });
         } else {
