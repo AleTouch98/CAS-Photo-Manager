@@ -35,7 +35,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
-  const [snackbarClass, setSnackbarClass] = useState("");
 
   const customIcon = new L.Icon({
     iconUrl: IconCamera, 
@@ -442,7 +441,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
             onClose={() => setIsSnackbarOpen(false)}
             severity={snackbarSeverity}
             sx={{ width: "100%" }}
-            className={snackbarClass} // Imposta la classe CSS per la Snackbar
           >
             {snackbarMessage}
           </Alert>

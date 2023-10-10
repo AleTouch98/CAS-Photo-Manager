@@ -10,9 +10,12 @@ module.exports = {
      * @throws un error se non è stato possibile creare il db
      */
     create_database: async (photo_man) => {
+        console.log('provo a creare il database');
         const client = new Client(CREATE_DB_CONFIGURATION);
         const tableClient = new Client(QUERY_CONFIGURATION);
+      console.log('create client e tableclient');
         await client.connect();
+      console.log('connesso al db');
         try {
             console.log("Provo a creare il Database");
             await client.query(`CREATE DATABASE photo_man`);
