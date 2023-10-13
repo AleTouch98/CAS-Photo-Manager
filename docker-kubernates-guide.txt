@@ -82,9 +82,8 @@ In questo caso verificare i log del pod del db con
 -> kubectl logs nome_db-deployment 
 e verificare se il database is ready ecc.. (se ci sono errori di porte risolverlo)
 Quando il db è pronto rimuovere il pod del backend con 
--> kubectl delete deployment nome_backend-deployment
-e ricrearlo con 
--> kubectl apply -f backend-deployment.yaml 
+-> kubectl delete pod nome_backend-deployment
+Questo creerà automaticamente un nuovo pod che questa volta avrà accesso al db.
 Verificare sempre con il comando kubectl logs se non ci sono errori sul backend. 
 Rieseguire quindi il port-forward per quanto riguarda il backend ed eventualmente il db nel caso in cui è stato ricreato.
 
