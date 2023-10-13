@@ -21,9 +21,11 @@ const AddPhotoButton = ({handleAggiornamento}) => {
     setOpen(true);
   };
 
+  
   const handleClose = () => {
     setOpen(false);
   };
+
 
   const handleEndUpload = () => {
     setOpen(false);
@@ -32,6 +34,7 @@ const AddPhotoButton = ({handleAggiornamento}) => {
     setIsSnackbarOpen(true);
   };
 
+  
   return (
     <div>
       <IconButton color="primary" onClick={handleOpen}>

@@ -12,7 +12,7 @@ import axios from "axios";
 
 const Dashboard = () => {
 
-  const [selectedOption, setSelectedOption] = useState('option1'); // Stato per tenere traccia dell'opzione selezionata
+  const [selectedOption, setSelectedOption] = useState('option1'); 
   const { userId } = useParams();
   const [userName, setUserName] = useState(''); 
   const [statoAggiornamento, setStatoAggiornamento] = useState(false);
@@ -71,7 +71,6 @@ const Dashboard = () => {
 
   return (
     <div>
-      {/* Top Bar */}
       <div style={{ backgroundColor: "#E74D2C", color: "white", padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', top: '0', left: '0', right: '0', zIndex: '999' }}>
       <div>
         <Typography variant="h6" style={{ marginLeft: '10px' }}>Tipo Mappa</Typography>
@@ -80,10 +79,10 @@ const Dashboard = () => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'white', // Colore del testo
-    fontSize: '20px', // Dimensione del carattere
-    fontWeight: 'bold', // Grassetto
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' // Ombra del testo
+    color: 'white', 
+    fontSize: '20px', 
+    fontWeight: 'bold', 
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' 
 }}>
     Stai visualizzando
     <Select
@@ -94,10 +93,10 @@ const Dashboard = () => {
             marginLeft: '15px',
             backgroundColor: "#F88463",
             height: '50px',
-            color: 'white', // Colore del testo nella select
-            fontSize: '16px', // Dimensione del carattere nella select
-            fontWeight: 'bold', // Grassetto nella select
-            textShadow: '2px 2px 8px rgba(0, 0, 0, 0.5)' // Ombra del testo nella select
+            color: 'white', 
+            fontSize: '16px', 
+            fontWeight: 'bold', 
+            textShadow: '2px 2px 8px rgba(0, 0, 0, 0.5)' 
         }}
     >
         {userFriends && userFriends.length > 0 && userFriends.map((user, index) => (
@@ -128,21 +127,13 @@ const Dashboard = () => {
             color="default"
           /> Stamen
         </div>
-      </div>
-      
+      </div>      
     </div>
-
-
-
-
-      {/* Sidebar */}
       <Drawer variant="permanent" anchor="left" PaperProps={{ sx: { backgroundColor: "#E74D2C", color: "red",  width: '200px' } }}>
         <Grid container direction="column" alignItems="center" justifyContent="center" style={{ backgroundColor: "#F88463", padding: '10px' }}>
-          {/* Inserisci il tuo logo sopra il bottone */}
           <Grid item>
             <img src={Logo} alt="Logo" style={{ width: '100px', marginBottom: '2px' }} />
           </Grid>
-          {/* Inserisci il testo "Benvenuto" */}
           <Grid item>
             <Typography variant="subtitle1" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Benvenuto {userName}</Typography>
           </Grid>
@@ -165,13 +156,9 @@ const Dashboard = () => {
           </ListItem>
         </List>
       </Drawer>
-
-      {/* Main Content */}
       <div style={{ marginLeft: '195px', marginTop:'-23px'}}>
-        {/* style={{ marginLeft: '195px', marginTop:'182px', marginRight:'-5px' }} */}
         <MapComponent selectedOption={selectedOption} statoAggiornamento={statoAggiornamento} userView={userSelected} /> {/* Ad esempio: <MapComponent /> */}
       </div>
-      
     </div>
   );
 };

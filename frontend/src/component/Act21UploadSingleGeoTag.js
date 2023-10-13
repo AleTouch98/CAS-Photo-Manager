@@ -8,9 +8,9 @@ import PlacesAutocomplete, {
 const UploadSingleGeoTag = ({ file, index, onGeoTagChange }) => {
   const [geoTag, setGeoTag] = useState('');
 
+
   const handleGeoTagChange = async (address) => {
     setGeoTag(address);
-
     try {
       const results = await geocodeByAddress(address);
       const latLng = await getLatLng(results[0]);
@@ -21,6 +21,7 @@ const UploadSingleGeoTag = ({ file, index, onGeoTagChange }) => {
     }
   };
 
+  
   return (
     <div style={{ maxHeight: '200px', overflowY: 'auto', marginBottom: '8px' }}>
       <Card variant="outlined">

@@ -23,16 +23,17 @@ const AddGeojsonButton = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState('');
   const { userId } = useParams();
-
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false); // Stato separato per la Snackbar
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false); 
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
   const [snackbarClass, setSnackbarClass] = useState("");
+
 
   const handleButtonClick = () => {
     setSelectedUser('');
     setOpen(true);
   };
+
 
   useEffect(() => {
     const caricaDati = async () => {
@@ -48,13 +49,16 @@ const AddGeojsonButton = () => {
     caricaDati();
   }, []);
 
+
   const handleClose = () => {
     setOpen(false);
   };
 
+
   const handleFeatureSelect = (event) => {
     setSelectedUser(event.target.value);
   };
+
 
   const handleShareClick = async () => {
     try{
@@ -76,6 +80,7 @@ const AddGeojsonButton = () => {
     } 
   };
 
+  
   return (
     <div>
       <IconButton color="primary" onClick={handleButtonClick}>

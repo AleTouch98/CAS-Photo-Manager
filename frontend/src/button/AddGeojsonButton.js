@@ -41,7 +41,6 @@ const AddGeojsonButton = () => {
   };
 
   useEffect(() => {
-    // Carica le features dal GeoJSON quando il file viene selezionato
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -63,6 +62,8 @@ const AddGeojsonButton = () => {
       reader.readAsText(selectedFile);
     }
   }, [selectedFile]);
+
+
 
   const handleGeoJSONUpload = async () => {
     if (!fileName.trim()) {
@@ -116,14 +117,20 @@ const AddGeojsonButton = () => {
     }
   };
 
+
+
   const handleClose = () => {
     setOpen(false);
   };
+
+
 
   const handleFeatureSelect = (event) => {
     setSelectedFeature(event.target.value);
   };
 
+
+  
   return (
     <div>
       <IconButton color="primary" onClick={handleButtonClick}>

@@ -13,6 +13,7 @@ function ChooseArea({ selectedGeoJSON, onAreaChange, iconButtonDisabled }) {
   const [listaAree, setListaAree] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
+
   const handleButtonClick = async () => {
     if (!selectedGeoJSON) {
       console.error('Nessun file selezionato.');
@@ -39,15 +40,18 @@ function ChooseArea({ selectedGeoJSON, onAreaChange, iconButtonDisabled }) {
     }
   };
 
+
   const handleMenuItemClick = async (opzioneScelta) => {
     onAreaChange(opzioneScelta);
     setSelectedOption(opzioneScelta);
   };
 
+
   if (iconButtonDisabled) {
     return null;
   }
 
+  
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (

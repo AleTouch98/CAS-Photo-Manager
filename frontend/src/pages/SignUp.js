@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-//import FormControlLabel from '@mui/material/FormControlLabel';
-//import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-//import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -33,8 +29,8 @@ function Copyright(props) {
   );
 }
 
-const defaultTheme = createTheme();
 
+const defaultTheme = createTheme();
   
  
 export default function SignUp() {
@@ -43,8 +39,8 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false); // Stato per mostrare/nascondere l'alert
-  const [showSuccess, setShowSuccess] = useState(false); // Stato per mostrare/nascondere l'alert
+  const [showAlert, setShowAlert] = useState(false); 
+  const [showSuccess, setShowSuccess] = useState(false); 
   const [nomeError, setNomeError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -62,30 +58,23 @@ export default function SignUp() {
       return;
     }
     setShowSuccess(false);
-    navigate('/');  //Reindirizzamento a login
+    navigate('/');  
   };
 
- // Funzione di validazione
  const validate = () => {
   let isValid = true;
-
-  // Validazione nome (puoi personalizzare questa logica)
   if (nome.trim() === '') {
     setNomeError('Il nome è obbligatorio');
     isValid = false;
   } else {
     setNomeError('');
   }
-
-  // Validazione email
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     setEmailError('Email non valida');
     isValid = false;
   } else {
     setEmailError('');
   }
-
-  // Validazione password (esempio: minimo 6 caratteri)
   if (password.length < 6) {
     setPasswordError('La password deve contenere almeno 6 caratteri');
     isValid = false;
@@ -122,21 +111,20 @@ const handleSubmit = async (event) => {
         "Si è verificato un errore durante l'inserimento dell'utente",
         error
       );
-      // Gestisci l'errore in base alle tue esigenze
     }
   }
 };
 
 useEffect(() => {
-  setNomeError(''); // Pulisci l'errore nome quando il nome cambia
+  setNomeError(''); 
 }, [nome]);
 
 useEffect(() => {
-  setEmailError(''); // Pulisci l'errore email quando l'email cambia
+  setEmailError(''); 
 }, [email]);
 
 useEffect(() => {
-  setPasswordError(''); // Pulisci l'errore password quando la password cambia
+  setPasswordError(''); 
 }, [password]);
 
   
@@ -156,16 +144,16 @@ useEffect(() => {
             backgroundBlendMode: 'lighten',
             border: '2px solid #ccc',
             borderRadius: '10px',
-            padding: '20px', // Aggiungi spazio intorno al contenuto
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Aggiungi una leggera ombra
+            padding: '20px', 
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', 
           }}
            >
         <img
             src={Logo}
             alt="Il tuo Logo"
             style={{
-            width: '100px', // Imposta la larghezza desiderata del logo
-            height: '100px', // Imposta l'altezza desiderata del logo
+            width: '100px', 
+            height: '100px', 
           }}
             />
           <Typography

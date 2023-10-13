@@ -6,18 +6,18 @@ function ColorCheckbox({ valueCheckbox }) {
    
   const [checked, setChecked] = useState(false);
 
-  // Funzione per gestire il cambio di stato del checkbox
+  
   const handleCheckboxChange = (event) => {
     setChecked(!checked);
-    valueCheckbox(!checked);// Passa il nuovo valore al genitore tramite la prop onChange
+    valueCheckbox(!checked);
   };
 
   return (
     <FormControlLabel 
       control={
         <Checkbox
-          checked={checked} // Utilizza il valore da valueCheckbox per determinare se il checkbox deve essere selezionato o deselezionato
-          onChange={handleCheckboxChange} // Usa la funzione di gestione
+          checked={checked} 
+          onChange={handleCheckboxChange} 
           name="Color"
           color="primary"
           style={{ padding: '4.5px' }}

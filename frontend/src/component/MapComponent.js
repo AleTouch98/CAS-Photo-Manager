@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '../component/Grid.js';
 import Gallery from '../component/GalleryComponent';
 import { MapContainer, TileLayer, GeoJSON, Marker, CircleMarker, Popup } from 'react-leaflet';
@@ -13,11 +13,7 @@ import Alert from '@mui/material/Alert';
 import IconCamera from '../iconMarker/iconCamera.png';
 import L from 'leaflet';
 
-
 const randomColor = require('randomcolor');
-
-
-
 
 const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
   const { userId } = useParams();
@@ -43,7 +39,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
     popupAnchor: [0, -40], 
   });
   
-
   useEffect(() => {
     const caricaDati = async () => {
       setLoading(true);
@@ -61,7 +56,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
 
 
   useEffect(() => {
-    // Questo effetto viene chiamato ogni volta che `photos` cambia
     if (isHeatmapEnabled && photos && photos.length > 0) {
       handleHeatmap(true);
     }
@@ -71,11 +65,11 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
   useEffect(() => {
     const aggiornaDati = async () => {
       if(statoAggiornamento){
-        if(areaSelected !== null) {  // se è selezionata un'area aggiorna i dati in quell'area 
+        if(areaSelected !== null) {  
           await handleAreaSelezionata(areaSelected);
-        } else if (geoJSONSelezionato !== null) { // se è selezionato un geojson aggiorna i dati nel geojson
+        } else if (geoJSONSelezionato !== null) { 
           await handleGeoJSONSelezionato(geoJSONSelezionato);
-        } else {  // altrimenti aggiorna tutte le foto 
+        } else {  
           const photoResult = await axios.get(`http://localhost:8000/dashboard/${userId}/${userView}/photos`);
           setPhotos(photoResult.data.immagini);
         }
@@ -83,8 +77,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
     };
     aggiornaDati();
   }, [statoAggiornamento]);
-
-
 
 
   const handleGeoJSONSelezionato = async (geoJSONSelezionato) => {
@@ -120,8 +112,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
       setLoading(false);
     }
   };
-
-
 
 
   const handleAreaSelezionata = async (areaSelezionata) => {
@@ -163,7 +153,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
   async function handleColor(option){
     if(option){
       setGeoJSONView('');
-      // Calcola il numero di foto per ciascuna feature del geoJSON
       const featuresWithCounts = await Promise.all(geojson.features.map(async (feature) => {
         const areaName = feature.properties[geoJSONSelezionato.featureDescrittiva];
         const featureSelezionata = geojson.features.find((feature) => {
@@ -182,15 +171,12 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
         const numPhotosInArea = photoResult.data.data.length;
         return { ...feature, numPhotos: numPhotosInArea };
       }));
-      // Calcola il massimo e il minimo numero di foto tra le feature
       const maxNumPhotos = Math.max(...featuresWithCounts.map((feature) => feature.numPhotos));
       const minNumPhotos = Math.min(...featuresWithCounts.map((feature) => feature.numPhotos));
-    
-      // Assegna un colore in base al numero di foto per ciascuna feature
       const coloredGeoJSON = {
         ...geojson,
         features: featuresWithCounts.map((feature) => {
-          const colorScale = scaleSequential(interpolateOrRd) // Usa l'interpolazione di colori "OrRd" da d3
+          const colorScale = scaleSequential(interpolateOrRd) 
             .domain([minNumPhotos, maxNumPhotos]);
           const fillColor = colorScale(feature.numPhotos);
       
@@ -204,7 +190,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
         }),
       };
       setGeoJSONColor(coloredGeoJSON);
-      setHeatmapData([]); // Rimuovi i dati del heatmap se necessario
+      setHeatmapData([]); 
     } else {
       setGeoJSONColor('');
       if(areaSelected){
@@ -216,7 +202,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
       } 
     } 
   }
-
 
 
   async function handleHeatmap(option){
@@ -237,7 +222,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
       setHeatmapData([]);
     }
   }
-
 
 
   const handleClusters =  (result) => {
@@ -264,6 +248,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
       setIsSnackbarOpen(true);
     } else {
       setSnackbarMessage(`Errore durante l'esecuzione del clustering. ` + result.data.message);
+      setPointsClusters([]);
       setSnackbarSeverity('error');
       setIsSnackbarOpen(true);
     }
@@ -295,7 +280,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
         </div>
 
         <div id="map" style={{ width: '100%', height: '82vh' }}>
-          {loading && ( // Mostra CircularProgress durante il caricamento
+          {loading && ( // icona di caricamento
             <div className="loading-overlay"
             style={{
               position: 'absolute',
@@ -303,8 +288,8 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
               down: 0,
               left: 0,
               width: '100%',
-              height: '82vh',
-              backgroundColor: 'rgba(255, 255, 255, 0.7)', // Sfondo semitrasparente
+              height: '100vh',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -319,7 +304,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
             center={[44.494887, 11.3426163]}
             zoom={12}
           >
-            {/* Utilizza un'istruzione condizionale per scegliere il layer della mappa */}
             {selectedOption === 'option1' ? (
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -343,19 +327,19 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
                   const numPhotos = heatmapData.filter((photo) => {
                     const latDiff = Math.abs(photo.lat - point.lat);
                     const lngDiff = Math.abs(photo.lng - point.lng);
-                    return latDiff < 0.01 && lngDiff < 0.01; // Imposta una soglia per considerare le foto vicine
+                    return latDiff < 0.01 && lngDiff < 0.01; 
                   }).length;
-                  return (numPhotos / totalNumPhotos) * 100; // L'intensità sarà il numero di foto nella stessa area
+                  return (numPhotos / totalNumPhotos) * 100; 
                 }}
-                colors={['#FF0000', '#FFFF00', '#00FF00']} // Personalizza i colori del heatmap
+                colors={['#FF0000', '#FFFF00', '#00FF00']}
                 blur={30}
-                radius={30} // Personalizza il blur del heatmap
+                radius={30} 
               />
             }
             {geoJSONView && (
               <GeoJSON
                 data={geoJSONView}
-                key={JSON.stringify(geoJSONView)} //utilizzata per forzare l'aggiornamento della mappa
+                key={JSON.stringify(geoJSONView)} 
                 style={() => ({
                   color: 'blue',
                   opacity: 1,
@@ -371,7 +355,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
                 style={(feature) => ({
                   color: 'orange',
                   opacity: 0.4,
-                  fillColor: feature.properties.fillColor, // Usa il colore dalle proprietà delle feature
+                  fillColor: feature.properties.fillColor, 
                   fillOpacity: 0.6,
                 })}
               />
@@ -380,8 +364,8 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
               <CircleMarker
                 key={JSON.stringify(point) + index}
                 center={[point.latitudine, point.longitudine]}
-                radius={8} // Imposta il raggio del cerchio
-                color={point.colore} // Imposta il colore in base all'attributo "colore"
+                radius={8} 
+                color={point.colore} 
               >
               </CircleMarker>
             ))}
@@ -412,12 +396,11 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
                           Caricato da:
                         </p>
                         <p style={{ display: 'inline-block' }}>{otherPhoto.nome_utente}</p>
-                        {/* Altre informazioni sulla foto */}
                       </div>
                     ))}
                     {photos
                       .filter((otherPhoto) => otherPhoto.indirizzo === photo.indirizzo).length > 1 && (
-                      <hr /> // Inserisce una linea solo se ci sono più foto
+                      <hr />
                     )}
                 </div>
               </Popup>
@@ -436,7 +419,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
 
       <Snackbar
           open={isSnackbarOpen}
-          autoHideDuration={6000} // Imposta la durata in millisecondi (opzionale)
+          autoHideDuration={6000} 
           onClose={() => setIsSnackbarOpen(false)}
           sx={{ zIndex: 9999 }}
           anchorOrigin={{

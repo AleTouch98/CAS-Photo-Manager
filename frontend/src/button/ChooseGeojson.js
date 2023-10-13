@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 function ChooseGeojson({ onGeoJSONChange , valueTestoGeoJSON}) {
   const { userId } = useParams();
   const [listaNomiGeo, setListaNomiGeo] = useState([{ nomeGeoJSON: 'Nessun GeoJSON' }]);
-  const [selectedOption, setSelectedOption] = useState(null); 
+
 
   const handleButtonClick = async () => {
     try {
@@ -27,10 +27,11 @@ function ChooseGeojson({ onGeoJSONChange , valueTestoGeoJSON}) {
     }
   };
 
+
   const handleMenuItemClick = async (opzioneScelta) => {
     onGeoJSONChange(opzioneScelta);
-    setSelectedOption(opzioneScelta); 
   };
+
 
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">

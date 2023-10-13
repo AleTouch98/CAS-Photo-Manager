@@ -1,5 +1,5 @@
 const CREATE_DB_CONFIGURATION = {
-    host: 'db-service', // Utilizza il nome del servizio del database come hostname
+    host: 'db-service', // nome del servizio del database come hostname
     user: 'postgres',
     port: 5432,
     password: 'cas2023',

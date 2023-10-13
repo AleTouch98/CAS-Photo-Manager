@@ -4,11 +4,8 @@ const path = require('path');
 const {CREATE_DB_CONFIGURATION , QUERY_CONFIGURATION } = require("./Configuration");
 
 module.exports = {
-    /**
-     * Questa funzione crea il db se non esiste già
-     * @returns vero se il db è stato creato, falso se il db esiste già
-     * @throws un error se non è stato possibile creare il db
-     */
+
+    // CREA IL DB 
     create_database: async (photo_man) => {
         console.log('provo a creare il database');
         const client = new Client(CREATE_DB_CONFIGURATION);
@@ -24,19 +21,15 @@ module.exports = {
             await tableClient.query("CREATE EXTENSION postgis;");
            
             await create_user_table(tableClient);
-            await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
+            await create_geojson_table(tableClient);
             await create_photo_table(tableClient);
             await create_shares_table(tableClient);
-            //await create_collection_table(tableClient);
-            
-            //await create_collab_racc_table(tableClient);
-            //await create_geojson_table(tableClient); //AGGIUNTA CREAZIONE TABELLA DB
+
             console.log('Tabelle e relazioni create');
             console.log("Database Creato");
             return true;
         }
         catch (e) {
-            //se il db esiste già ritorna false
             if (e.code === '42P04') {
                 console.log("Il database esiste già")
                 return false;
@@ -78,16 +71,11 @@ const create_user_table = async (client) => {
             ('Manuel', 'manuel@email.com', 'intermerda');
         `);
              console.log('Caricamento dati utenti effettuato');
-        // Creazione del tipo per i ruoli dei collaboratori
-        await client.query(`
-            CREATE TYPE RuoloCollaboratore AS ENUM ('Visualizzatore', 'Caricatore', 'Commentatore');
-        `);
-             console.log('Tipo RuoloCollaboratore creato');
     }
     
 
 
-    // CREA TABELLA PER OSPITARE I GEOJSON
+    // CREA TABELLA PER I GEOJSON
     const create_geojson_table = async (client) => {
         console.log('creo tabella geojson');
         try {

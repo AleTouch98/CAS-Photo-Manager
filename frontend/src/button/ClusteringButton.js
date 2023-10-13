@@ -5,19 +5,22 @@ import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import ClusterManagement from '../component/ClusterManagement'; // Importa il componente ClusterManagement
+import ClusterManagement from '../component/ClusterManagement'; 
 
 const ClusterButton = ({resultClustering, removeClusters}) => {
   const [open, setOpen] = useState(false);
+
 
   const handleOpen = () => {
     setOpen(true);
   };
 
+
   const handleClose = () => {
     setOpen(false);
   };
   
+
   const handleResultClustering = (result) => {
     resultClustering(result);
   };

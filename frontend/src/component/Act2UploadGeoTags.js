@@ -19,27 +19,23 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
   }, []);
 
 
-
   const handleCheckboxChange = () => {
     setCheckboxChecked(!checkboxChecked);
   };
 
 
-
   const handleAllPhotoGeoTag = (indice, valore) => {
-    const geoTagForPhoto = { // Creare un nuovo oggetto geoTag per la foto corrente
-      address: valore.address, // Sostituisci con il valore effettivo
-      lat: valore.lat, // Sostituisci con la latitudine reale
-      lng: valore.lng, // Sostituisci con la longitudine reale
+    const geoTagForPhoto = { 
+      address: valore.address, 
+      lat: valore.lat, 
+      lng: valore.lng, 
     };
-    const updatedGeoTagsArray = [...geoTagsArray]; // Creare una copia dell'array dei geotag
-    updatedGeoTagsArray[indice] = geoTagForPhoto; // Inserire il nuovo geoTag nella posizione specificata dall'indice
-    setGeoTagsArray(updatedGeoTagsArray); // Aggiornare lo stato con il nuovo array dei geotag
-    onGeoTagChange(updatedGeoTagsArray); // Ora puoi passare l'array aggiornato alla funzione onGeoTagChange
+    const updatedGeoTagsArray = [...geoTagsArray]; 
+    updatedGeoTagsArray[indice] = geoTagForPhoto; 
+    setGeoTagsArray(updatedGeoTagsArray); 
+    onGeoTagChange(updatedGeoTagsArray); 
   };
 
-
-  
 
   const handleSingleGeoTag = async (address) => {
     setGeoTag(address);
@@ -47,7 +43,7 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
       const results = await geocodeByAddress(address);
       const latLng = await getLatLng(results[0]);
       const { lat, lng } = latLng;
-      // Creare un array di geotag con gli stessi dati per ogni foto e un indice
+      // Crea un array di geotag con gli stessi dati per ogni foto e un indice
       const geoTagsArray = fotoCaricate.map((file, index) => ({
         address,
         lat,
@@ -58,6 +54,7 @@ const UploadGeoTags = ({ fotoCaricate, onGeoTagChange }) => {
       console.error('Errore durante la geocodifica:', error);
     }
   };
+
 
   return (
     <div style={{width:'400px', height:'auto'}}>

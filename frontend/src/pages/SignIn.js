@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-//import Avatar from '@mui/material/Avatar';
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-//import FormControlLabel from '@mui/material/FormControlLabel';
-//import Checkbox from '@mui/material/Checkbox';
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-//import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -42,13 +38,10 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [showAlertErrorPassword, setShowAlertErrorPassword] = useState(false); // Stato per mostrare/nascondere l'alert
-  //const [showAlertLoginSuccess, setShowAlertLoginSuccess] = useState(false); // Stato per mostrare/nascondere l'alert
-  const [showAlertErrorLogin, setShowAlertErrorLogin] = useState(false); // Stato per mostrare/nascondere l'alert
+  const [showAlertErrorPassword, setShowAlertErrorPassword] = useState(false); 
+  const [showAlertErrorLogin, setShowAlertErrorLogin] = useState(false); 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
-
 
   
   const handleCloseErrorPassword = (event, reason) => {
@@ -59,10 +52,6 @@ export default function SignIn() {
   };
 
 
-
-
-
-
   const handleCloseErrorLogin = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -70,43 +59,32 @@ export default function SignIn() {
     setShowAlertErrorLogin(false);
   };
   
-// Funzione di validazione
 const validate = () => {
   let isValid = true;
-
-  // Validazione email
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     setEmailError("Email non valida");
     isValid = false;
   } else {
     setEmailError("");
   }
-
-  // Validazione password (esempio: minimo 6 caratteri)
   if (password.length < 6) {
     setPasswordError("La password deve contenere almeno 6 caratteri");
     isValid = false;
   } else {
     setPasswordError("");
   }
-
   return isValid;
 };
 
 
-
-
-
 const handleSubmit = async (event) => {
   event.preventDefault();
-
   if (validate()) {
     try {
       const response = await axios.post("http://localhost:8000/", {
         Email: email,
         Password: password,
       });
-
       console.log(response);
       if (response.status === 200) {
         console.log("Login effettuato", response.data.utente, response.data.id);
@@ -127,14 +105,15 @@ const handleSubmit = async (event) => {
   }
 };
 
+
   useEffect(() => {
-    setEmailError(""); // Pulisci l'errore email quando l'email cambia
+    setEmailError(""); 
   }, [email]);
 
-  useEffect(() => {
-    setPasswordError(""); // Pulisci l'errore password quando la password cambia
-  }, [password]);
 
+  useEffect(() => {
+    setPasswordError(""); 
+  }, [password]);
 
  
   return (
@@ -151,16 +130,16 @@ const handleSubmit = async (event) => {
             backgroundBlendMode: "lighten",
             border: "2px solid #ccc",
             borderRadius: "10px",
-            padding: "20px", // Aggiungi spazio intorno al contenuto
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Aggiungi una leggera ombra
+            padding: "20px", 
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", 
           }}
         >
           <img
             src={Logo}
             alt="Il tuo Logo"
             style={{
-              width: "100px", // Imposta la larghezza desiderata del logo
-              height: "100px", // Imposta l'altezza desiderata del logo
+              width: "100px",
+              height: "100px",
             }}
           />
           <Typography

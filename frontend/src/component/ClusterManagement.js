@@ -17,17 +17,16 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
   const [autoConfig, setAutoConfig] = useState(true);
   const [manualClusterCount, setManualClusterCount] = useState(1);
   const [algorithmType, setAlgorithmType] = useState('K-Means');
-  const [epsilon, setEpsilon] = useState(1); // Aggiunta variabile epsilon
-  const [minPoints, setMinPoints] = useState(1); // Aggiunta variabile minPoints
+  const [epsilon, setEpsilon] = useState(1); 
+  const [minPoints, setMinPoints] = useState(1); 
   const { userId } = useParams();
+  const { userView } = useParams();
 
-  const userView = userId;
 
   const handleConfigChange = (event) => {
     const { name, value } = event.target;
     if (name === 'configType') {
       setAutoConfig(value === 'auto');
-      // Quando il tipo di configurazione cambia, azzera il valore del numero di cluster
       setManualClusterCount(1);
     } else if (name === 'manualClusterCount') {
       setManualClusterCount(parseInt(value));
@@ -36,9 +35,11 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
     }
   };
 
+
   const handleAlgorithmTabChange = (event, newValue) => {
     setAlgorithmType(newValue);
   };
+
 
   const handleClusterButtonClick = async () => {
     if(algorithmType === 'K-Means'){
@@ -56,11 +57,11 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
     onClose();
   };
 
+
   const handleRimuoviClusters = () => {
     removeClusters();
     onClose();
   };
-
 
 
   const renderAlgorithmSpecificOptions = () => {
@@ -82,7 +83,6 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
               <MenuItem value="manual">Manuale</MenuItem>
             </Select>
           </FormControl>
-
           {!autoConfig && (
             <FormControl fullWidth style={{ marginTop: '16px' }}>
               <InputLabel shrink={true} htmlFor="cluster-count">
@@ -126,7 +126,6 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
                 }}
             />
           </FormControl>
-
           <FormControl fullWidth style={{ marginTop: '16px' }}>
             <InputLabel shrink={true} htmlFor="min-points">
               Min Points
@@ -176,13 +175,12 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
   >
     Esegui {algorithmType}
   </Button>
-
   <Button
     variant="contained"
-    color="error" // Impostiamo il colore su "secondary" per ottenere un pulsante rosso
+    color="error"
     fullWidth
     sx={{ mt: 2 }}
-    onClick={handleRimuoviClusters} // Aggiungiamo un gestore di eventi per il clic del pulsante
+    onClick={handleRimuoviClusters} 
   >
     Rimuovi clusters
   </Button>

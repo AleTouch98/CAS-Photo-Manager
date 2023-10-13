@@ -6,9 +6,7 @@ import { useParams } from 'react-router-dom';
 const ChooseCollection = ({onChangeSelection }) => {
     const [checkboxChecked, setCheckboxChecked] = useState(false);
     const [selectedCollection, setSelectedCollection] = useState(null);
-
     const [collezioni, setCollezioni] = useState([]);
-
     const { userId } = useParams();
 
 
@@ -36,16 +34,17 @@ const ChooseCollection = ({onChangeSelection }) => {
         }
     };
 
+
     const handleNewCollectionChange = (event) => {
         setSelectedCollection(event.target.value);
         onChangeSelection(event.target.value);
     };
 
+
     const handleCollectionChange = (event) => {
         setSelectedCollection(event.target.value);
         onChangeSelection(event.target.value);
     };
-
 
 
     return (

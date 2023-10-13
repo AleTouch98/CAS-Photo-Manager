@@ -12,11 +12,13 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
+
   useEffect(() => {
     if (fotoCaricate !== null && fotoCaricate.length > 0) {
       setFiles(fotoCaricate);
     }
   }, [fotoCaricate]);
+
 
   const onDrop = (acceptedFiles) => {
     const newFiles = [...files];
@@ -38,6 +40,7 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
     onFileUpload(newFiles);
   };
 
+
   const handleRemoveFile = (index) => {
     const newFiles = [...files];
     newFiles.splice(index, 1);
@@ -45,6 +48,7 @@ const PhotoUploader = ({ fotoCaricate, onFileUpload }) => {
     onFileUpload(newFiles);
   };
 
+  
   return (
     <div>
       <Dropzone onDrop={onDrop}>

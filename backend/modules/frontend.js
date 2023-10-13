@@ -20,11 +20,10 @@ module.exports = {
     // RICHIESTA PER LA REGISTRAZIONE
     app.post("/register", async (req, res) => {
       try {
-        const {Nome, Email, Password } = req.body; // Estrai i dati dalla richiesta POST
-        const result = await databasepg.inserisciUtente(Nome, Email, Password); // Passa i parametri Email e Password
+        const {Nome, Email, Password } = req.body; 
+        const result = await databasepg.inserisciUtente(Nome, Email, Password); 
         if (result != null) {
           const user = result;
-          // Caso in cui l'utente esiste ma la password è errata
           if (result == true) {
             res.status(200).json({ message: "Registrazione avvenuta con successo." });
             return;
@@ -48,11 +47,10 @@ module.exports = {
     // RICHIESTA PER ESEGUIRE LOGIN
     app.post("/", async (req, res) => {
       try {
-        const { Email, Password } = req.body; // Estrai i dati dalla richiesta POST
-        const result = await databasepg.loggaUtente(Email); // Passa i parametri Email e Password
+        const { Email, Password } = req.body; 
+        const result = await databasepg.loggaUtente(Email); 
         if (result != null) {
           const user = result;
-          // Caso in cui l'utente esiste ma la password è errata
           if (user.password_utente === Password) {
             res.status(200).json({ message: "Login avvenuto con successo.", utente: user.nome_utente, id: user.id });
             return;
@@ -74,7 +72,7 @@ module.exports = {
 
     //----------------------- FINE GESTIONE QUERY DI LOGIN/REGISTER ----------------------
 
-    //CHIAMATA PER CARICARE I DATI DELL'UTENTE ALL'APERTURA DELLA DASHBOARD 
+    //RICHIESTA PER CARICARE I DATI DELL'UTENTE ALL'APERTURA DELLA DASHBOARD 
     app.get("/dashboard/:userId/loaded", async (req, res) => {
       try {
         const userId = req.params.userId;
@@ -91,13 +89,10 @@ module.exports = {
 
     const storageJSON = multer.diskStorage({
       destination: function (req, file, cb) {
-        const uploadDir = './geojson'; // Cartella di destinazione
-        const fullPath = path.resolve(uploadDir); // Risolve il percorso assoluto
-    
-        // Verifica se la cartella esiste
+        const uploadDir = './geojson'; 
+        const fullPath = path.resolve(uploadDir); 
         if (!fs.existsSync(fullPath)) {
-          // Se la cartella non esiste, crea la cartella
-          fs.mkdirSync(fullPath, { recursive: true });
+          fs.mkdirSync(fullPath, { recursive: true }); // Se la cartella non esiste, crea la cartella
         }
         cb(null, uploadDir);
       },
@@ -111,15 +106,15 @@ module.exports = {
 
     const uploadJSON = multer({storage : storageJSON})
 
-    // FARE IN MODO CHE L'UTENTE POSSA SALVARE ANCHE IL NOME DEL JSON 
+    // RICHIESTA PER CARICARE IL GEOJSON SUL DB/SERVER
      app.post("/dashboard/:userId/loadGeoJSON", uploadJSON.single('file'), async (req, res) => {
       if (!req.file) {
         return res.status(400).send("Nessun file caricato.");
       }
       const userId = req.params.userId;
-      const percorsoFile = req.file.path; // Il percorso del file caricato
+      const percorsoFile = req.file.path; 
       const fileName = req.body.fileName;
-      const featureDescrittiva = req.body.featureDescrittiva; // Il nome del file
+      const featureDescrittiva = req.body.featureDescrittiva; 
       const result = await databasepg.inserisciGeoJSON(userId, percorsoFile, fileName, featureDescrittiva); 
       res.status(200).send("File caricato con successo.");
     });
@@ -128,10 +123,10 @@ module.exports = {
    
 
 
-    //PER CARICARE IL GEOJSON PRENDO IL NOME DAL FILTRO, CERCO NEL DB IL PERCORSO DEL FILE E RITORNO IL FILE 
+    // RICHIESTA PER SCARICARE IL GEOJSON DAL SERVER
     app.post('/dashboard/:userId/downloadGeoJSON', (req, res) => {
       const userId = req.params.userId;
-      const filePath = req.body.path; // Leggi il percorso del file dal corpo della richiesta
+      const filePath = req.body.path; 
       fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
           console.error('Errore nella lettura del file:', err);
@@ -142,7 +137,7 @@ module.exports = {
     });
 
 
-
+    //  RICHIESTA PER CARICARE LA LISTA DEI GEOJSON DI UN UTENTE 
     app.get("/dashboard/:userId/getGeoJSONList", async (req, res) => {
       try {
         const userId = req.params.userId;
@@ -160,13 +155,11 @@ module.exports = {
     
 
 
-
-
     const storage = multer.memoryStorage();
     const upload = multer({ storage: storage });
 
 
-    // RICHIESTA PER CARICARE UN'IMMAGINE 
+    // RICHIESTA PER CARICARE UN'IMMAGINE SUL DB
     app.post("/dashboard/:userId/loadImage", upload.single('file'), async (req, res) => {
       const userId = req.params.userId;
       const file = req.file;
@@ -193,7 +186,7 @@ module.exports = {
 
 
 
-    //QUERY PER CARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
+    //QUERY PER SCARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
     app.get("/dashboard/:userLog/:userView/photos", async (req, res) => {
       try {
         const userView = req.params.userView
@@ -210,9 +203,7 @@ module.exports = {
     });
 
 
-    //QUERY PER CARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
-
-    // Funzione per gestire la lettura del file in modo asincrono
+    //RICHIESTA PER CARICARE DAL DB TUTTE LE FOTO DI UN UTENTE 
     function readFileAsync(filePath) {
       return new Promise((resolve, reject) => {
         fs.readFile(filePath, 'utf8', (err, fileData) => {
@@ -225,8 +216,6 @@ module.exports = {
         });
       });
     }
-    
-    // Funzione principale per l'endpoint API
     app.post("/dashboard/:userLog/:userView/photosInGeoJSON", async (req, res) => {
       try {
         const userView = req.params.userView;
@@ -234,9 +223,8 @@ module.exports = {
         const filePath = geojson.geoJSONPath;
         const featureDescrittiva = geojson.featureDescrittiva;
         const area = req.body.area;
-        // Leggi il file GeoJSON in modo asincrono
         const fileData = await readFileAsync(filePath);
-        const geojsonData = JSON.parse(fileData); // Parsa il GeoJSON
+        const geojsonData = JSON.parse(fileData); 
         if (geojsonData && geojsonData.features) {
           let geometryFeatures;
           if (area === 'all') {
@@ -250,8 +238,8 @@ module.exports = {
             const queryResult = await databasepg.getFotoUtenteInPolygon(userView, geometry);
             return queryResult.rows;
           }));
-          const flatResults = results.flat(); // Serve per schiacciare l'array
-          // Elimina le foto con lo stesso ID
+          const flatResults = results.flat(); 
+          // Elimina le foto con lo stesso id
           const uniquePhotos = flatResults.filter((photo, index, self) => {
             const firstIndex = self.findIndex(p => p.id === photo.id);
             return index === firstIndex;
@@ -268,9 +256,7 @@ module.exports = {
     
 
   
-    
-
-
+    // RICHIESTA PER CANCELLARE UNA FOTO DAL DB
   app.post('/dashboard/:userId/deletePhoto', async (req, res) => {
     const userId = req.params.userId;
     const photoId = req.body.id_photo; // Leggi il percorso del file dal corpo della richiesta
@@ -289,7 +275,7 @@ module.exports = {
 
 
 
-
+  //RICHIESTA PER CARICARE TUTTI I NOMI DELLE COLLEZIONI DI UN UTENTE 
   app.get("/dashboard/:userId/collectionsName", async (req, res) => {
     try {
       const userId = req.params.userId;
@@ -306,7 +292,7 @@ module.exports = {
   });
 
 
-  // NUOVA RICHIESTA PER NOMI COLLEZIONI AMICO 
+  // RICHIESTA PER SCARICARE LA LISTA DEI NOMI DELLE COLLEZIONI DI UN AMICO
   app.get("/dashboard/:userId/:userView/collectionsName", async (req, res) => {
     try {
       const userView = req.params.userView;
@@ -323,6 +309,7 @@ module.exports = {
   });
 
 
+  // RICHIESTA PER SCARICARE TUTTE LE FOTO DI UNA COLLEZIONE
   app.post("/dashboard/:userId/:userView/fotoCollection", async (req, res) => {
     try {
       const userView = req.params.userView;
@@ -343,9 +330,7 @@ module.exports = {
   // ---------------------------- KMEANS E DBSCAN ----------------------------- //
 
 
-
-
-  // FUNZIONE UTILIZZATA PER CALCOLARE IL NUMERO OTTIMALE DI CLUSTER  
+  // FUNZIONE UTILIZZATA PER CALCOLARE IL NUMERO OTTIMALE DI CLUSTER  (ELBOW METHOD)
   async function calculateOptimalClusterNumber(data) {
     const sseArray = [];
     const kValues = Array.from({ length: data.length }, (_, i) => i + 1);
@@ -381,7 +366,7 @@ module.exports = {
   }
 
 
-  
+  // RICHIESTA PER ESEGUIRE IL KMEANS
   app.post("/dashboard/:userId/:userView/kmeans", async (req, res) => {
     try {
       const userView = req.params.userView;
@@ -404,9 +389,9 @@ module.exports = {
       } else {
         k = nCluster;
       }
-      if(k > data.length || k < 0){
+      if(k >= data.length || k < 0){
         return res.status(218).json({
-          message: "Impossibile eseguide il k-means con un numero di cluster maggiore dei punti dati / minore di zero.",
+          message: "Impossibile eseguide il k-means con un numero di cluster maggiore o uguale dei punti dati / minore di zero.",
         });
       }
       var kmeans = new clustering.KMEANS();
@@ -414,7 +399,7 @@ module.exports = {
       if (clusters) {
         const clusteredData = clusters.map(cluster => cluster.map(index => data[index]));
         res.status(200).json({
-          message: "Risultati DBSCAN",
+          message: "Risultati KMEANS",
           clusters: clusteredData,
         });
       } else {
@@ -430,7 +415,7 @@ module.exports = {
   });
 
 
-
+  // RICHIESTA PER ESEGUIRE IL DB SCAN
   app.post("/dashboard/:userId/:userView/dbscan", async (req, res) => {
     try {
       const userView = req.params.userView;
@@ -456,8 +441,7 @@ module.exports = {
       }
       const clusters = dbscan.run(data, epsilon, minPoints);
       if (clusters) {
-        // Ottieni i punti appartenenti a ciascun cluster
-        const clusteredData = clusters.map(cluster => cluster.map(index => data[index]));
+        const clusteredData = clusters.map(cluster => cluster.map(index => data[index])); // punti appartenenti a ciascun cluster
         res.status(200).json({
           message: "Risultati DBSCAN",
           clusters: clusteredData,
@@ -480,7 +464,7 @@ module.exports = {
  // ---------------------------- CONDIVISIONE ----------------------------- //
 
 
-
+// RICHIESTA PER OTTENERE TUTTI GLI UTENTI
  app.get("/dashboard/:userId/getAllUsers", async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -496,7 +480,7 @@ module.exports = {
   }
 });
 
-
+// RICHIESTA PER AGGIUNGERE UNA CONDIVISIONE TRA UTENTI
 app.post("/dashboard/:userId/addShare", async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -513,6 +497,8 @@ app.post("/dashboard/:userId/addShare", async (req, res) => {
   }
 });
 
+
+// RICHIESTA PER OTTENERE TUTTI GLI AMICI DI UN UTENTE 
 app.get("/dashboard/:userId/getUserFriends", async (req, res) => {
   try {
     const userId = req.params.userId;

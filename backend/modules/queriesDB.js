@@ -4,15 +4,6 @@ const { QUERY_CONFIGURATION } = require( './Configuration');
 const pgp = require('pg-promise')();
 
 
-/*
-Per resettare l'autoincrement di una tabella
-DELETE FROM history;
-DELETE FROM user_events;
-SELECT setval(pg_get_serial_sequence('history', 'id_event'), 1);
-SELECT setval(pg_get_serial_sequence('user_events', 'id_user'), 1);
-*/
-
-
 module.exports = { 
 
 inserisciUtente: async (Nome, Email, Password) => {
@@ -64,8 +55,7 @@ loggaUtente: async (Email) => {
 
 // -------------------------- FINE DELLE QUERY PER IL LOGIN ---------------------------
 
-//con questa query una volta aperta la dashboard (da cui si preleva l'id) viene recuperato il nome dell'utente per stamparlo a video
-//si potrebbe pensare anche di recuperare direttamente l'utente.
+
 getNomeUtenteById: async (id) => {
     const client = new Client(QUERY_CONFIGURATION);
     await client.connect();
@@ -76,14 +66,13 @@ getNomeUtenteById: async (id) => {
         const values = [id];
         const result = await client.query(query, values);
         if (result.rows.length === 1) {
-            // Restituisci il nome dell'utente se trovato
             return result.rows[0].nome_utente;
         } else {
             return null;
         }
     } catch (e) {
         console.error(e);
-        return e; // Gestione dell'errore: restituisci null in caso di errore
+        return e; 
     } finally {
         await client.end();
     }
@@ -101,16 +90,14 @@ inserisciGeoJSON: async (id, geojson, nome, feature) => {
         VALUES ($1, $2, $3, $4);
         `;
         await client.query(query, [id, geojson, nome, feature]);
-        return null; // Nessun errore
+        return null;
       } catch (e) {
         console.error('Errore nell\'inserimento del GeoJSON:', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e; 
       } finally {
         await client.end();
       }
 },
-
-
 
 
 getListaGeoJSON: async (userID) => {
@@ -131,7 +118,7 @@ getListaGeoJSON: async (userID) => {
         return geoJSONList;
     } catch (e) {
         console.error('Errore nella query per ottenere la lista dei NomeGeoJSON:', e);
-        throw e; // Rilancia l'errore in caso di fallimento
+        throw e; 
     } finally {
         await client.end();
     }
@@ -182,10 +169,10 @@ getFotoUtente: async (id) => {
         WHERE Foto.ID_Utente = $1
         `;
         const result = await client.query(query, [id]);
-        return result; // Nessun errore e ritorna il risultato della query
+        return result;
     } catch (e) {
         console.error('Errore nel download delle foto:', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e; 
     } finally {
         await client.end();
     }
@@ -204,10 +191,10 @@ getFotoUtenteInCollection: async (id, collection) => {
         WHERE Foto.ID_Utente = $1 AND Foto.Nome_Collezione = $2
         `;
         const result = await client.query(query, [id, collection]);
-        return result; // Nessun errore e ritorna il risultato della query
+        return result; 
     } catch (e) {
         console.error('Errore nel download delle foto:', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e; 
     } finally {
         await client.end();
     }
@@ -230,10 +217,10 @@ getFotoUtenteInPolygon: async (id, polygon) => {
           AND ST_Contains(ST_GeomFromGeoJSON($2), Foto.GeoTag_Spaziale)
         `;
         const result = await client.query(query, [id, polygon]);
-        return result; // Nessun errore e ritorna il risultato della query
+        return result; 
     } catch (e) {
         console.error('Errore nel download delle foto:', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e;
     } finally {
         await client.end();
     }
@@ -251,9 +238,9 @@ cancellaFoto: async (idUtente, idFoto) => {
       `;
       const result = await client.query(query, [idUtente, idFoto]);
       if (result.rowCount === 0) {
-        return false; // Nessuna riga cancellata, la foto non esisteva
+        return false; 
       } else {
-        return true; // La foto è stata cancellata con successo
+        return true; 
       }
     } catch (e) {
       console.error('Errore nella cancellazione della foto:', e);
@@ -276,16 +263,16 @@ getCollezioniUtente: async (id) => {
         WHERE ID_Utente = $1;
         `;
         const result = await client.query(query, [id]);
-        return result; // Nessun errore e ritorna il risultato della query
+        return result; 
     } catch (e) {
         console.error('Errore nel download delle foto:', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e; 
     } finally {
         await client.end();
     }
     },
 
-// -------------------------- QUERY PER LA CONDIVISIONE TRA UTENTEI ---------------------------
+// -------------------------- QUERY PER LA CONDIVISIONE TRA UTENTI ---------------------------
 
 getNomiUtenti: async (excludedId) => {
     const client = new Client(QUERY_CONFIGURATION);
@@ -312,10 +299,10 @@ getCondivisioniUtente: async (id) => {
         SELECT Utente1 FROM Shares WHERE Utente2 = $1;
         `;
         const result = await client.query(query, [id]);
-        return result; // Nessun errore e ritorna il risultato della query
+        return result; 
     } catch (e) {
         console.error('Errore nel recupero degli amici: ', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e;
     } finally {
         await client.end();
     }
@@ -331,21 +318,14 @@ aggiungiCondivisione: async (id1, id2) => {
         INSERT INTO Shares (Utente1, Utente2) VALUES ($1, $2);
         `;
         const result = await client.query(query, [id1, id2]);
-        return true; // Nessun errore e ritorna il risultato della query
+        return true; 
     } catch (e) {
         console.error('Errore nell\'inserimento della condivisione: ', e);
-        return e; // Restituisci l'errore in caso di fallimento
+        return e; 
     } finally {
         await client.end();
     }
     },
 
 
-
-
-
 }
-
-
-
-/* -------------------------------------------------------UTILS-----------------------------------------------------------------------------*/

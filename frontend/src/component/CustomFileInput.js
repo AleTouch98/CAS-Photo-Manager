@@ -6,9 +6,11 @@ function CustomFileInput({ handleFileSelection }) {
   const inputRef = React.useRef();
   const [selectedFileName, setSelectedFileName] = useState('');
 
+
   const handleButtonClick = () => {
     inputRef.current.click();
   };
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -18,6 +20,7 @@ function CustomFileInput({ handleFileSelection }) {
     }
   };
 
+  
   return (
     <div>
       <input

@@ -20,22 +20,25 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [valueButtonCarica, setValueButtonCarica] = useState(true);
-
   const { userId } = useParams();
+
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
 
+
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
 
   const steps = [
     { title: 'Seleziona Foto' },
     { title: 'Inserisci Geotag' },
     { title: 'Carica Foto' },
   ];
+
 
   const handleCaricamentoFoto = (files) => {
     setnextButtonGeo(true);
@@ -47,6 +50,7 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
     }
   };
 
+
   const handleCaricamentoGeoTag = (array) => {  
     setArrayGeoTags(array);
     if (array.length === foto.length && !array.includes(undefined)) {
@@ -55,6 +59,7 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
       setnextButtonGeo(true);
     }
   };
+
 
   const handleSceltaCollezione = (collezione) => {  
     setCollezione(collezione);
@@ -65,11 +70,13 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
     }
   };
 
+
   const axiosConfig = {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   };
+
 
   const handleCaricaFoto = async () => {
     handleAggiornamento(false);
@@ -103,18 +110,13 @@ const PhotoUploadWizard = ({onClose, handleAggiornamento}) => {
         }
       }
       onClose();
-      handleAggiornamento(true);
-      
-     
+      handleAggiornamento(true);   
     } else {
       console.error('Le liste foto e arrayGeoTags non hanno la stessa lunghezza.');
     }
-    
-
   };
 
-
-
+  
   return (
     <div>
       <Stepper steps={steps} activeStep={activeStep} />

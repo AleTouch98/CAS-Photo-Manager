@@ -53,7 +53,6 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
     setIsRemoveButtonDisabled(userView !== userId);
   }, [userView]);
 
-
   
   useEffect(() => {
     const aggiornaDati = async () => {
@@ -93,10 +92,12 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
     }
   };
 
+
   const handleDeleteClick = (image) => {
     setSelectedImage(image);
     setIsDeleteDialogOpen(true);
   };
+
 
   const handleDeleteConfirm = async () => {
     try {
@@ -128,17 +129,20 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
     setIsDeleteDialogOpen(false);
   };
 
+
   const handleClick = (event, index) => {
     const newAnchorEls = [...anchorEls];
     newAnchorEls[index] = event.currentTarget;
     setAnchorEls(newAnchorEls);
   };
 
+
   const handleClose = (index) => {
     const newAnchorEls = [...anchorEls];
     newAnchorEls[index] = null;
     setAnchorEls(newAnchorEls);
   };
+
 
   const handleClickMenuCollection = async () => {
     try {
@@ -162,7 +166,6 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
         setSnackbarSeverity('success');
         setSnackbarClass('success-snackbar');
       } else {
-
         setSnackbarMessage(`${result.data.message}`);
         setSnackbarSeverity('error');
         setSnackbarClass('error-snackbar');
@@ -174,29 +177,25 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
   };
 
 
-  return (
-
-
-    
+  return (    
     <div style={{ width: '100%', overflowX: 'auto' }}>
-      {/* CREAZIONE DEI BOTTONI */}
       <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState) => (
           <React.Fragment>
             <IconButton
-  color="primary"
-  variant="contained"
-  {...bindTrigger(popupState)}
-  style={{
-    position: 'relative',
-    marginTop: '10px',
-    marginBottom: '-10px',
-  }}
-  onClick={() => {
-    handleClickMenuCollection();
-    popupState.open();
-  }}
->
+              color="primary"
+              variant="contained"
+              {...bindTrigger(popupState)}
+              style={{
+                position: 'relative',
+                marginTop: '10px',
+                marginBottom: '-10px',
+              }}
+              onClick={() => {
+                handleClickMenuCollection();
+                popupState.open();
+              }}
+            >
   <div style={{ display: 'flex', alignItems: 'center' }}>
     <FilterCollectionIcon style={{ marginRight: '8px' }} />
     <Typography
@@ -213,14 +212,14 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
             <Menu  {...bindMenu(popupState)}
           anchorReference="anchorPosition"
           anchorPosition={{
-            top: 32, // Regola questa altezza per spostare il menu più in alto o in basso
-            left: 8, // Regola questa larghezza per spostare il menu più a sinistra o a destra
+            top: 32, 
+            left: 8, 
           }}
           getContentAnchorEl={null}
           style={{
             position: 'fixed',
-            marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
-            marginLeft: '1150px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
+            marginTop: '85px', 
+            marginLeft: '1150px', 
           }}
         >
             {collezioni.map((option, index) => (
@@ -243,7 +242,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
     style={{
       position: 'absolute',
       top: '10px',
-      right: '40px', // Posizione fissa a destra
+      right: '40px', 
     }}
   >
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -273,12 +272,12 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
           <ImageListItem key={index}>
             <img
               style={{ width: '100%', height: 'auto' }}
-              src={`data:image/jpeg;base64,${image.immaginebase64}`} // Usa 'data:image/jpeg;base64,' per visualizzare immagini in formato base64
+              src={`data:image/jpeg;base64,${image.immaginebase64}`} 
               alt={`Image ${index}`}
               loading="lazy"
             />
             <ImageListItemBar
-              title={`${image.nome_foto}`} // Puoi personalizzare il titolo come preferisci
+              title={`${image.nome_foto}`} 
               actionIcon={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <IconButton
@@ -322,7 +321,6 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
           </ImageListItem>
         ))}
       </ImageList>
-      {/* Popup di conferma per l'eliminazione */}
       {selectedImage && (
         <Dialog open={isDeleteDialogOpen} onClose={handleDeleteCancel}>
           <DialogTitle>Conferma Eliminazione</DialogTitle>

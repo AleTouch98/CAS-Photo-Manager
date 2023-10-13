@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -33,13 +33,16 @@ export default function ResponsiveGrid({geoJSONSelected, valueTestoGeoJSON, area
     areaSelected(area);
   }
 
+
   function handleClusteringButton(clusters) {
     clustersFound(clusters);
   }
 
+
   function handleValueCheckboxColor(value) {
     valueColorCheckbox(value);
   }
+
 
   function handleValueCheckboxHeatmap(value) {
     valueHeatmapCheckbox(value);
