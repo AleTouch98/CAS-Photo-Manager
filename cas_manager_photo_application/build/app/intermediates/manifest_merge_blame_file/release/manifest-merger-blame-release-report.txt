@@ -1,0 +1,248 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="cas.group.cas_photo_manager_application"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+11-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:3:5-79
+11-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:3:22-76
+12    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+12-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:4:5-81
+12-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:4:22-78
+13    <uses-permission android:name="android.permission.INTERNET" />
+13-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:5:5-66
+13-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:5:22-64
+14    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+14-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:6:5-80
+14-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:6:22-77
+15
+16    <!--
+17     Required only if your app needs to access images or photos
+18     that other apps created.
+19    -->
+20    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+20-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:10:5-76
+20-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:10:22-73
+21
+22    <!--
+23         Required only if your app needs to access videos
+24         that other apps created.
+25    -->
+26    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+26-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:14:5-75
+26-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:14:22-72
+27
+28    <!--
+29         Required only if your app needs to access audio files
+30         that other apps created.
+31    -->
+32    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+32-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:18:5-75
+32-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:18:22-72
+33    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+33-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:6:5-80
+33-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:6:22-77
+34    <uses-permission
+34-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:22:5-23:38
+35        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+35-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:22:22-78
+36        android:maxSdkVersion="29" />
+36-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:23:9-35
+37    <uses-permission android:name="android.permission.CAMERA" />
+37-->[:camera_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-65
+37-->[:camera_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-62
+38    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+38-->[:camera_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:5-71
+38-->[:camera_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:22-68
+39
+40    <permission
+40-->[androidx.core:core:1.10.1] /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
+41        android:name="cas.group.cas_photo_manager_application.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+41-->[androidx.core:core:1.10.1] /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
+42        android:protectionLevel="signature" />
+42-->[androidx.core:core:1.10.1] /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+43
+44    <uses-permission android:name="cas.group.cas_photo_manager_application.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+44-->[androidx.core:core:1.10.1] /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
+44-->[androidx.core:core:1.10.1] /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
+45
+46    <application
+47        android:name="android.app.Application"
+47-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:26:9-42
+48        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+48-->[androidx.core:core:1.10.1] /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
+49        android:icon="@mipmap/ic_launcher"
+49-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:27:9-43
+50        android:label="cas_photo_manager_application" >
+50-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:25:9-54
+51        <activity
+51-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:28:9-48:20
+52            android:name="cas.group.cas_photo_manager_application.MainActivity"
+52-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:29:13-41
+53            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+53-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:33:13-163
+54            android:exported="true"
+54-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:30:13-36
+55            android:hardwareAccelerated="true"
+55-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:34:13-47
+56            android:launchMode="singleTop"
+56-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:31:13-43
+57            android:theme="@style/LaunchTheme"
+57-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:32:13-47
+58            android:windowSoftInputMode="adjustResize" >
+58-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:35:13-55
+59
+60            <!--
+61                 Specifies an Android theme to apply to this Activity as soon as
+62                 the Android process has started. This theme is visible to the user
+63                 while the Flutter UI initializes. After that, this theme continues
+64                 to determine the Window background behind the Flutter UI.
+65            -->
+66            <meta-data
+66-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:40:13-43:17
+67                android:name="io.flutter.embedding.android.NormalTheme"
+67-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:41:15-70
+68                android:resource="@style/NormalTheme" />
+68-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:42:15-52
+69
+70            <intent-filter>
+70-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:44:13-47:29
+71                <action android:name="android.intent.action.MAIN" />
+71-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:45:17-68
+71-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:45:25-66
+72
+73                <category android:name="android.intent.category.LAUNCHER" />
+73-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:46:17-76
+73-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:46:27-74
+74            </intent-filter>
+75        </activity>
+76
+77        <!--
+78             Don't delete the meta-data below.
+79             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+80        -->
+81        <meta-data
+81-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:52:9-54:33
+82            android:name="flutterEmbedding"
+82-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:53:13-44
+83            android:value="2" />
+83-->/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/AndroidManifest.xml:54:13-30
+84
+85        <provider
+85-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-18:20
+86            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+86-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-82
+87            android:authorities="cas.group.cas_photo_manager_application.flutter.image_provider"
+87-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-74
+88            android:exported="false"
+88-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-37
+89            android:grantUriPermissions="true" >
+89-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-47
+90            <meta-data
+90-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-17:75
+91                android:name="android.support.FILE_PROVIDER_PATHS"
+91-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:16:17-67
+92                android:resource="@xml/flutter_image_picker_file_paths" />
+92-->[:image_picker_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-72
+93        </provider>
+94
+95        <activity
+95-->[:url_launcher_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-13:74
+96            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+96-->[:url_launcher_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-74
+97            android:exported="false"
+97-->[:url_launcher_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-37
+98            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+98-->[:url_launcher_android] /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-71
+99        <activity
+99-->[com.google.android.gms:play-services-base:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/a694b510833c075b7c278b9b1b1a8824/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:23:9-26:75
+100            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+100-->[com.google.android.gms:play-services-base:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/a694b510833c075b7c278b9b1b1a8824/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:24:13-79
+101            android:exported="false"
+101-->[com.google.android.gms:play-services-base:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/a694b510833c075b7c278b9b1b1a8824/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:25:13-37
+102            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+102-->[com.google.android.gms:play-services-base:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/a694b510833c075b7c278b9b1b1a8824/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:26:13-72
+103
+104        <meta-data
+104-->[com.google.android.gms:play-services-basement:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/51c2a4a75edeffa8ebebf30b41b045ad/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:23:9-25:69
+105            android:name="com.google.android.gms.version"
+105-->[com.google.android.gms:play-services-basement:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/51c2a4a75edeffa8ebebf30b41b045ad/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
+106            android:value="@integer/google_play_services_version" />
+106-->[com.google.android.gms:play-services-basement:17.0.0] /Users/alessandrotocco/.gradle/caches/transforms-3/51c2a4a75edeffa8ebebf30b41b045ad/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
+107
+108        <uses-library
+108-->[androidx.window:window:1.0.0-beta04] /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+109            android:name="androidx.window.extensions"
+109-->[androidx.window:window:1.0.0-beta04] /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+110            android:required="false" />
+110-->[androidx.window:window:1.0.0-beta04] /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+111        <uses-library
+111-->[androidx.window:window:1.0.0-beta04] /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+112            android:name="androidx.window.sidecar"
+112-->[androidx.window:window:1.0.0-beta04] /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+113            android:required="false" />
+113-->[androidx.window:window:1.0.0-beta04] /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+114
+115        <provider
+115-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+116            android:name="androidx.startup.InitializationProvider"
+116-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:25:13-67
+117            android:authorities="cas.group.cas_photo_manager_application.androidx-startup"
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:26:13-68
+118            android:exported="false" >
+118-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:27:13-37
+119            <meta-data
+119-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+120                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+121                android:value="androidx.startup" />
+121-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+122        </provider>
+123
+124        <receiver
+124-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+125            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+125-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+126            android:directBootAware="false"
+126-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+127            android:enabled="true"
+127-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+128            android:exported="true"
+128-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+129            android:permission="android.permission.DUMP" >
+129-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+130            <intent-filter>
+130-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+131                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+131-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+131-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+132            </intent-filter>
+133            <intent-filter>
+133-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+134                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+134-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+134-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+135            </intent-filter>
+136            <intent-filter>
+136-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+137                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+137-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+137-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+138            </intent-filter>
+139            <intent-filter>
+139-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+140                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+140-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+140-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+141            </intent-filter>
+142        </receiver>
+143    </application>
+144
+145</manifest>

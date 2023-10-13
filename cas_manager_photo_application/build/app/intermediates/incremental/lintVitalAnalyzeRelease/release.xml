@@ -1,0 +1,40 @@
+<variant
+    name="release"
+    package="cas.group.cas_photo_manager_application"
+    minSdkVersion="21"
+    targetSdkVersion="33"
+    shrinking="true"
+    mergedManifest="/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/merged_manifest/release/AndroidManifest.xml"
+    proguardFiles="/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/default_proguard_files/global/proguard-android.txt-7.3.1:/Users/alessandrotocco/Desktop/Universita/Context Aware/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro:proguard-rules.pro"
+    partialResultsDir="/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/lint_vital_partial_results/release/out"
+    desugaredMethodsFiles="/Users/alessandrotocco/.gradle/caches/transforms-3/2cfb6a75ce22e977bba23e898d3360eb/transformed/D8BackportedDesugaredMethods.txt">
+  <buildFeatures
+      namespacing="REQUIRED"/>
+  <sourceProviders>
+    <sourceProvider
+        manifest="src/main/AndroidManifest.xml"
+        javaDirectories="src/main/java:src/main/kotlin"
+        resDirectories="src/main/res"
+        assetsDirectories="src/main/assets"/>
+    <sourceProvider
+        manifest="src/release/AndroidManifest.xml"
+        javaDirectories="src/release/java:src/release/kotlin"
+        resDirectories="src/release/res"
+        assetsDirectories="src/release/assets"/>
+  </sourceProviders>
+  <testSourceProviders>
+  </testSourceProviders>
+  <testFixturesSourceProviders>
+  </testFixturesSourceProviders>
+  <manifestPlaceholders>
+    <placeholder
+        name="applicationName"
+        value="android.app.Application" />
+  </manifestPlaceholders>
+  <mainArtifact
+      classOutputs="/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/javac/release/classes:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/tmp/kotlin-classes/release:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/kotlinToolingMetadata:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/compile_and_runtime_not_namespaced_r_class_jar/release/R.jar"
+      applicationId="cas.group.cas_photo_manager_application"
+      generatedSourceFolders="/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/ap_generated_sources/release/out:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/aidl_source_output_dir/release/out:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/source/buildConfig/release:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/renderscript_source_output_dir/release/out"
+      generatedResourceFolders="/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/res/rs/release:/Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/res/resValues/release">
+  </mainArtifact>
+</variant>

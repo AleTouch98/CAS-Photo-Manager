@@ -1,0 +1,36 @@
+cas.group.cas_photo_manager_application.app-jetified-profileinstaller-1.3.0-0 /Users/alessandrotocco/.gradle/caches/transforms-3/1fa348df96fefe8a5af4d2a94fd401f6/transformed/jetified-profileinstaller-1.3.0/res
+cas.group.cas_photo_manager_application.app-core-runtime-2.2.0-1 /Users/alessandrotocco/.gradle/caches/transforms-3/237bf89e99bdfccbf470ca6ec6a77451/transformed/core-runtime-2.2.0/res
+cas.group.cas_photo_manager_application.app-lifecycle-viewmodel-2.6.1-2 /Users/alessandrotocco/.gradle/caches/transforms-3/24f0e239370a7db5265975d6df52e5ab/transformed/lifecycle-viewmodel-2.6.1/res
+cas.group.cas_photo_manager_application.app-lifecycle-livedata-2.6.1-3 /Users/alessandrotocco/.gradle/caches/transforms-3/34e61ea5b2f45899158976540c480d41/transformed/lifecycle-livedata-2.6.1/res
+cas.group.cas_photo_manager_application.app-jetified-play-services-basement-17.0.0-4 /Users/alessandrotocco/.gradle/caches/transforms-3/51c2a4a75edeffa8ebebf30b41b045ad/transformed/jetified-play-services-basement-17.0.0/res
+cas.group.cas_photo_manager_application.app-jetified-window-java-1.0.0-beta04-5 /Users/alessandrotocco/.gradle/caches/transforms-3/5ddc55be9a1f9ca3021e908092377266/transformed/jetified-window-java-1.0.0-beta04/res
+cas.group.cas_photo_manager_application.app-lifecycle-livedata-core-2.6.1-6 /Users/alessandrotocco/.gradle/caches/transforms-3/686bb6ff5fa141fc48940bc7c5dcde17/transformed/lifecycle-livedata-core-2.6.1/res
+cas.group.cas_photo_manager_application.app-jetified-lifecycle-viewmodel-savedstate-2.6.1-7 /Users/alessandrotocco/.gradle/caches/transforms-3/8ef4145649a3c7fb49eba76bd022d445/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/res
+cas.group.cas_photo_manager_application.app-jetified-play-services-base-17.0.0-8 /Users/alessandrotocco/.gradle/caches/transforms-3/a694b510833c075b7c278b9b1b1a8824/transformed/jetified-play-services-base-17.0.0/res
+cas.group.cas_photo_manager_application.app-jetified-startup-runtime-1.1.1-9 /Users/alessandrotocco/.gradle/caches/transforms-3/a82fc0c2c652b7206977a33252383412/transformed/jetified-startup-runtime-1.1.1/res
+cas.group.cas_photo_manager_application.app-jetified-window-1.0.0-beta04-10 /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/res
+cas.group.cas_photo_manager_application.app-jetified-activity-1.7.2-11 /Users/alessandrotocco/.gradle/caches/transforms-3/c8ea606aaf2791795847920f9d8ce060/transformed/jetified-activity-1.7.2/res
+cas.group.cas_photo_manager_application.app-core-1.10.1-12 /Users/alessandrotocco/.gradle/caches/transforms-3/cdd4fa9d08ccbc9c5512a016523fe321/transformed/core-1.10.1/res
+cas.group.cas_photo_manager_application.app-jetified-core-ktx-1.10.1-13 /Users/alessandrotocco/.gradle/caches/transforms-3/def4815acd33fd4006040a85a9e44403/transformed/jetified-core-ktx-1.10.1/res
+cas.group.cas_photo_manager_application.app-browser-1.5.0-14 /Users/alessandrotocco/.gradle/caches/transforms-3/e517900a174b66b9bd24506abc55ce7b/transformed/browser-1.5.0/res
+cas.group.cas_photo_manager_application.app-jetified-savedstate-1.2.1-15 /Users/alessandrotocco/.gradle/caches/transforms-3/ed2173e5750029ced31f25d082b2759b/transformed/jetified-savedstate-1.2.1/res
+cas.group.cas_photo_manager_application.app-jetified-annotation-experimental-1.3.0-16 /Users/alessandrotocco/.gradle/caches/transforms-3/f4165d65e7c1fbf8fa60889e1dccc94b/transformed/jetified-annotation-experimental-1.3.0/res
+cas.group.cas_photo_manager_application.app-lifecycle-runtime-2.6.1-17 /Users/alessandrotocco/.gradle/caches/transforms-3/fb036a12a36e2e4b9b49c4354b7d8e62/transformed/lifecycle-runtime-2.6.1/res
+cas.group.cas_photo_manager_application.app-debug-18 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/debug/res
+cas.group.cas_photo_manager_application.app-main-19 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/android/app/src/main/res
+cas.group.cas_photo_manager_application.app-pngs-20 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/res/pngs/debug
+cas.group.cas_photo_manager_application.app-resValues-21 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/res/resValues/debug
+cas.group.cas_photo_manager_application.app-rs-22 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/generated/res/rs/debug
+cas.group.cas_photo_manager_application.app-mergeDebugResources-23 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/incremental/debug/mergeDebugResources/merged.dir
+cas.group.cas_photo_manager_application.app-mergeDebugResources-24 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+cas.group.cas_photo_manager_application.app-merged_res-25 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/app/intermediates/merged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-26 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-27 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/flutter_native_splash/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-28 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/flutter_plugin_android_lifecycle/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-29 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geocoding_android/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-30 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-31 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/image_picker_android/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-32 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/path_provider_android/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-33 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/permission_handler_android/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-34 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/sqflite/intermediates/packaged_res/debug
+cas.group.cas_photo_manager_application.app-packaged_res-35 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/url_launcher_android/intermediates/packaged_res/debug

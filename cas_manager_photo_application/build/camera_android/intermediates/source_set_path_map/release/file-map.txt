@@ -1,0 +1,13 @@
+io.flutter.plugins.camera.camera_android-core-1.6.0-0 /Users/alessandrotocco/.gradle/caches/transforms-3/1033e36e972b24f495cbeb7edb0f8401/transformed/core-1.6.0/res
+io.flutter.plugins.camera.camera_android-jetified-annotation-experimental-1.1.0-1 /Users/alessandrotocco/.gradle/caches/transforms-3/424fe90f0bd6d50b9ed38cb53548737f/transformed/jetified-annotation-experimental-1.1.0/res
+io.flutter.plugins.camera.camera_android-jetified-window-java-1.0.0-beta04-2 /Users/alessandrotocco/.gradle/caches/transforms-3/5ddc55be9a1f9ca3021e908092377266/transformed/jetified-window-java-1.0.0-beta04/res
+io.flutter.plugins.camera.camera_android-jetified-window-1.0.0-beta04-3 /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/res
+io.flutter.plugins.camera.camera_android-main-4 /Users/alessandrotocco/.pub-cache/hosted/pub.dev/camera_android-0.10.8+12/android/src/main/res
+io.flutter.plugins.camera.camera_android-release-5 /Users/alessandrotocco/.pub-cache/hosted/pub.dev/camera_android-0.10.8+12/android/src/release/res
+io.flutter.plugins.camera.camera_android-pngs-6 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/generated/res/pngs/release
+io.flutter.plugins.camera.camera_android-resValues-7 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/generated/res/resValues/release
+io.flutter.plugins.camera.camera_android-rs-8 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/generated/res/rs/release
+io.flutter.plugins.camera.camera_android-mergeReleaseResources-9 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/incremental/release/mergeReleaseResources/merged.dir
+io.flutter.plugins.camera.camera_android-mergeReleaseResources-10 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+io.flutter.plugins.camera.camera_android-merged_res-11 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/camera_android/intermediates/merged_res/release
+io.flutter.plugins.camera.camera_android-packaged_res-12 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/flutter_plugin_android_lifecycle/intermediates/packaged_res/release

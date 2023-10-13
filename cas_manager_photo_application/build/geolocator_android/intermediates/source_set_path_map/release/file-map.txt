@@ -1,0 +1,14 @@
+com.baseflow.geolocator.geolocator_android-core-1.6.0-0 /Users/alessandrotocco/.gradle/caches/transforms-3/1033e36e972b24f495cbeb7edb0f8401/transformed/core-1.6.0/res
+com.baseflow.geolocator.geolocator_android-jetified-annotation-experimental-1.1.0-1 /Users/alessandrotocco/.gradle/caches/transforms-3/424fe90f0bd6d50b9ed38cb53548737f/transformed/jetified-annotation-experimental-1.1.0/res
+com.baseflow.geolocator.geolocator_android-jetified-play-services-basement-17.0.0-2 /Users/alessandrotocco/.gradle/caches/transforms-3/51c2a4a75edeffa8ebebf30b41b045ad/transformed/jetified-play-services-basement-17.0.0/res
+com.baseflow.geolocator.geolocator_android-jetified-window-java-1.0.0-beta04-3 /Users/alessandrotocco/.gradle/caches/transforms-3/5ddc55be9a1f9ca3021e908092377266/transformed/jetified-window-java-1.0.0-beta04/res
+com.baseflow.geolocator.geolocator_android-jetified-play-services-base-17.0.0-4 /Users/alessandrotocco/.gradle/caches/transforms-3/a694b510833c075b7c278b9b1b1a8824/transformed/jetified-play-services-base-17.0.0/res
+com.baseflow.geolocator.geolocator_android-jetified-window-1.0.0-beta04-5 /Users/alessandrotocco/.gradle/caches/transforms-3/beb1df14a36789fd46f1fa73f36b9595/transformed/jetified-window-1.0.0-beta04/res
+com.baseflow.geolocator.geolocator_android-main-6 /Users/alessandrotocco/.pub-cache/hosted/pub.dev/geolocator_android-2.1.0/android/src/main/res
+com.baseflow.geolocator.geolocator_android-release-7 /Users/alessandrotocco/.pub-cache/hosted/pub.dev/geolocator_android-2.1.0/android/src/release/res
+com.baseflow.geolocator.geolocator_android-pngs-8 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/generated/res/pngs/release
+com.baseflow.geolocator.geolocator_android-resValues-9 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/generated/res/resValues/release
+com.baseflow.geolocator.geolocator_android-rs-10 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/generated/res/rs/release
+com.baseflow.geolocator.geolocator_android-mergeReleaseResources-11 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/intermediates/incremental/release/mergeReleaseResources/merged.dir
+com.baseflow.geolocator.geolocator_android-mergeReleaseResources-12 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+com.baseflow.geolocator.geolocator_android-merged_res-13 /Users/alessandrotocco/Desktop/Universita/Context Aware/cas_photo_manager_application/build/geolocator_android/intermediates/merged_res/release

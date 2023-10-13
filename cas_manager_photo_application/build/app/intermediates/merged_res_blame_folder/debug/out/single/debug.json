@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-mdpi_splash.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-mdpi/splash.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-v21_background.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-v21/background.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-hdpi_splash.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-hdpi/splash.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-xhdpi_splash.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-xhdpi/splash.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-xxxhdpi_splash.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-xxxhdpi/splash.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-xxhdpi_splash.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-xxhdpi/splash.png"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/drawable-v21_launch_background.xml.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/drawable-v21/launch_background.xml"
+    },
+    {
+        "merged": "cas.group.cas_photo_manager_application.app-merged_res-25:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "cas.group.cas_photo_manager_application.app-main-19:/mipmap-xxhdpi/ic_launcher.png"
+    }
+]
