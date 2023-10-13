@@ -1,20 +1,18 @@
-version: '3'
+version: '3.8'
 services:
   postgres:
     container_name: db  # Nome personalizzato per il container PostgreSQL
-    image: postgis/postgis:12-3.2
+    image: cas-db
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: Mp090998
+      POSTGRES_PASSWORD: cas2023
     volumes:
       - ./postgresql/data:/var/lib/postgresql/data
 
   backend:
     container_name: backend  # Nome personalizzato per il container del backend
-    build:
-      context: ./backend
-      dockerfile: dockerfile.dev # Assicurati che il Dockerfile sia nella directory ./backend
+    image: cas-backend
     volumes:
       - /app/node_modules
       - ./backend:/app # Percorso del codice sorgente del backend
@@ -25,9 +23,7 @@ services:
 
   frontend:
     container_name: frontend  # Nome personalizzato per il container del backend
-    build:
-      context: ./frontend
-      dockerfile: dockerfile.dev # Assicurati che il Dockerfile sia nella directory ./frontend
+    image: cas-frontend
     volumes:
       - /app/node_modules # Corretto il percorso dei node_modules
       - ./frontend:/app

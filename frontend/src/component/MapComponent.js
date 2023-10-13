@@ -207,6 +207,13 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
       setHeatmapData([]); // Rimuovi i dati del heatmap se necessario
     } else {
       setGeoJSONColor('');
+      if(areaSelected){
+        await handleAreaSelezionata(areaSelected);
+        return;
+      } else {
+        await handleGeoJSONSelezionato(geoJSONSelezionato);
+        return;
+      } 
     } 
   }
 

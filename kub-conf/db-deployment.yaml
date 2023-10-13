@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: manuelplacella/cas-db
+        ports:
+        - containerPort: 5432
+          hostPort: 5432
+          protocol: TCP
+        env:
+          - name: POSTGRES_PASSWORD
+            value: cas2023
+        volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pgdata
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: pgdata

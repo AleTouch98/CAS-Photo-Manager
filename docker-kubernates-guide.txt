@@ -1,0 +1,92 @@
+############################# GUIDA DOCKER E KUBERNATES ###########################################
+
+1. Crea l'immagine docker per ogni componente (frontend, backend e db)
+
+	- nella cartella frontend esegui 
+	-> docker build -t manuelplacella/cas-frontend .
+	- nella cartella backend esegui 
+	-> docker build -t manuelplacella/cas-backend .
+	- nella cartella db esegui 
+	-> docker build -t manuelplacella/cas-db .
+
+	(manuelplacella indica il nomeutente di docker hub - inserisci il punto alla fine)
+
+	per provare con i container eseguire dalla root -> docker-compose up
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+2. Caricare immagini su DockerHub (registrarsi da browser)
+
+	- comando per login -> docker login
+	- comando per caricare immagine -> docker push nomeImmagine (ad esempio manuelplacella/cas-backend)
+	-> docker push manuelplacella/cas-frontend
+	-> docker push manuelplacella/cas-backend
+	-> docker push manuelplacella/cas-db
+
+A questo punto le immagini docker sono caricate su dockerhub. 
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+3. Modificare tutti i file yaml nella cartella kub-conf sostituendo manuelplacella con l'id utente utilizzato per la registrazione su dockerhub
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+4. Installare minikube (macOS brew install minikube) e kubectl (dovrebbe installarsi automaticamente con minikube, poi vediamo insieme)
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+5. Avviare minikube 
+	-> minikube start 
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+6. Posizionarsi nella cartella kub-conf ed eseguire lo script .sh con 
+	-> ./scriptKub.sh 
+
+	il risultato di questa operazione dovrà essere:
+
+	persistentvolumeclaim/pgdata created
+	deployment.apps/db-deployment created
+	service/db-service created
+	deployment.apps/backend-deployment created
+	service/backend-service created
+	deployment.apps/frontend-deployment created
+	service/frontend-service created
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+7. Esegui 
+	-> kubectl get pods  (attendere che lo STATUS dei tre pods sia su Running - rieseguire il comando per avere aggiornamenti)
+	7.1 Copiare il nome del db-deployment (compreso tutto il codice) ed eseguire 
+		-> kubectl port-forward nome_db_deployment_copiato 5432:5432
+	7.2 Aprire un nuovo terminale e copiare il nome del backend-deployment, quindi eseguire 
+		-> kubectl port-forward nome_backend_deployment_copiato 8000:8000
+	7.3 Aprire un nuovo terminale e copiare il nome del frontend-deployment, quindi eseguire 
+		-> kubectl port-forward nome_frontend_deployment_copiato 3000:3000
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+8. Accedere a localhost:3000 e testare il tutto 
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+9. Al termine uscire dal cluster kubernates con -> minikube stop 
+
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
+
+#### NB ####
+
+A volte potrebbe succedere che non funziona il tutto perchè nell'esecuzione dello script è stato creato prima il backend e poi il db. In questo caso il backend non trova il db quindi da errore e va in crash tutto. 
+
+In questo caso verificare i log del pod del db con 
+-> kubectl logs nome_db-deployment 
+e verificare se il database is ready ecc.. (se ci sono errori di porte risolverlo)
+Quando il db è pronto rimuovere il pod del backend con 
+-> kubectl delete deployment nome_backend-deployment
+e ricrearlo con 
+-> kubectl apply -f backend-deployment.yaml 
+Verificare sempre con il comando kubectl logs se non ci sono errori sul backend. 
+Rieseguire quindi il port-forward per quanto riguarda il backend ed eventualmente il db nel caso in cui è stato ricreato.
+
+
+	
