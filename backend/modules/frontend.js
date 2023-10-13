@@ -391,7 +391,7 @@ module.exports = {
       }
       if(k >= data.length || k < 0){
         return res.status(218).json({
-          message: "Impossibile eseguide il k-means con un numero di cluster maggiore o uguale dei punti dati / minore di zero.",
+          message: "Impossibile eseguire il k-means con un numero di cluster maggiore o uguale dei punti dati / minore di zero.",
         });
       }
       var kmeans = new clustering.KMEANS();

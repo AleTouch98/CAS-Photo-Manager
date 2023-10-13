@@ -63,14 +63,14 @@ function ChooseGeojson({ onGeoJSONChange , valueTestoGeoJSON}) {
           {...bindMenu(popupState)}
           anchorReference="anchorPosition"
           anchorPosition={{
-            top: 32, // Regola questa altezza per spostare il menu più in alto o in basso
-            left: 8, // Regola questa larghezza per spostare il menu più a sinistra o a destra
+            top: 32, 
+            left: 8, 
           }}
           getContentAnchorEl={null}
           style={{
             position: 'fixed',
-            marginTop: '85px', // Regola questa altezza per spostare il menu più in alto o in basso
-            marginLeft: '220px', // Regola questa larghezza per spostare il menu più a sinistra o a destra
+            marginTop: '85px', 
+            marginLeft: '220px', 
           }}
         >
           {listaNomiGeo.map((option, index) => (

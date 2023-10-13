@@ -177,7 +177,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
   };
 
 
-  return (    
+  return (
     <div style={{ width: '100%', overflowX: 'auto' }}>
       <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState) => (
@@ -196,70 +196,69 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
                 popupState.open();
               }}
             >
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-    <FilterCollectionIcon style={{ marginRight: '8px' }} />
-    <Typography
-      variant="inherit"
-      style={{
-        color: 'black',
-        fontSize: '16px',
-      }}
-    >
-      {collezioneSelezionata ? collezioneSelezionata : 'Scegli collezione'}
-    </Typography>
-  </div>
-</IconButton>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FilterCollectionIcon style={{ marginRight: '8px' }} />
+                <Typography
+                  variant="inherit"
+                  style={{
+                    color: 'black',
+                    fontSize: '16px',
+                  }}
+                >
+                  {collezioneSelezionata ? collezioneSelezionata : 'Scegli collezione'}
+                </Typography>
+              </div>
+            </IconButton>
             <Menu  {...bindMenu(popupState)}
-          anchorReference="anchorPosition"
-          anchorPosition={{
-            top: 32, 
-            left: 8, 
-          }}
-          getContentAnchorEl={null}
-          style={{
-            position: 'fixed',
-            marginTop: '85px', 
-            marginLeft: '1150px', 
-          }}
-        >
-            {collezioni.map((option, index) => (
-              <MenuItem key={index} onClick={() => {
-                handleCollectionSelected(option);
-                popupState.close();
-              }}>
-                {option.nome_collezione}
-              </MenuItem>
-            ))}
+              anchorReference="anchorPosition"
+              anchorPosition={{
+                top: 32, 
+                left: 8, 
+              }}
+              getContentAnchorEl={null}
+              style={{
+                position: 'fixed',
+                marginTop: '85px', 
+                marginLeft: '1150px', 
+              }}
+            >
+              {collezioni.map((option, index) => (
+                <MenuItem key={index} onClick={() => {
+                  handleCollectionSelected(option);
+                  popupState.close();
+                }}>
+                  {option.nome_collezione}
+                </MenuItem>
+              ))}
             </Menu>
           </React.Fragment>
         )}
       </PopupState>
-
+  
       <IconButton
-    color="primary"
-    variant="contained"
-    onClick={handleAllPhoto}
-    style={{
-      position: 'absolute',
-      top: '10px',
-      right: '40px', 
-    }}
-  >
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <FilterAltIcon style={{ marginRight: '8px' }} />
-      <Typography
-        variant="inherit"
+        color="primary"
+        variant="contained"
+        onClick={handleAllPhoto}
         style={{
-          color: 'black',
-          fontSize: '16px',
+          position: 'absolute',
+          top: '10px',
+          right: '40px', 
         }}
       >
-        Tutte le foto
-      </Typography>
-    </div>
-  </IconButton>
-
-
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FilterAltIcon style={{ marginRight: '8px' }} />
+          <Typography
+            variant="inherit"
+            style={{
+              color: 'black',
+              fontSize: '16px',
+            }}
+          >
+            Tutte le foto
+          </Typography>
+        </div>
+      </IconButton>
+  
       <ImageList
         sx={{
           width: '100%',
@@ -338,17 +337,15 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
             </Button>
           </DialogActions>
         </Dialog>
-
-        
       )}
-
-    <Snackbar
+  
+      <Snackbar
         open={isSnackbarOpen}
         autoHideDuration={6000}
         onClose={() => setIsSnackbarOpen(false)}
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'center'
+          horizontal: 'center',
         }}
         className={snackbarClass}
       >
@@ -360,7 +357,7 @@ export default function TitlebarImageList({imageRemove, statoAggiornamento, user
           {snackbarMessage}
         </Alert>
       </Snackbar>
-    
     </div>
   );
+  
 }

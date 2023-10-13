@@ -150,9 +150,7 @@ const AddGeojsonButton = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Aggiungi Geojson</DialogTitle>
         <DialogContent>
-          <CustomFileInput
-            handleFileSelection={(file) => setSelectedFile(file)}
-          />
+          <CustomFileInput handleFileSelection={(file) => setSelectedFile(file)} />
           <TextField
             label="Nome del file"
             variant="outlined"
@@ -186,16 +184,10 @@ const AddGeojsonButton = () => {
           <Button onClick={handleClose} color="primary">
             Annulla
           </Button>
-          <Button
-            onClick={handleGeoJSONUpload}
-            color="primary"
-            variant="contained"
-          >
+          <Button onClick={handleGeoJSONUpload} color="primary" variant="contained">
             Carica
           </Button>
         </DialogActions>
-
-       
       </Dialog>
 
       <Snackbar
@@ -215,7 +207,6 @@ const AddGeojsonButton = () => {
         >
           {snackbarMessage}
         </Alert>
-        
       </Snackbar>
     </div>
   );

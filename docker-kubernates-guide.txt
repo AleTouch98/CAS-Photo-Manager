@@ -11,8 +11,6 @@
 
 	(manuelplacella indica il nomeutente di docker hub - inserisci il punto alla fine)
 
-	per provare con i container eseguire dalla root -> docker-compose up
-
 -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  
 
 2. Caricare immagini su DockerHub (registrarsi da browser)

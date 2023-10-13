@@ -71,76 +71,86 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div style={{ backgroundColor: "#E74D2C", color: "white", padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'fixed', top: '0', left: '0', right: '0', zIndex: '999' }}>
-      <div>
-        <Typography variant="h6" style={{ marginLeft: '10px' }}>Tipo Mappa</Typography>
-      </div>
       <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white', 
-    fontSize: '20px', 
-    fontWeight: 'bold', 
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' 
-}}>
-    Stai visualizzando
-    <Select
-        value={userSelected}
-        onChange={handleSelectChange}
-        label="Selezione"
-        style={{
-            marginLeft: '15px',
-            backgroundColor: "#F88463",
-            height: '50px',
-            color: 'white', 
-            fontSize: '16px', 
-            fontWeight: 'bold', 
-            textShadow: '2px 2px 8px rgba(0, 0, 0, 0.5)' 
-        }}
-    >
-        {userFriends && userFriends.length > 0 && userFriends.map((user, index) => (
-            <MenuItem key={user.id} value={user.id}>
+        backgroundColor: "#E74D2C",
+        color: "white",
+        padding: '10px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        right: '0',
+        zIndex: '999',
+      }}>
+        <div>
+          <Typography variant="h6" style={{ marginLeft: '10px' }}>Tipo Mappa</Typography>
+        </div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: 'white',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
+        }}>
+          Stai visualizzando
+          <Select
+            value={userSelected}
+            onChange={handleSelectChange}
+            label="Selezione"
+            style={{
+              marginLeft: '15px',
+              backgroundColor: "#F88463",
+              height: '50px',
+              color: 'white',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              textShadow: '2px 2px 8px rgba(0, 0, 0, 0.5)'
+            }}>
+            {userFriends && userFriends.length > 0 && userFriends.map((user, index) => (
+              <MenuItem key={user.id} value={user.id}>
                 {index === 0 ? user.nome_utente : `Profilo di ${user.nome_utente}`}
-            </MenuItem>
-        ))}
-    </Select>
-</div>
-
-
-
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ marginRight: '10px' }}>
-          <Typography variant="subtitle1">TIPO DI MAPPA:</Typography>
+              </MenuItem>
+            ))}
+          </Select>
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Radio
-            checked={selectedOption === 'option1'}
-            onChange={handleOptionChange}
-            value="option1"
-            color="default"
-          /> OpenStreetMap
-          <Radio
-            checked={selectedOption === 'option2'}
-            onChange={handleOptionChange}
-            value="option2"
-            color="default"
-          /> Stamen
+          <div style={{ marginRight: '10px' }}>
+            <Typography variant="subtitle1">TIPO DI MAPPA:</Typography>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Radio
+              checked={selectedOption === 'option1'}
+              onChange={handleOptionChange}
+              value="option1"
+              color="default"
+            /> OpenStreetMap
+            <Radio
+              checked={selectedOption === 'option2'}
+              onChange={handleOptionChange}
+              value="option2"
+              color="default"
+            /> Stamen
+          </div>
         </div>
-      </div>      
-    </div>
-      <Drawer variant="permanent" anchor="left" PaperProps={{ sx: { backgroundColor: "#E74D2C", color: "red",  width: '200px' } }}>
+      </div>
+      <Drawer variant="permanent" anchor="left" PaperProps={{ sx: { backgroundColor: "#E74D2C", color: "red", width: '200px' } }}>
         <Grid container direction="column" alignItems="center" justifyContent="center" style={{ backgroundColor: "#F88463", padding: '10px' }}>
           <Grid item>
             <img src={Logo} alt="Logo" style={{ width: '100px', marginBottom: '2px' }} />
           </Grid>
           <Grid item>
-            <Typography variant="subtitle1" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Benvenuto {userName}</Typography>
+            <Typography variant="subtitle1" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>
+              Benvenuto {userName}
+            </Typography>
           </Grid>
         </Grid>
         <List>
           <ListItem button>
-            <AddPhotoButton handleAggiornamento={handleAggiornamento}/>
+            <AddPhotoButton handleAggiornamento={handleAggiornamento} />
           </ListItem>
           <ListItem button>
             <AddGeojsonButton />
@@ -156,11 +166,12 @@ const Dashboard = () => {
           </ListItem>
         </List>
       </Drawer>
-      <div style={{ marginLeft: '195px', marginTop:'-23px'}}>
+      <div style={{ marginLeft: '195px', marginTop: '-23px' }}>
         <MapComponent selectedOption={selectedOption} statoAggiornamento={statoAggiornamento} userView={userSelected} /> {/* Ad esempio: <MapComponent /> */}
       </div>
     </div>
   );
+  
 };
 
 export default Dashboard;

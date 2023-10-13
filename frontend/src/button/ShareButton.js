@@ -96,38 +96,37 @@ const AddGeojsonButton = () => {
           <ShareIcon style={{ marginRight: '8px' }} /> Condividi
         </Typography>
       </IconButton>
-
+  
       <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-  <DialogTitle>Condividi con ...</DialogTitle>
-  <DialogContent>
-    <FormControl fullWidth style={{ marginTop: "16px" }}>
-      <InputLabel htmlFor="selected-feature">
-        Seleziona utente con cui condividere
-      </InputLabel>
-      <Select
-        value={selectedUser}
-        onChange={handleFeatureSelect}
-        label="Seleziona utente con cui condividere"
-      >
-        {users.map((user) => (
-          <MenuItem key={user.id} value={user}>
-            {user.nome_utente}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleClose} color="primary">
-      Annulla
-    </Button>
-    <Button onClick={handleShareClick} color="primary" variant="contained">
-      Condividi
-    </Button>
-  </DialogActions>
-</Dialog>
-
-
+        <DialogTitle>Condividi con ...</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth style={{ marginTop: "16px" }}>
+            <InputLabel htmlFor="selected-feature">
+              Seleziona utente con cui condividere
+            </InputLabel>
+            <Select
+              value={selectedUser}
+              onChange={handleFeatureSelect}
+              label="Seleziona utente con cui condividere"
+            >
+              {users.map((user) => (
+                <MenuItem key={user.id} value={user}>
+                  {user.nome_utente}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Annulla
+          </Button>
+          <Button onClick={handleShareClick} color="primary" variant="contained">
+            Condividi
+          </Button>
+        </DialogActions>
+      </Dialog>
+  
       {/* Snackbar fuori dalla Dialog */}
       <Snackbar
         open={isSnackbarOpen}
@@ -149,7 +148,7 @@ const AddGeojsonButton = () => {
         </Alert>
       </Snackbar>
     </div>
-  );
+  );  
 };
 
 export default AddGeojsonButton;

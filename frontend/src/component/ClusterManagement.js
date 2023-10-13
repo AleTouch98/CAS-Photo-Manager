@@ -13,14 +13,13 @@ import {
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-function ClusterManagement({ onClose, resultClustering, removeClusters }) {
+function ClusterManagement({ onClose, resultClustering, removeClusters , userView}) {
   const [autoConfig, setAutoConfig] = useState(true);
   const [manualClusterCount, setManualClusterCount] = useState(1);
   const [algorithmType, setAlgorithmType] = useState('K-Means');
   const [epsilon, setEpsilon] = useState(1); 
   const [minPoints, setMinPoints] = useState(1); 
   const { userId } = useParams();
-  const { userView } = useParams();
 
 
   const handleConfigChange = (event) => {
@@ -153,41 +152,39 @@ function ClusterManagement({ onClose, resultClustering, removeClusters }) {
 
   return (
     <Box p={2}>
-  <Tabs
-    value={algorithmType}
-    onChange={handleAlgorithmTabChange}
-    indicatorColor="primary"
-    textColor="primary"
-    centered
-  >
-    <Tab label="K-Means" value="K-Means" />
-    <Tab label="DBScan" value="DBScan" />
-  </Tabs>
-
-  {renderAlgorithmSpecificOptions()}
-
-  <Button
-    variant="contained"
-    color="primary"
-    fullWidth
-    sx={{ mt: 2 }}
-    onClick={handleClusterButtonClick}
-  >
-    Esegui {algorithmType}
-  </Button>
-  <Button
-    variant="contained"
-    color="error"
-    fullWidth
-    sx={{ mt: 2 }}
-    onClick={handleRimuoviClusters} 
-  >
-    Rimuovi clusters
-  </Button>
-</Box>
-
-
-  );
+      <Tabs
+        value={algorithmType}
+        onChange={handleAlgorithmTabChange}
+        indicatorColor="primary"
+        textColor="primary"
+        centered
+      >
+        <Tab label="K-Means" value="K-Means" />
+        <Tab label="DBScan" value="DBScan" />
+      </Tabs>
+  
+      {renderAlgorithmSpecificOptions()}
+  
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ mt: 2 }}
+        onClick={handleClusterButtonClick}
+      >
+        Esegui {algorithmType}
+      </Button>
+      <Button
+        variant="contained"
+        color="error"
+        fullWidth
+        sx={{ mt: 2 }}
+        onClick={handleRimuoviClusters} 
+      >
+        Rimuovi clusters
+      </Button>
+    </Box>
+  );  
 }
 
 export default ClusterManagement;

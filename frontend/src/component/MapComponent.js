@@ -166,7 +166,6 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
           setSnackbarMessage(`Si è verificato un errore durante il caricamento del geoJSON\n,  ${photoResult.data.message}`);
           setSnackbarSeverity('error');
           setIsSnackbarOpen(true);
-          
         }
         const numPhotosInArea = photoResult.data.data.length;
         return { ...feature, numPhotos: numPhotosInArea };
@@ -276,25 +275,35 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
     <div style={{ height: '90vh', position: 'relative', display: 'flex' }}>
       <div style={{ width: '70%', position: 'relative', top: '80px', left: '0', right: '0', bottom: '0' }}>
         <div>
-          <Grid geoJSONSelected={handleGeoJSONSelezionato} valueTestoGeoJSON={geoJSONSelezionato ? geoJSONSelezionato.nomeGeoJSON : 'Scegli GeoJSON'} areaSelected={handleAreaSelezionata} valueColorCheckbox={handleColor} chooseAreaAndColorDisabled={isAreaAndColorDisabled} valueHeatmapCheckbox={handleHeatmap} clustersFound={handleClusters} removeClusters={handleRemoveClusters}/>
+          <Grid
+            geoJSONSelected={handleGeoJSONSelezionato}
+            valueTestoGeoJSON={geoJSONSelezionato ? geoJSONSelezionato.nomeGeoJSON : 'Scegli GeoJSON'}
+            areaSelected={handleAreaSelezionata}
+            valueColorCheckbox={handleColor}
+            chooseAreaAndColorDisabled={isAreaAndColorDisabled}
+            valueHeatmapCheckbox={handleHeatmap}
+            clustersFound={handleClusters}
+            removeClusters={handleRemoveClusters}
+            userView={userView}
+          />
         </div>
-
+  
         <div id="map" style={{ width: '100%', height: '82vh' }}>
-          {loading && ( // icona di caricamento
+          {loading && (
             <div className="loading-overlay"
-            style={{
-              position: 'absolute',
-              top: 0,
-              down: 0,
-              left: 0,
-              width: '100%',
-              height: '100vh',
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 999, // Posiziona sopra la mappa
-            }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                down: 0,
+                left: 0,
+                width: '100%',
+                height: '100vh',
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 999,
+              }}
             >
               <CircularProgress size={80} />
             </div>
@@ -317,7 +326,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
                 attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
             )}
-            {
+            {heatmapData && (
               <HeatmapLayer
                 points={heatmapData}
                 longitudeExtractor={(point) => point.lng}
@@ -327,19 +336,19 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
                   const numPhotos = heatmapData.filter((photo) => {
                     const latDiff = Math.abs(photo.lat - point.lat);
                     const lngDiff = Math.abs(photo.lng - point.lng);
-                    return latDiff < 0.01 && lngDiff < 0.01; 
+                    return latDiff < 0.01 && lngDiff < 0.01;
                   }).length;
-                  return (numPhotos / totalNumPhotos) * 100; 
+                  return (numPhotos / totalNumPhotos) * 100;
                 }}
                 colors={['#FF0000', '#FFFF00', '#00FF00']}
                 blur={30}
-                radius={30} 
+                radius={30}
               />
-            }
+            )}
             {geoJSONView && (
               <GeoJSON
                 data={geoJSONView}
-                key={JSON.stringify(geoJSONView)} 
+                key={JSON.stringify(geoJSONView)}
                 style={() => ({
                   color: 'blue',
                   opacity: 1,
@@ -355,7 +364,7 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
                 style={(feature) => ({
                   color: 'orange',
                   opacity: 0.4,
-                  fillColor: feature.properties.fillColor, 
+                  fillColor: feature.properties.fillColor,
                   fillOpacity: 0.6,
                 })}
               />
@@ -364,79 +373,75 @@ const MapComponent = ({ selectedOption, statoAggiornamento, userView}) => {
               <CircleMarker
                 key={JSON.stringify(point) + index}
                 center={[point.latitudine, point.longitudine]}
-                radius={8} 
-                color={point.colore} 
+                radius={8}
+                color={point.colore}
               >
               </CircleMarker>
             ))}
             {photos && photos.map((photo, index) => (
               <Marker
                 key={index}
-                position={[photo.latitudine, photo.longitudine]}  
+                position={[photo.latitudine, photo.longitudine]}
                 icon={customIcon}
               >
-              <Popup>
-                <div style={{ width: '300px', overflowY: 'auto', maxHeight: '400px' }}>
-                  <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>{photo.indirizzo}</h3>
-                  {photos
-                    .filter((otherPhoto) => otherPhoto.indirizzo === photo.indirizzo)
-                    .map((otherPhoto, index) => (
-                      <div key={index} style={{ marginBottom: '8px', width: '100%' }}>
-                        {otherPhoto.nome_foto && (
-                          <h4 style={{ fontWeight: 'bold' }}>{otherPhoto.nome_foto}</h4>
-                        )}
-                        {otherPhoto.immaginebase64 && (
-                          <img
-                            src={`data:image/jpeg;base64,${otherPhoto.immaginebase64}`}
-                            alt={otherPhoto.Nome_Foto}
-                            style={{ width: '100%', maxWidth: '100%', height: 'auto' }}
-                          />
-                        )}
-                        <p style={{ fontWeight: 'bold', display: 'inline-block', marginRight: '8px' }}>
-                          Caricato da:
-                        </p>
-                        <p style={{ display: 'inline-block' }}>{otherPhoto.nome_utente}</p>
-                      </div>
-                    ))}
+                <Popup>
+                  <div style={{ width: '300px', overflowY: 'auto', maxHeight: '400px' }}>
+                    <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>{photo.indirizzo}</h3>
+                    {photos
+                      .filter((otherPhoto) => otherPhoto.indirizzo === photo.indirizzo)
+                      .map((otherPhoto, index) => (
+                        <div key={index} style={{ marginBottom: '8px', width: '100%' }}>
+                          {otherPhoto.nome_foto && (
+                            <h4 style={{ fontWeight: 'bold' }}>{otherPhoto.nome_foto}</h4>
+                          )}
+                          {otherPhoto.immaginebase64 && (
+                            <img
+                              src={`data:image/jpeg;base64,${otherPhoto.immaginebase64}`}
+                              alt={otherPhoto.Nome_Foto}
+                              style={{ width: '100%', maxWidth: '100%', height: 'auto' }}
+                            />
+                          )}
+                          <p style={{ fontWeight: 'bold', display: 'inline-block', marginRight: '8px' }}>
+                            Caricato da:
+                          </p>
+                          <p style={{ display: 'inline-block' }}>{otherPhoto.nome_utente}</p>
+                        </div>
+                      ))}
                     {photos
                       .filter((otherPhoto) => otherPhoto.indirizzo === photo.indirizzo).length > 1 && (
                       <hr />
                     )}
-                </div>
-              </Popup>
+                  </div>
+                </Popup>
               </Marker>
             ))}
-            
-
           </MapContainer>
         </div>
-
-
       </div>
       <div style={{ width: '30%', height: '90vh', position: 'relative', marginTop: '80px', marginBottom: '100px', marginLeft: '10px' }}>
-        <Gallery imageRemove={handleImageRemove} statoAggiornamento={statoAggiornamento} userView={userView}/>
+        <Gallery imageRemove={handleImageRemove} statoAggiornamento={statoAggiornamento} userView={userView} />
       </div>
-
       <Snackbar
-          open={isSnackbarOpen}
-          autoHideDuration={6000} 
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setIsSnackbarOpen(false)}
+        sx={{ zIndex: 9999 }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Alert
           onClose={() => setIsSnackbarOpen(false)}
-          sx={{ zIndex: 9999 }}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
         >
-          <Alert
-            onClose={() => setIsSnackbarOpen(false)}
-            severity={snackbarSeverity}
-            sx={{ width: "100%" }}
-          >
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
+  
 };
 
 export default MapComponent;

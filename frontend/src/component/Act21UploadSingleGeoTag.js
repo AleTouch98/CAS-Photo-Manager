@@ -54,12 +54,12 @@ const UploadSingleGeoTag = ({ file, index, onGeoTagChange }) => {
                           style: {
                             marginRight:'100px',
                             cursor: 'pointer',
-                            backgroundColor: suggestion.active ? 'blue' : 'white', // Cambia il colore di sfondo al passaggio del mouse
-                            color: suggestion.active ? 'white' : 'black', // Cambia il colore del testo al passaggio del mouse
+                            backgroundColor: suggestion.active ? 'blue' : 'white', 
+                            color: suggestion.active ? 'white' : 'black', 
                             maxWidth: '350px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap', // Assicura che il testo non venga avvolto
+                            whiteSpace: 'nowrap', 
                           },
                         })}
                       >

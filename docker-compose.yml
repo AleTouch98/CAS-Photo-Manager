@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgres:
     container_name: db  # Nome personalizzato per il container PostgreSQL
-    image: cas-db
+    image: manuelplacella/cas-db
     ports:
       - "5432:5432"
     environment:
@@ -12,7 +12,7 @@ services:
 
   backend:
     container_name: backend  # Nome personalizzato per il container del backend
-    image: cas-backend
+    image: manuelplacella/cas-backend
     volumes:
       - /app/node_modules
       - ./backend:/app # Percorso del codice sorgente del backend
@@ -23,7 +23,7 @@ services:
 
   frontend:
     container_name: frontend  # Nome personalizzato per il container del backend
-    image: cas-frontend
+    image: manuelplacella/cas-frontend
     volumes:
       - /app/node_modules # Corretto il percorso dei node_modules
       - ./frontend:/app
