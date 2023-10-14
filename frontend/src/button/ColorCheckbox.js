@@ -23,7 +23,7 @@ function ColorCheckbox({ valueCheckbox }) {
           style={{ padding: '4.5px' }}
         />
       }
-      label="Color"
+      label="Colore"
       style={{ height: '30px' }}
     />
   );

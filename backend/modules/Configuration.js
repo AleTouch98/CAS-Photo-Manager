@@ -1,15 +1,15 @@
 const CREATE_DB_CONFIGURATION = {
-    host: 'db-service', // nome del servizio del database come hostname
+    host: 'db', // nome del servizio del database come hostname
     user: 'postgres',
     port: 5432,
-    password: 'cas2023',
+    password: 'Mp090998',
 }
 
 const QUERY_CONFIGURATION = {
-    host: 'db-service',
+    host: 'db',
     user: 'postgres',
     port: 5432 ,
-    password: 'cas2023',
+    password: 'Mp090998',
     database: 'photo_man',
 }
 
